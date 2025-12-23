@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { is } from "zod/locales";
+import { PaginationParams } from "./common.interface.js";
 
 export const Analysis = z.object({
     id: z.number(),
@@ -56,8 +56,14 @@ export const AnalysisEngineVersionCreate = z.object({
     isActive: z.boolean(),
 })
 
+export const PaginatiomAnalysisEngineVersionParams = PaginationParams.extend({
+    isActive: z.boolean().optional(),
+});
+
 export type AnalysisType = z.infer<typeof Analysis>;
 export type AnalysisCreateType = z.infer<typeof AnalysisCreate>;
 
 export type AnalysisEngineVersionType = z.infer<typeof AnalysisEngineVersion>;
 export type AnalysisEngineVersionCreateType = z.infer<typeof AnalysisEngineVersionCreate>;
+
+export type PaginatiomAnalysisEngineVersionParamsType = z.infer<typeof PaginatiomAnalysisEngineVersionParams>;
