@@ -1,15 +1,15 @@
 import { z } from "zod";
 
-export interface Asset {
-    id: number;
-    symbol: string;
-    name: string;
+export const Asset = z.object({
+    id: z.number(),
+    symbol: z.string(),
+    name: z.string(),
 
     // snapshots MarketSnapshot[]
     // analyses  Analysis[]
     
-    createdAt: Date
-}
+    createdAt: z.date(),
+})
 
 export const AssetCreate = z.object({
         symbol: z.string().min(1),
