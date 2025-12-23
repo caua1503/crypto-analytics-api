@@ -71,7 +71,7 @@ export class AnalysisService {
     }
 }
 
-class AnalysisEngineVersionService {
+export class AnalysisEngineVersionService {
     constructor(private prisma: any) {}
 
     async create(data: AnalysisEngineVersionCreateType): Promise<AnalysisEngineVersionType> {
