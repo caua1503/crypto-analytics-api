@@ -8,10 +8,10 @@
         "module": "nodenext",
         "moduleResolution": "nodenext",
 
-        "rootDir": "src",
+        "rootDir": ".",
         "outDir": "build"
 
     },
-    "include": ["src"],
+    "include": ["src", "generated"],
     "exclude": ["node_modules", "prisma"]
 }
