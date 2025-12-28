@@ -21,6 +21,11 @@ export type FastifyInstanceTyped = FastifyInstance<
 export const Recommendation = z.enum(["STRONG_BUY", "BUY", "HOLD", "SELL", "STRONG_SELL"]);
 export const CriterionCategory = z.enum(["SENTIMENT", "TECHNICAL", "MACRO"]);
 
+export const zDecimal = z
+	.union([z.string(), z.number(), z.instanceof(Prisma.Decimal)])
+	.transform((val) => new Prisma.Decimal(val));
+
+export const zDecimaltoString = z.instanceof(Prisma.Decimal).transform((val) => val.toString());
 
 export type RecommendationType = z.infer<typeof Recommendation>;
 export type CriterionCategoryType = z.infer<typeof CriterionCategory>;
