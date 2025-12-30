@@ -1,6 +1,6 @@
-import fastify from "fastify";
+import fastify, { FastifyInstance } from "fastify";
 
-const app = fastify()
+const app: FastifyInstance = fastify()
 
 const PORT: number = 3000
 const HOST: string = "0.0.0.0"
