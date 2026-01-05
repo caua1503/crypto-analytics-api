@@ -17,4 +17,3 @@ export const EnvConfigSchema = z.object({
 });
 
 export type EnvConfig = z.infer<typeof EnvConfigSchema>;
-

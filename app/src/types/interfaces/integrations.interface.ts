@@ -3,9 +3,9 @@ import { z } from "zod";
 export const ApiMarketSnapshotSchema = z.object({
   assetSymbol: z.string().min(1), // Símbolo do ativo (BTC, ETH, SOL)
 
-  priceUsd: z.number().positive(), // Preço atual em USD
-  volume24hUsd: z.number().nonnegative(), // Volume negociado nas últimas 24h
-  marketCapUsd: z.number().nonnegative().optional(), // Capitalização de mercado
+  priceUsd: z.coerce.number().positive(), // Preço atual em USD
+  volume24hUsd: z.coerce.number().nonnegative(), // Volume negociado nas últimas 24h
+  marketCapUsd: z.coerce.number().nonnegative().optional(), // Capitalização de mercado
 
   source: z.string(), // Fonte dos dados (CoinGecko, CoinMarketCap, Alternative.me, etc)
   fetchedAt: z.date(), // Momento da coleta
