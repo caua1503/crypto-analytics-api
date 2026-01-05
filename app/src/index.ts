@@ -4,6 +4,7 @@ import sensible from '@fastify/sensible'
 import { validatorCompiler, serializerCompiler, ZodTypeProvider } from 'fastify-type-provider-zod';
 import { env } from "./config/env.js";
 
+// import { registerAllRoutes } from "./routers/index.js";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 app.setValidatorCompiler(validatorCompiler);
