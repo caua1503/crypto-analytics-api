@@ -13,6 +13,15 @@
   <a href="https://redis.io/" target="_blank">
     <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis">
   </a>
+  <a href="https://www.postgresql.org/" target="_blank">
+    <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+  </a>
+  <a href="https://www.prisma.io/" target="_blank">
+    <img src="https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white" alt="Prisma">
+  </a>
+  <a href="https://biomejs.dev/" target="_blank">
+    <img src="https://img.shields.io/badge/Biome-60a5fa?style=for-the-badge&logo=biome&logoColor=white" alt="Biome">
+  </a>
 </p>
 
 <p align="center">
@@ -38,6 +47,9 @@ Ela integra múltiplas fontes de dados para gerar uma **pontuação composta (sc
 - **Fastify** — Framework web de alta performance e baixo overhead
 - **Redis** — Cache distribuído para armazenamento rápido de dados processados
 - **Docker** — Padronização do ambiente de desenvolvimento, teste e produção
+- **PostgreSQL** — Banco de dados relacional robusto
+- **Prisma** — ORM moderno para TypeScript
+- **Biome** — Linter e formatter rápido para código
 
 > Outras dependências e detalhes de implementação estão documentados nos READMEs dos módulos específicos.
 
