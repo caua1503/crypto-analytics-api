@@ -29,7 +29,7 @@ class MarketSnapshotService {
     return snapshots.map((snapshot) => MarketSnapshot.parse(snapshot));
   }
 
-  async findById(id: number): Promise<MarketSnapshotType | null> {
+  async findById(id: number): Promise<MarketSnapshotType> {
     const marketsnapshot = await this.prisma.marketSnapshot.findFirst({
       where: { id },
       orderBy: { createdAt: "desc" },
@@ -41,7 +41,7 @@ class MarketSnapshotService {
     return MarketSnapshot.parse(marketsnapshot);
   }
 
-  async getLatestSnapshot(id: number): Promise<MarketSnapshotType | null> {
+  async getLatestSnapshot(id: number): Promise<MarketSnapshotType> {
     const marketsnapshot = await this.prisma.marketSnapshot.findFirst({
       where: { assetId: id },
       orderBy: { createdAt: "desc" },
