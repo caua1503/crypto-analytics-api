@@ -1,19 +1,19 @@
 import { z } from "zod";
 
 export const Asset = z.object({
-	id: z.number(),
-	symbol: z.string().min(1),
-	name: z.string().min(1),
+    id: z.number(),
+    symbol: z.string().min(1),
+    name: z.string().min(1),
 
-	// snapshots MarketSnapshot[]
-	// analyses  Analysis[]
+    // snapshots MarketSnapshot[]
+    // analyses  Analysis[]
 
-	createdAt: z.coerce.date(),
+    createdAt: z.coerce.date(),
 });
 
 export const AssetCreate = Asset.omit({
-	id: true,
-	createdAt: true,
+    id: true,
+    createdAt: true,
 });
 
 export type AssetType = z.infer<typeof Asset>;

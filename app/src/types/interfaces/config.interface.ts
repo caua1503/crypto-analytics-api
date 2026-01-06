@@ -13,7 +13,6 @@ export const EnvConfigSchema = z.object({
 
     COINMARKETCAP_API_URL: z.url().default("https://pro-api.coinmarketcap.com"),
     COINMARKETCAP_API_KEY: z.string().default("your-default-cmc-api-key"),
-
 });
 
 export type EnvConfig = z.infer<typeof EnvConfigSchema>;

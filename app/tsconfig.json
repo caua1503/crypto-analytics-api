@@ -10,7 +10,6 @@
 
         "rootDir": ".",
         "outDir": "build"
-
     },
     "include": ["src", "generated"],
     "exclude": ["node_modules", "prisma"]

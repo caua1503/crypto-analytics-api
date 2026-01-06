@@ -6,6 +6,6 @@ export { assetRoutes };
 export { criterionRoutes };
 
 export async function registerRoutes(app: FastifyInstance) {
-	app.register(assetRoutes, { prefix: "/assets" });
-	app.register(criterionRoutes, { prefix: "/criterion" });
+    app.register(assetRoutes, { prefix: "/assets" });
+    app.register(criterionRoutes, { prefix: "/criterion" });
 }
