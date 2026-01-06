@@ -40,7 +40,7 @@ export class CoinGeckoService {
             .then((res) => res.data);
 
         const { symbol, current_price, total_volume, market_cap } = response[0];
-        
+
         const data = ApiMarketSnapshotSchema.parse({
             assetSymbol: symbol.toUpperCase(),
             priceUsd: current_price,

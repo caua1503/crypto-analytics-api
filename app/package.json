@@ -7,7 +7,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "tsc",
         "dev": "tsx --watch src/index.ts",
-        "lint": "npx @biomejs/biome format src/ ",
+        "lint": "npx @biomejs/biome format --write ./src ",
         "start": "node ."
     },
     "type": "module",
