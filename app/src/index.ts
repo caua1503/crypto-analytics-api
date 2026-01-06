@@ -1,19 +1,45 @@
 import "dotenv/config";
 import fastify, { FastifyInstance } from "fastify";
+
+import swagger from "@fastify/swagger";
+import swaggerUI from "@fastify/swagger-ui";
 import sensible from "@fastify/sensible";
-import { validatorCompiler, serializerCompiler, ZodTypeProvider } from "fastify-type-provider-zod";
+
+import {
+    validatorCompiler,
+    serializerCompiler,
+    ZodTypeProvider,
+    jsonSchemaTransform,
+} from "fastify-type-provider-zod";
 import { env } from "./config/env.js";
 
-// import { registerAllRoutes } from "./routers/index.js";
-
-const app = fastify().withTypeProvider<ZodTypeProvider>();
-app.setValidatorCompiler(validatorCompiler);
-app.setSerializerCompiler(serializerCompiler);
+import { registerAllRoutes } from "./routers/index.js";
 
 const PORT: number = env.PORT;
 const HOST: string = env.HOST;
 
-// app.register(registerAllRoutes);
+const app = fastify().withTypeProvider<ZodTypeProvider>();
+
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
+
+await app.register(swagger, {
+    openapi: {
+        info: {
+            title: "crypto-analytics-api",
+            description:
+                "Uma API de análise de criptomoedas que combina indicadores técnicos, sentimento de mercado e dados macroeconômicos para gerar recomendações objetivas e baseadas em dados.",
+            version: "1.0.0",
+        },
+    },
+    transform: jsonSchemaTransform,
+});
+
+await app.register(swaggerUI, {
+    routePrefix: "/docs",
+});
+
+app.register(registerAllRoutes);
 
 app.register(sensible);
 
@@ -22,5 +48,9 @@ app.get("/", async (req, res) => {
 });
 
 app.listen({ port: PORT, host: HOST }).then(() => {
-    console.log(`Funcionando na porta ${PORT}`);
+    console.log(
+        `\n🚀 Server is running at \n(http://${HOST}:${PORT})\n(http://localhost:${PORT})\n`,
+    );
+    console.log(`\n📚 Docs available at: http://localhost:${PORT}/docs`);
+    console.log(`🔥 Running in mode: ${env.NODE_ENV} `);
 });
