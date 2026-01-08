@@ -52,5 +52,5 @@ app.listen({ port: PORT, host: HOST }).then(() => {
         `\n🚀 Server is running at \n(http://${HOST}:${PORT})\n(http://localhost:${PORT})\n`,
     );
     console.log(`\n📚 Docs available at: http://localhost:${PORT}/docs`);
-    console.log(`🔥 Running in mode: ${env.NODE_ENV} `);
+    console.log(`🔥 Running in mode: ${env.NODE_ENV}`);
 });
