@@ -31,6 +31,13 @@ export const AnalysisCreate = Analysis.omit({ id: true, createdAt: true }).exten
     finalScore: zDecimal,
 });
 
+export const AnalysisResponse = Analysis.extend({
+    sentimentScore: z.string(),
+    technicalScore: z.string(),
+    macroScore: z.string(),
+    finalScore: z.string(),
+});
+
 export const AnalysisEngineVersion = z.object({
     id: z.number(),
 
