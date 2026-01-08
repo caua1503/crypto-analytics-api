@@ -24,7 +24,7 @@ const adapter = new PrismaPg(pool);
 export const prisma = globalForPrisma.prisma ?? new PrismaClient({ adapter });
 
 if (process.env.RUN_MODE !== "production") {
-    console.log(process.env.RUN_MODE);
+    // console.log(process.env.RUN_MODE);
     globalForPrisma.prisma = prisma;
 }
 
