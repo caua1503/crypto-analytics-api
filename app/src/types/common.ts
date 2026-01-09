@@ -20,6 +20,10 @@ export type FastifyInstanceTyped = FastifyInstance<
 
 export const Recommendation = z.enum(["STRONG_BUY", "BUY", "HOLD", "SELL", "STRONG_SELL"]);
 export const CriterionCategory = z.enum(["SENTIMENT", "TECHNICAL", "MACRO"]);
+export const enum SourceEnum {
+    COINMARKETCAP = "COINMARKETCAP",
+    COINGECKO = "COINGECKO",
+}
 
 export const zDecimal = z
     .union([z.string(), z.number(), z.instanceof(Prisma.Decimal)])
