@@ -30,5 +30,12 @@ export const MarketSnapshotCreate = MarketSnapshot.omit({
     btcDominance: zDecimal,
 });
 
+export const MarketSnapshotResponse = MarketSnapshot.extend({
+    priceUsd: z.string(),
+    volume24hUsd: z.string(),
+    marketCapUsd: z.string(),
+    btcDominance: z.string(),
+});
+
 export type MarketSnapshotType = z.infer<typeof MarketSnapshot>;
 export type MarketSnapshotCreateType = z.infer<typeof MarketSnapshotCreate>;

@@ -10,15 +10,19 @@ import {
     MarketSnapshotCreateType,
     MarketSnapshotType,
 } from "../types/interfaces/market.interface.js";
+import { AssetService } from "./asset.service.js";
+import { z } from "zod";
 
-class MarketSnapshotService {
+export class MarketSnapshotService {
     constructor(private prisma: PrismaClientType) {}
 
     async findAll(
+        assetId: number,
         pagination: PaginationParamsType = PaginationParams.parse({}),
     ): Promise<MarketSnapshotType[]> {
         const { skip, take, order } = pagination;
         const snapshots = await this.prisma.marketSnapshot.findMany({
+            where: { assetId: assetId },
             skip: skip,
             take: take,
             orderBy: { createdAt: order },
@@ -41,15 +45,20 @@ class MarketSnapshotService {
         return MarketSnapshot.parse(marketsnapshot);
     }
 
-    async getLatestSnapshot(id: number): Promise<MarketSnapshotType> {
+    async getLatestSnapshotByAssetId(assetId: number): Promise<MarketSnapshotType> {
         const marketsnapshot = await this.prisma.marketSnapshot.findFirst({
-            where: { assetId: id },
+            where: { assetId: assetId },
             orderBy: { createdAt: "desc" },
         });
         if (!marketsnapshot) {
             throw httpErrors.notFound("Market snapshot not found");
         }
         return MarketSnapshot.parse(marketsnapshot);
+    }
+
+    async getLatestSnapshotBySymbol(symbol: string): Promise<MarketSnapshotType> {
+        const { id } = await new AssetService(this.prisma).findBySymbol(symbol);
+        return await this.getLatestSnapshotByAssetId(id);
     }
 
     async create(data: MarketSnapshotCreateType): Promise<MarketSnapshotType> {
@@ -66,7 +75,7 @@ class MarketSnapshotService {
 
     async update(id: number, data: Partial<MarketSnapshotCreateType>): Promise<MarketSnapshotType> {
         try {
-            const validatedData = MarketSnapshotCreate.parse(data);
+            const validatedData = MarketSnapshotCreate.partial().parse(data);
             const updatedSnapshot = await this.prisma.marketSnapshot.update({
                 where: { id },
                 data: validatedData,

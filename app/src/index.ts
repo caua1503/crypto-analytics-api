@@ -1,6 +1,6 @@
 import "dotenv/config";
 import fastify, { FastifyInstance } from "fastify";
-
+import cors from "@fastify/cors";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
 import sensible from "@fastify/sensible";
@@ -23,6 +23,11 @@ const app = fastify().withTypeProvider<ZodTypeProvider>();
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
+await app.register(cors, {
+    origin: "*", // Allows all origins
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Specify allowed methods
+});
+
 await app.register(swagger, {
     openapi: {
         info: {
@@ -44,6 +49,10 @@ app.register(registerAllRoutes);
 app.register(sensible);
 
 app.get("/", async (req, res) => {
+    return { message: "go to /docs" };
+});
+
+app.get("/health", async (req, res) => {
     return { message: "ok" };
 });
 

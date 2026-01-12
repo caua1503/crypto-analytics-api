@@ -4,21 +4,26 @@ import { prisma } from "../../../config/prisma.js";
 import { AssetCreate, Asset } from "../../../types/interfaces/asset.interface.js";
 import { IdSchema, SymbolSchema } from "../../../types/schemas/common.schemas.js";
 import { z } from "zod";
+import { PaginationParams } from "../../../types/interfaces/common.interface.js";
+
+import { StatusCodes } from "http-status-codes";
 
 export async function assetRoutes(app: FastifyInstanceTyped) {
     app.get(
         "/",
         {
             schema: {
+                tags: ["Asset"],
+                querystring: PaginationParams,
                 response: {
-                    200: z.object({
+                    [StatusCodes.OK]: z.object({
                         assets: z.array(Asset),
                     }),
                 },
             },
         },
-        async () => {
-            return { assets: await new AssetService(prisma).findAll() };
+        async (req) => {
+            return { assets: await new AssetService(prisma).findAll(req.query) };
         },
     );
 
@@ -26,9 +31,10 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
         "/symbol/:symbol",
         {
             schema: {
+                tags: ["Asset"],
                 params: SymbolSchema,
                 response: {
-                    200: Asset,
+                    [StatusCodes.OK]: Asset,
                 },
             },
         },
@@ -41,9 +47,10 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
         "/:id",
         {
             schema: {
+                tags: ["Asset"],
                 params: IdSchema,
                 response: {
-                    200: Asset,
+                    [StatusCodes.OK]: Asset,
                 },
             },
         },
@@ -56,14 +63,43 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
         "/",
         {
             schema: {
+                tags: ["Asset"],
                 body: AssetCreate,
                 response: {
-                    201: Asset,
+                    [StatusCodes.CREATED]: Asset,
                 },
             },
         },
         async (req, res) => {
             return await new AssetService(prisma).create(req.body);
+        },
+    );
+    app.patch(
+        "/:id",
+        {
+            schema: {
+                tags: ["Asset"],
+                params: IdSchema,
+                body: AssetCreate.partial(),
+                response: {
+                    [StatusCodes.CREATED]: Asset,
+                },
+            },
+        },
+        async (req, res) => {
+            return await new AssetService(prisma).update(req.params.id, req.body);
+        },
+    );
+    app.delete(
+        "/:id",
+        {
+            schema: {
+                tags: ["Asset"],
+                params: IdSchema,
+            },
+        },
+        async (req, res) => {
+            return await new AssetService(prisma).delete(req.params.id);
         },
     );
 }
