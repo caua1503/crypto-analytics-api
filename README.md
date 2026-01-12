@@ -1,4 +1,6 @@
 # Crypto Analytics API
+📖 Read this documentation in [English](README.en.md)
+
 
 <p align="center">
   <a href="https://www.typescriptlang.org/" target="_blank">
