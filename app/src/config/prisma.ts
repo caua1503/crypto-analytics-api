@@ -14,9 +14,8 @@ const globalForPrisma = globalThis as unknown as {
 const pool = new Pool({
     connectionString,
     max: 20,
-    idleTimeoutMillis: 30_000,
-    connectionTimeoutMillis: 2_000,
-    keepAlive: true,
+    idleTimeoutMillis: 10_000,
+    connectionTimeoutMillis: 3_000,
 });
 
 const adapter = new PrismaPg(pool);
