@@ -23,6 +23,7 @@ export const CriterionCategory = z.enum(["SENTIMENT", "TECHNICAL", "MACRO"]);
 export const enum SourceEnum {
     COINMARKETCAP = "COINMARKETCAP",
     COINGECKO = "COINGECKO",
+    COINPAPRIKA = "COINPAPRIKA",
 }
 
 export const zDecimal = z
