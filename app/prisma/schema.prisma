@@ -69,7 +69,7 @@ model MarketSnapshot {
   btcDominance Decimal? @db.Decimal(5, 2)
   fearGreed    Int? // 0-100
 
-  source      String // CoinGecko, CoinMarketCap, Alternative.me, etc
+  source      String // CoinGecko, CoinMarketCap, etc
   cachedUntil DateTime // TTL do cache
 
   createdAt DateTime   @default(now())
