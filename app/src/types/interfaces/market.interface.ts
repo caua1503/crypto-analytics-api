@@ -20,6 +20,8 @@ export const MarketSnapshot = z.object({
     createdAt: z.coerce.date(),
 });
 
+export const MarketSnapshotArray = z.array(MarketSnapshot);
+
 export const MarketSnapshotCreate = MarketSnapshot.omit({
     id: true,
     createdAt: true,

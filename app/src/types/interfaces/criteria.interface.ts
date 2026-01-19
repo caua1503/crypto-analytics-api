@@ -14,6 +14,8 @@ export const Criterion = z.object({
     // createdAt: z.coerce.date(),
 });
 
+export const CriterionArray = z.array(Criterion);
+
 export const CriterionCreate = Criterion.omit({ id: true });
 
 export const CriterionWeight = z.object({

@@ -38,6 +38,7 @@ export const AnalysisResponse = Analysis.extend({
     finalScore: z.string(),
 });
 
+export const AnalysisArray = z.array(Analysis);
 export const AnalysisEngineVersion = z.object({
     id: z.number(),
 
@@ -53,12 +54,15 @@ export const AnalysisEngineVersionCreate = AnalysisEngineVersion.omit({
     createdAt: true,
 });
 
+export const AnalysisEngineVersionArray = z.array(AnalysisEngineVersion);
+
 export const PaginatiomAnalysisEngineVersionParams = PaginationParams.extend({
     isActive: z.boolean().optional(),
 });
 
 export type AnalysisType = z.infer<typeof Analysis>;
 export type AnalysisCreateType = z.infer<typeof AnalysisCreate>;
+export type AnalysisArrayType = z.infer<typeof AnalysisArray>;
 
 export type AnalysisEngineVersionType = z.infer<typeof AnalysisEngineVersion>;
 export type AnalysisEngineVersionCreateType = z.infer<typeof AnalysisEngineVersionCreate>;

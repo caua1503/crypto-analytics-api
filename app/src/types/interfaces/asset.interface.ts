@@ -18,5 +18,7 @@ export const AssetCreate = Asset.omit({
     createdAt: true,
 });
 
+export const AssetArray = z.array(Asset);
+
 export type AssetType = z.infer<typeof Asset>;
 export type AssetCreateType = z.infer<typeof AssetCreate>;
