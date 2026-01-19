@@ -8,12 +8,14 @@
         "build": "tsc",
         "dev": "tsx --watch src/index.ts",
         "lint": "npx @biomejs/biome format --write ./src ",
+        "migrate": "prisma migrate dev",
         "start": "node ."
     },
     "type": "module",
     "dependencies": {
         "@fastify/cors": "^11.2.0",
         "@fastify/sensible": "^6.0.4",
+        "@fastify/swagger-ui": "^5.2.4",
         "@prisma/adapter-pg": "^7.2.0",
         "@prisma/client": "^7.2.0",
         "axios": "^1.13.2",
