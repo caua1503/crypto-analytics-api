@@ -6,6 +6,7 @@ import {
 } from "../types/interfaces/common.interface.js";
 import {
     MarketSnapshot,
+    MarketSnapshotArray,
     MarketSnapshotCreate,
     MarketSnapshotCreateType,
     MarketSnapshotType,
@@ -30,7 +31,7 @@ export class MarketSnapshotService {
         if (!snapshots) {
             throw httpErrors.notFound("No market snapshots found");
         }
-        return snapshots.map((snapshot) => MarketSnapshot.parse(snapshot));
+        return MarketSnapshotArray.parse(snapshots);
     }
 
     async findById(id: number): Promise<MarketSnapshotType> {

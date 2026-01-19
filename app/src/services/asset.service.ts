@@ -3,6 +3,7 @@ import type { PrismaClientType } from "../config/prisma.js";
 import {
     Asset,
     AssetCreate,
+    AssetArray,
     type AssetCreateType,
     type AssetType,
 } from "../types/interfaces/asset.interface.js";
@@ -29,7 +30,7 @@ export class AssetService {
             throw httpErrors.notFound("No assets found");
         }
         // console.log(assets);
-        return assets.map((asset) => Asset.parse(asset));
+        return AssetArray.parse(assets);
     }
 
     async findById(id: number): Promise<AssetType> {

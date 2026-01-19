@@ -5,13 +5,16 @@ import type { PrismaClientType } from "../config/prisma.js";
 
 import {
     Analysis,
+    type AnalysisType,
     AnalysisCreate,
     type AnalysisCreateType,
     AnalysisEngineVersion,
     AnalysisEngineVersionCreate,
+    AnalysisArray,
+    AnalysisEngineVersionArray,
+    type AnalysisArrayType,
     type AnalysisEngineVersionCreateType,
     type AnalysisEngineVersionType,
-    type AnalysisType,
     PaginatiomAnalysisEngineVersionParams,
     type PaginatiomAnalysisEngineVersionParamsType,
 } from "../types/interfaces/analysis.interface.js";
@@ -54,7 +57,7 @@ export class AnalysisService {
                 throw httpErrors.notFound("Analyses not found");
             }
 
-            return analyses.map((analyses: any) => Analysis.parse(analyses));
+            return AnalysisArray.parse(analyses);
         } catch (error) {
             console.error("Error fetching analyses:", error);
             throw httpErrors.internalServerError("Failed to fetch analyses");
@@ -141,7 +144,7 @@ export class AnalysisEngineVersionService {
                 throw httpErrors.notFound("No analysis engine versions found");
             }
 
-            return versions.map((version: any) => AnalysisEngineVersion.parse(version));
+            return AnalysisEngineVersionArray.parse(versions);
         } catch (error) {
             console.error("Error fetching analysis engine versions:", error);
             throw httpErrors.internalServerError("Failed to fetch analysis engine versions");

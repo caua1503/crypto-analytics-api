@@ -5,6 +5,7 @@ import { CriterionCategory, type CriterionCategoryType } from "../types/common.j
 import {
     Criterion,
     CriterionCreate,
+    CriterionArray,
     type CriterionCreateType,
     type CriterionType,
     CriterionWeight,
@@ -28,7 +29,7 @@ export class CriterionService {
                 throw httpErrors.notFound("No criterions found");
             }
 
-            return criterions.map((criterions) => Criterion.parse(criterions));
+            return CriterionArray.parse(criterions);
         } catch (error) {
             throw httpErrors.internalServerError("Error retrieving criterions");
         }
