@@ -50,6 +50,7 @@ model Asset {
   id     Int    @id @default(autoincrement())
   symbol String @unique // BTC, ETH, SOL...
   name   String
+  extras Json? // qualquer dado extra (ex: CoinGecko ID, CoinMarketCap ID, etc)
 
   snapshots MarketSnapshot[]
   analyses  Analysis[]

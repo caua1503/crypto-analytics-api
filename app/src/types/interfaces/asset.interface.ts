@@ -13,12 +13,20 @@ export const Asset = z.object({
     createdAt: z.coerce.date(),
 });
 
+export const AssetExtras = Asset.extend({
+    extras: z.json().default({}),
+});
+
 export const AssetCreate = Asset.omit({
     id: true,
     createdAt: true,
 });
 
 export const AssetArray = z.array(Asset);
+export const AssetExtrasArray = z.array(AssetExtras);
+
+// export const JsonExtras = z.object({});
 
 export type AssetType = z.infer<typeof Asset>;
+export type AssetExtrasType = z.infer<typeof AssetExtras>;
 export type AssetCreateType = z.infer<typeof AssetCreate>;

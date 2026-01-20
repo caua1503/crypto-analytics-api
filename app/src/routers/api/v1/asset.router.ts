@@ -1,7 +1,12 @@
 import { FastifyInstanceTyped } from "../../../types/common.js";
 import { AssetService } from "../../../services/asset.service.js";
 import { prisma } from "../../../config/prisma.js";
-import { AssetCreate, Asset } from "../../../types/interfaces/asset.interface.js";
+import {
+    Asset,
+    AssetCreate,
+    AssetExtras,
+    AssetExtrasArray,
+} from "../../../types/interfaces/asset.interface.js";
 import { IdSchema, SymbolSchema } from "../../../types/schemas/common.schemas.js";
 import { z } from "zod";
 import { PaginationParams } from "../../../types/interfaces/common.interface.js";
@@ -28,6 +33,24 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
     );
 
     app.get(
+        "/extras",
+        {
+            schema: {
+                tags: ["Asset"],
+                querystring: PaginationParams,
+                response: {
+                    [StatusCodes.OK]: z.object({
+                        assets: AssetExtrasArray,
+                    }),
+                },
+            },
+        },
+        async (req) => {
+            return { assets: await new AssetService(prisma).findAllWithExtras(req.query) };
+        },
+    );
+
+    app.get(
         "/symbol/:symbol",
         {
             schema: {
@@ -44,6 +67,22 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
     );
 
     app.get(
+        "/symbol/:symbol/extras",
+        {
+            schema: {
+                tags: ["Asset"],
+                params: SymbolSchema,
+                response: {
+                    [StatusCodes.OK]: AssetExtras,
+                },
+            },
+        },
+        async (req) => {
+            return await new AssetService(prisma).findBySymbolWithExtras(req.params.symbol);
+        },
+    );
+
+    app.get(
         "/:id",
         {
             schema: {
@@ -56,6 +95,22 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
         },
         async (req) => {
             return await new AssetService(prisma).findById(req.params.id);
+        },
+    );
+
+    app.get(
+        "/:id/extras",
+        {
+            schema: {
+                tags: ["Asset"],
+                params: IdSchema,
+                response: {
+                    [StatusCodes.OK]: AssetExtras,
+                },
+            },
+        },
+        async (req) => {
+            return await new AssetService(prisma).findByIdWithExtras(req.params.id);
         },
     );
 

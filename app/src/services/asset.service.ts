@@ -6,6 +6,9 @@ import {
     AssetArray,
     type AssetCreateType,
     type AssetType,
+    AssetExtras,
+    AssetExtrasArray,
+    AssetExtrasType,
 } from "../types/interfaces/asset.interface.js";
 import {
     PaginationParams,
@@ -33,6 +36,24 @@ export class AssetService {
         return AssetArray.parse(assets);
     }
 
+    async findAllWithExtras(
+        pagination: PaginationParamsType = PaginationParams.parse({}),
+    ): Promise<AssetExtrasType[]> {
+        const { skip, take, order } = pagination;
+
+        const assets = await this.prisma.asset.findMany({
+            skip: skip,
+            take: take,
+            orderBy: { createdAt: order },
+        });
+
+        if (!assets) {
+            throw httpErrors.notFound("No assets found");
+        }
+        // console.log(assets);
+        return AssetExtrasArray.parse(assets);
+    }
+
     async findById(id: number): Promise<AssetType> {
         const asset = await this.prisma.asset.findUnique({ where: { id } });
 
@@ -43,12 +64,30 @@ export class AssetService {
         return Asset.parse(asset);
     }
 
+    async findByIdWithExtras(id: number): Promise<AssetExtrasType> {
+        const asset = await this.prisma.asset.findUnique({ where: { id } });
+
+        if (!asset) {
+            throw httpErrors.notFound("Asset not found");
+        }
+
+        return AssetExtras.parse(asset);
+    }
+
     async findBySymbol(symbol: string): Promise<AssetType> {
         const asset = await this.prisma.asset.findUnique({ where: { symbol } });
         if (!asset) {
             throw httpErrors.notFound("Asset not found");
         }
         return Asset.parse(asset);
+    }
+
+    async findBySymbolWithExtras(symbol: string): Promise<AssetExtrasType> {
+        const asset = await this.prisma.asset.findUnique({ where: { symbol } });
+        if (!asset) {
+            throw httpErrors.notFound("Asset not found");
+        }
+        return AssetExtras.parse(asset);
     }
 
     async create(data: AssetCreateType): Promise<AssetType> {
