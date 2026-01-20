@@ -109,6 +109,5 @@ export class CoinGeckoService implements ServiceContract {
     }
 }
 
-
 // const result = await new CoinGeckoService({apiUrl: env.COINGECKO_API_URL, apiKey: env.COINGECKO_API_KEY}).fetchMacroData()
 // console.log("Macro Data CoinGecko:", result);

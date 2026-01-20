@@ -88,11 +88,13 @@ export class CoinPaprikaService implements ServiceContract {
     }
 
     async fetchMacroData(): Promise<ApiMacroData> {
-        const response = await this.httpsInterface
-            .get(`/global`)
-            .then((res) => res.data);
+        const response = await this.httpsInterface.get(`/global`).then((res) => res.data);
 
-        const { bitcoin_dominance_percentage: btcDominance, market_cap_usd: totalMarketCapUsd, volume_24h_usd: totalVolumeUsd } = response;
+        const {
+            bitcoin_dominance_percentage: btcDominance,
+            market_cap_usd: totalMarketCapUsd,
+            volume_24h_usd: totalVolumeUsd,
+        } = response;
 
         const liquidityIndex = (totalVolumeUsd / totalMarketCapUsd) * 100;
 
@@ -107,7 +109,6 @@ export class CoinPaprikaService implements ServiceContract {
         return data;
     }
 }
-
 
 // const result = await new CoinPaprikaService({apiUrl: env.COINPAPRIKA_API_URL, apiKey: env.COINPAPRIKA_API_KEY}).fetchMacroData()
 // console.log("Macro Data CoinPaprika:", result);

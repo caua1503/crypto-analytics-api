@@ -45,31 +45,24 @@ export const ApiMacroDataSchema = z.object({
 });
 
 export const ApiMacroDataSchemaDTO = ApiMacroDataSchema.extend({
-  btcDominance: z
-    .number()
-    .min(0)
-    .max(100)
-    .optional()
-    .transform((val) =>
-      val !== undefined ? Number(val.toFixed(2)) : undefined
-    ),
+    btcDominance: z
+        .number()
+        .min(0)
+        .max(100)
+        .optional()
+        .transform((val) => (val !== undefined ? Number(val.toFixed(2)) : undefined)),
 
-  totalMarketCapUsd: z
-    .number()
-    .positive()
-    .optional()
-    .transform((val) =>
-      val !== undefined ? Math.round(val) : undefined
-    ),
+    totalMarketCapUsd: z
+        .number()
+        .positive()
+        .optional()
+        .transform((val) => (val !== undefined ? Math.round(val) : undefined)),
 
-  liquidityIndex: z
-    .number()
-    .optional()
-    .transform((val) =>
-      val !== undefined ? Number(val.toFixed(4)) : undefined
-    ),
+    liquidityIndex: z
+        .number()
+        .optional()
+        .transform((val) => (val !== undefined ? Number(val.toFixed(4)) : undefined)),
 });
-
 
 export const ApiAnalysisInputSchema = z.object({
     assetSymbol: z.string().min(1), // Ativo analisado
