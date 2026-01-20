@@ -3,6 +3,7 @@ import fastify, { FastifyInstance } from "fastify";
 import cors from "@fastify/cors";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
+import { getMarketDataService } from "./core/integrations/index.js";
 import sensible from "@fastify/sensible";
 
 import {
@@ -20,6 +21,7 @@ const HOST: string = env.HOST;
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
+
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
@@ -33,7 +35,7 @@ await app.register(swagger, {
         info: {
             title: "crypto-analytics-api",
             description:
-                "Uma API de análise de criptomoedas que combina indicadores técnicos, sentimento de mercado e dados macroeconômicos para gerar recomendações objetivas e baseadas em dados.",
+            "Uma API de análise de criptomoedas que combina indicadores técnicos, sentimento de mercado e dados macroeconômicos para gerar recomendações objetivas e baseadas em dados.",
             version: "1.0.0",
         },
     },
@@ -55,6 +57,13 @@ app.get("/", async (req, res) => {
 app.get("/health", async (req, res) => {
     return { message: "ok" };
 });
+
+//Inicialisa a integração de dados de mercado
+getMarketDataService();
+// const service = getMarketDataService();
+// const result = await service.fetchMacroData()
+// console.log("Macro Data:", result);
+
 
 app.listen({ port: PORT, host: HOST }).then(() => {
     console.log(
