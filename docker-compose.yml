@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: crypto_api_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: crypto_api
+      POSTGRES_PASSWORD: crypto_api
+      POSTGRES_DB: crypto_api
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    container_name: crypto_api_pgbouncer
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "6432:5432"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: crypto_api
+      DB_PASSWORD: crypto_api
+      DB_NAME: crypto_api
+
+      POOL_MODE: transaction
+
+      MAX_CLIENT_CONN: 1000
+      DEFAULT_POOL_SIZE: 50
+      RESERVE_POOL_SIZE: 10
+
+      SERVER_IDLE_TIMEOUT: 0
+      SERVER_LIFETIME: 0
+      QUERY_WAIT_TIMEOUT: 0
+
+      AUTH_TYPE: plain
+    volumes:
+      - pgbouncer_data:/etc/pgbouncer
+
+volumes:
+  postgres_data:
+  pgbouncer_data:
