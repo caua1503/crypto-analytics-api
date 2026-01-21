@@ -1,9 +1,9 @@
-import { Redis } from 'ioredis';
-import {env} from './env.js';
-import {z} from 'zod';
+import { Redis } from "ioredis";
+import { env } from "./env.js";
+import { z } from "zod";
 
 export const redis = new Redis({
-    host: env.REDIS_HOST, 
+    host: env.REDIS_HOST,
     port: env.REDIS_PORT,
 });
 
@@ -16,7 +16,7 @@ export class RedisClient {
 
     async set(key: string, value: string, expireInSeconds?: number): Promise<void> {
         if (expireInSeconds) {
-            await this.client.set(key, value, 'EX', expireInSeconds);
+            await this.client.set(key, value, "EX", expireInSeconds);
         } else {
             await this.client.set(key, value);
         }
@@ -26,13 +26,13 @@ export class RedisClient {
         try {
             const stringValue = JSON.stringify(value);
             if (expireInSeconds) {
-                await this.client.set(key, stringValue, 'EX', expireInSeconds);
+                await this.client.set(key, stringValue, "EX", expireInSeconds);
             } else {
                 await this.client.set(key, stringValue);
             }
         } catch (e) {
             console.error(`Failed to stringify JSON for Redis key ${key}:`, e);
-        }    
+        }
     }
 
     async get(key: string): Promise<string | null> {
@@ -52,9 +52,7 @@ export class RedisClient {
         return null;
     }
 
-
     async del(key: string): Promise<number> {
         return await this.client.del(key);
     }
-
 }
