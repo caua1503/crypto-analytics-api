@@ -24,6 +24,7 @@ export const enum SourceEnum {
     COINMARKETCAP = "COINMARKETCAP",
     COINGECKO = "COINGECKO",
     COINPAPRIKA = "COINPAPRIKA",
+    ALTERNATIVE_ME = "ALTERNATIVE_ME",
 }
 
 export const zDecimal = z

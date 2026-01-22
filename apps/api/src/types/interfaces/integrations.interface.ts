@@ -13,8 +13,8 @@ export const ApiMarketSnapshotSchema = z.object({
 });
 
 export const ApiSentimentDataSchema = z.object({
-    fearGreedIndex: z.number().min(0).max(100).optional(), // Índice bruto de medo/ganância
-    sentimentScore: z.number().min(0).max(10).optional(), // Score normalizado (0–10)
+    fearGreedIndex: z.coerce.number().min(0).max(100).optional(), // Índice bruto de medo/ganância
+    sentimentScore: z.coerce.number().min(0).max(10).optional(), // Score normalizado (0–10)
 
     source: z.string(), // Fonte do indicador
     timestamp: z.date(), // Momento da medição
@@ -82,3 +82,4 @@ export type ApiSentimentData = z.infer<typeof ApiSentimentDataSchema>;
 export type ApiMacroData = z.infer<typeof ApiMacroDataSchema>;
 export type ApiTechnicalData = z.infer<typeof ApiTechnicalDataSchema>;
 export type ApiAnalysisInput = z.infer<typeof ApiAnalysisInputSchema>;
+export type ApiTechnicalIndicators = z.infer<typeof ApiTechnicalIndicatorsSchema>;
