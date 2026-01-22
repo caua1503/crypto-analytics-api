@@ -8,7 +8,7 @@ export const EnvConfigSchema = z.object({
 
     DATABASE_URL: z.string().min(1),
     REDIS_HOST: z.string().min(1),
-    REDIS_PORT: z.coerce.number().min(1),
+    REDIS_PORT: z.coerce.number().min(1).default(6379),
 
     MARKET_DATA_PROVIDER: z
         .enum(["COINGECKO", "COINMARKETCAP", "COINPAPRIKA"])
