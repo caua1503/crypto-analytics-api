@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { Redis } from "ioredis";
 import { env } from "./env.js";
 import { z } from "zod";
@@ -39,20 +40,41 @@ export class RedisClient {
         return await this.client.get(key);
     }
 
-    async get_json<T>(key: string): Promise<T | null> {
+    async get_json<T>(key: string, model: z.ZodSchema<T>): Promise<T | null> {
         const value = await this.client.get(key);
-        if (value) {
-            try {
-                return JSON.parse(value) as T;
-            } catch (e) {
-                console.error(`Failed to parse JSON from Redis for key ${key}:`, e);
-                return null;
-            }
+
+        if (!value) return null;
+
+        try {
+            return model.parse(JSON.parse(value));
+        } catch (e) {
+            console.error(`Failed to parse JSON from Redis for key ${key}:`, e);
+            return null;
         }
-        return null;
     }
 
     async del(key: string): Promise<number> {
         return await this.client.del(key);
     }
+}
+
+function normalizeParams(params: Record<string, any>) {
+    return Object.fromEntries(
+        Object.entries(params)
+            .filter(([, value]) => value !== undefined)
+            .map(([key, value]) => {
+                if (value instanceof Date) {
+                    return [key, value.toISOString()];
+                }
+                return [key, value];
+            })
+            .sort(([a], [b]) => a.localeCompare(b)),
+    );
+}
+
+export function buildCacheKey(prefix: string, params: Record<string, any>): string {
+    const normalized = normalizeParams(params);
+    const hash = crypto.createHash("sha256").update(JSON.stringify(normalized)).digest("hex");
+
+    return `${prefix}:${hash}`;
 }
