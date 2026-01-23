@@ -1,5 +1,8 @@
 import axios, { AxiosInstance } from "axios";
-import {ApiSentimentDataSchema, ApiSentimentData} from "../types/interfaces/integrations.interface.js";
+import {
+    ApiSentimentDataSchema,
+    ApiSentimentData,
+} from "../types/interfaces/integrations.interface.js";
 import { SourceEnum } from "../types/common.js";
 
 export class FearAndGreedIndex {
@@ -15,8 +18,8 @@ export class FearAndGreedIndex {
             const value: string = response.data.data[0].value;
             return parseInt(value, 10);
         } catch (error) {
-        throw new Error("Erro ao buscar Fear & Greed Index");
-        }    
+            throw new Error("Erro ao buscar Fear & Greed Index");
+        }
     }
 
     async getSentimentData(): Promise<ApiSentimentData> {
@@ -27,10 +30,9 @@ export class FearAndGreedIndex {
             sentimentScore: sentiment,
             source: SourceEnum.ALTERNATIVE_ME,
             timestamp: new Date(),
-        }); 
+        });
 
-        return data ;
-
+        return data;
     }
 }
 
