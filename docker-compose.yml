@@ -42,6 +42,17 @@ services:
       AUTH_TYPE: plain
     volumes:
       - pgbouncer_data:/etc/pgbouncer
+  redis:
+    image: redis:8.0-alpine
+    ports:
+      - "6379:6379"
+    mem_limit: 128m
+    cpus: 0.1
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:
