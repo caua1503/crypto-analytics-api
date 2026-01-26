@@ -76,7 +76,7 @@ model MarketSnapshot {
   createdAt DateTime   @default(now())
   analyses  Analysis[]
 
-  // @@index([assetId])
+  @@index([assetId])
   @@index([assetId, createdAt])
 }
 
@@ -138,8 +138,8 @@ model Analysis {
 
   createdAt DateTime @default(now())
 
-  // @@index([snapshotId])
-  // @@index([engineVersionId])
+  @@index([snapshotId])
+  @@index([engineVersionId])
   @@index([assetId, createdAt])
 }
 
