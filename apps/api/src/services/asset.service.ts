@@ -9,6 +9,8 @@ import {
     AssetExtras,
     AssetExtrasArray,
     AssetExtrasType,
+    AssetResponse,
+    AssetResponseType,
 } from "../types/interfaces/asset.interface.js";
 import {
     PaginationParams,
@@ -20,20 +22,28 @@ export class AssetService {
 
     async findAll(
         pagination: PaginationParamsType = PaginationParams.parse({}),
-    ): Promise<AssetType[]> {
+    ): Promise<AssetResponseType> {
         const { skip, take, order } = pagination;
 
-        const assets = await this.prisma.asset.findMany({
-            skip: skip,
-            take: take,
-            orderBy: { createdAt: order },
-        });
+        const [assets, total] = await Promise.all([
+            this.prisma.asset.findMany({
+                skip: skip,
+                take: take,
+                orderBy: { createdAt: order },
+            }),
+            this.prisma.asset.count(),
+        ]);
 
         if (!assets) {
             throw httpErrors.notFound("No assets found");
         }
-        // console.log(assets);
-        return AssetArray.parse(assets);
+
+        const data = AssetResponse.parse({
+            meta: { total },
+            data: assets,
+        });
+
+        return data;
     }
 
     async findAllWithExtras(

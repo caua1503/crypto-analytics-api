@@ -25,8 +25,14 @@ export const AssetCreate = Asset.omit({
 export const AssetArray = z.array(Asset);
 export const AssetExtrasArray = z.array(AssetExtras);
 
-// export const JsonExtras = z.object({});
+export const AssetResponse = z.object({
+    meta: z.object({
+        total: z.number(),
+    }),
+    data: AssetArray,
+});
 
 export type AssetType = z.infer<typeof Asset>;
 export type AssetExtrasType = z.infer<typeof AssetExtras>;
 export type AssetCreateType = z.infer<typeof AssetCreate>;
+export type AssetResponseType = z.infer<typeof AssetResponse>;

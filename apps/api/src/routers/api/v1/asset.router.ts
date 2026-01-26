@@ -6,6 +6,7 @@ import {
     AssetCreate,
     AssetExtras,
     AssetExtrasArray,
+    AssetResponse,
 } from "../../../types/interfaces/asset.interface.js";
 import { IdSchema, SymbolSchema } from "../../../types/schemas/common.schemas.js";
 import { z } from "zod";
@@ -21,14 +22,12 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
                 tags: ["Asset"],
                 querystring: PaginationParams,
                 response: {
-                    [StatusCodes.OK]: z.object({
-                        assets: z.array(Asset),
-                    }),
+                    [StatusCodes.OK]: AssetResponse,
                 },
             },
         },
         async (req) => {
-            return { assets: await new AssetService(prisma).findAll(req.query) };
+            return await new AssetService(prisma).findAll(req.query);
         },
     );
 
