@@ -9,6 +9,7 @@ export const EnvConfigSchema = z.object({
     DATABASE_URL: z.string().min(1),
     REDIS_HOST: z.string().min(1),
     REDIS_PORT: z.coerce.number().min(1).default(6379),
+    REDIS_TIMEOUT_SECONDS: z.coerce.number().min(1).default(120),
 
     MARKET_DATA_PROVIDER: z
         .enum(["COINGECKO", "COINMARKETCAP", "COINPAPRIKA"])
@@ -24,5 +25,6 @@ export const EnvConfigSchema = z.object({
     COINPAPRIKA_API_KEY: z.string().default("no-key"),
 
     // JWT_SECRET: z.string().min(256),
+
 });
 export const env = EnvConfigSchema.parse(process.env);

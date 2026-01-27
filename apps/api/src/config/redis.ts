@@ -15,7 +15,7 @@ export class RedisClient {
         this.client = client;
     }
 
-    async set(key: string, value: string, expireInSeconds?: number): Promise<void> {
+    async set(key: string, value: string, expireInSeconds: number = env.REDIS_TIMEOUT_SECONDS): Promise<void> {
         if (expireInSeconds) {
             await this.client.set(key, value, "EX", expireInSeconds);
         } else {
@@ -23,7 +23,7 @@ export class RedisClient {
         }
     }
 
-    async set_json(key: string, value: any, expireInSeconds?: number): Promise<void> {
+    async set_json(key: string, value: any, expireInSeconds: number = env.REDIS_TIMEOUT_SECONDS): Promise<void> {
         try {
             const stringValue = JSON.stringify(value);
             if (expireInSeconds) {
