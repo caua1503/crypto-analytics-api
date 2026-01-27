@@ -23,9 +23,13 @@ import {
     PaginationParams,
     type PaginationParamsType,
 } from "../types/interfaces/common.interface.js";
+import { RedisClient, buildCacheKey, redis } from "../config/redis.js";
 
 export class AnalysisService {
-    constructor(private prisma: PrismaClientType) {}
+    constructor(
+        private prisma: PrismaClientType,
+        private cache: RedisClient = new RedisClient(redis),
+    ) {}
 
     async create(data: AnalysisCreateType): Promise<AnalysisType> {
         try {
@@ -43,50 +47,87 @@ export class AnalysisService {
     async findAll(
         pagination: PaginationParamsType = PaginationParams.parse({}),
     ): Promise<AnalysisType[]> {
-        try {
-            const { skip, take } = pagination;
+        const cacheKey = buildCacheKey("analyses:findAll:", pagination);
 
-            const analyses = await this.prisma.analysis.findMany({
-                skip: skip,
-                take: take,
-                orderBy: { createdAt: "desc" },
-            });
+        const cachedAnalyses = await this.cache.get_json<AnalysisType[]>(cacheKey, AnalysisArray);
 
-            if (!analyses) {
-                //Retornar uma execeção http 404
-                throw httpErrors.notFound("Analyses not found");
-            }
-
-            return AnalysisArray.parse(analyses);
-        } catch (error) {
-            console.error("Error fetching analyses:", error);
-            throw httpErrors.internalServerError("Failed to fetch analyses");
+        if (cachedAnalyses) {
+            return cachedAnalyses;
         }
+        const { skip, take, order } = pagination;
+
+        const analyses = await this.prisma.analysis.findMany({
+            skip: skip,
+            take: take,
+            orderBy: { createdAt: order },
+        });
+
+        if (!analyses) {
+            throw httpErrors.notFound("Analyses not found");
+        }
+
+        const { success, data, error } = AnalysisArray.safeParse(analyses);
+
+        if (!success) {
+            console.error(error);
+            throw httpErrors.internalServerError("Invalid analyses data");
+        }
+
+        return data;
     }
 
     async findById(id: number): Promise<AnalysisType> {
-        try {
-            const analyses = await this.prisma.analysis.findUnique({ where: { id } });
+        const cacheKey = `analyses:findById:${id}`;
 
-            if (!analyses) {
-                //Retornar uma execeção http 404
-                throw httpErrors.notFound("Analyses not found");
-            }
+        const cachedAnalyses = await this.cache.get_json<AnalysisType>(cacheKey, Analysis);
 
-            return Analysis.parse(analyses);
-        } catch (error) {
-            console.error(`Error fetching analysis by ID (${id}): ${error}`);
-            throw httpErrors.internalServerError("Failed to fetch analysis by ID");
+        if (cachedAnalyses) {
+            return cachedAnalyses;
         }
+
+        const analyses = await this.prisma.analysis.findUnique({ where: { id } });
+
+        if (!analyses) {
+            throw httpErrors.notFound("Analyses not found");
+        }
+
+        const { success, data, error } = Analysis.safeParse(analyses);
+
+        if (!success) {
+            console.error(error);
+            throw httpErrors.internalServerError("Invalid analyses data");
+        }
+
+        return data;
     }
 
     async findByAssetId(assetId: number): Promise<AnalysisType[]> {
+        const cacheKey = `analyses:findByAssetId:${assetId}`;
+
+        const cachedAnalyses = await this.cache.get_json<AnalysisType[]>(cacheKey, AnalysisArray);
+
+        if (cachedAnalyses) {
+            return cachedAnalyses;
+        }
         const analyses = await this.prisma.analysis.findMany({ where: { assetId } });
-        return analyses.map((analysis: any) => Analysis.parse(analysis));
+
+        if (!analyses) {
+            throw httpErrors.notFound("Analyses not found");
+        }
+
+        const { success, data, error } = AnalysisArray.safeParse(analyses);
+
+        if (!success) {
+            console.error(error);
+            throw httpErrors.internalServerError("Invalid analyses data");
+        }
+
+        return data;
     }
 
     async delete(id: number): Promise<void> {
         try {
+            this.cache.del(`analyses:findById:${id}`);
             await this.prisma.analysis.delete({ where: { id } });
         } catch (error) {
             console.error(`Error deleting analysis by ID (${id}): ${error}`);
@@ -96,6 +137,7 @@ export class AnalysisService {
 
     async update(id: number, data: Partial<AnalysisCreateType>): Promise<AnalysisType> {
         try {
+            this.cache.del(`analyses:findById:${id}`);
             const validatedData = AnalysisCreate.partial().parse(data);
             const updatedAnalysis = await this.prisma.analysis.update({
                 where: { id },
@@ -110,7 +152,10 @@ export class AnalysisService {
 }
 
 export class AnalysisEngineVersionService {
-    constructor(private prisma: PrismaClientType) {}
+    constructor(
+        private prisma: PrismaClientType,
+        private cache: RedisClient = new RedisClient(redis),
+    ) {}
 
     async create(data: AnalysisEngineVersionCreateType): Promise<AnalysisEngineVersionType> {
         try {
@@ -127,44 +172,71 @@ export class AnalysisEngineVersionService {
             {},
         ),
     ): Promise<AnalysisEngineVersionType[]> {
-        try {
-            const { skip, take, isActive } = pagination;
+        const cacheKey = buildCacheKey("analysisEngineVersions:findAll:", pagination);
 
-            const versions = await this.prisma.analysisEngineVersion.findMany({
-                skip: skip,
-                take: take,
-                orderBy: { createdAt: "desc" },
-                where: {
-                    ...(isActive !== undefined && { isActive }),
-                },
-            });
+        const cachedVersions = await this.cache.get_json<AnalysisEngineVersionType[]>(
+            cacheKey,
+            AnalysisEngineVersionArray,
+        );
 
-            if (!versions) {
-                //Retornar uma execeção http 404
-                throw httpErrors.notFound("No analysis engine versions found");
-            }
-
-            return AnalysisEngineVersionArray.parse(versions);
-        } catch (error) {
-            console.error("Error fetching analysis engine versions:", error);
-            throw httpErrors.internalServerError("Failed to fetch analysis engine versions");
+        if (cachedVersions) {
+            return cachedVersions;
         }
+        const { skip, take, isActive } = pagination;
+
+        const versions = await this.prisma.analysisEngineVersion.findMany({
+            skip: skip,
+            take: take,
+            orderBy: { createdAt: "desc" },
+            where: {
+                ...(isActive !== undefined && { isActive }),
+            },
+        });
+
+        if (!versions) {
+            throw httpErrors.notFound("No analysis engine versions found");
+        }
+
+        const { success, data, error } = AnalysisEngineVersionArray.safeParse(versions);
+
+        if (!success) {
+            console.error(error);
+            throw httpErrors.internalServerError("Invalid analysis engine versions data");
+        }
+
+        this.cache.set_json(cacheKey, data, 300);
+
+        return data;
     }
 
     async findById(id: number): Promise<AnalysisEngineVersionType> {
-        try {
-            const version = await this.prisma.analysisEngineVersion.findUnique({ where: { id } });
+        const cacheKey = `analysisEngineVersions:findById:${id}`;
 
-            if (!version) {
-                //Retornar uma execeção http 404
-                throw httpErrors.notFound("Analysis engine version not found");
-            }
+        const cachedVersion = await this.cache.get_json<AnalysisEngineVersionType>(
+            cacheKey,
+            AnalysisEngineVersion,
+        );
 
-            return AnalysisEngineVersion.parse(version);
-        } catch (error) {
-            console.error(`Error fetching analysis engine version by ID (${id}): ${error}`);
-            throw httpErrors.internalServerError("Failed to fetch analysis engine version by ID");
+        if (cachedVersion) {
+            return cachedVersion;
         }
+
+        const version = await this.prisma.analysisEngineVersion.findUnique({ where: { id } });
+
+        if (!version) {
+            throw httpErrors.notFound("Analysis engine version not found");
+        }
+
+        const { success, data, error } = AnalysisEngineVersion.safeParse(version);
+
+        if (!success) {
+            console.error(error);
+            throw httpErrors.internalServerError("Invalid analysis engine version data");
+        }
+
+        this.cache.set_json(cacheKey, data, 300);
+
+        return data;
     }
 
     async delete(id: number): Promise<void> {

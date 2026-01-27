@@ -13,14 +13,29 @@ import {
 } from "../types/interfaces/market.interface.js";
 import { AssetService } from "./asset.service.js";
 import { z } from "zod";
+import { RedisClient, buildCacheKey, redis } from "../config/redis.js";
 
 export class MarketSnapshotService {
-    constructor(private prisma: PrismaClientType) {}
+    constructor(
+        private prisma: PrismaClientType,
+        private cache: RedisClient = new RedisClient(redis),
+    ) {}
 
     async findAll(
         assetId: number,
         pagination: PaginationParamsType = PaginationParams.parse({}),
     ): Promise<MarketSnapshotType[]> {
+        const cacheKey = buildCacheKey("marketsnapshots:findAll:", { assetId, ...pagination });
+
+        const cachedSnapshots = await new RedisClient(redis).get_json<MarketSnapshotType[]>(
+            cacheKey,
+            MarketSnapshotArray,
+        );
+
+        if (cachedSnapshots) {
+            return cachedSnapshots;
+        }
+
         const { skip, take, order } = pagination;
         const snapshots = await this.prisma.marketSnapshot.findMany({
             where: { assetId: assetId },
@@ -28,38 +43,108 @@ export class MarketSnapshotService {
             take: take,
             orderBy: { createdAt: order },
         });
+
         if (!snapshots) {
             throw httpErrors.notFound("No market snapshots found");
         }
-        return MarketSnapshotArray.parse(snapshots);
+
+        const { success, data, error } = MarketSnapshotArray.safeParse(snapshots);
+
+        if (!success) {
+            console.error(error);
+            throw httpErrors.internalServerError("Invalid market snapshots data");
+        }
+
+        this.cache.set_json(cacheKey, data, 300);
+
+        return data;
     }
 
     async findById(id: number): Promise<MarketSnapshotType> {
+        const cacheKey = `marketsnapshots:findById:${id}`;
+
+        const cachedSnapshot = await this.cache.get_json<MarketSnapshotType>(
+            cacheKey,
+            MarketSnapshot,
+        );
+
+        if (cachedSnapshot) {
+            return cachedSnapshot;
+        }
+
         const marketsnapshot = await this.prisma.marketSnapshot.findFirst({
             where: { id },
             orderBy: { createdAt: "desc" },
         });
+
         if (!marketsnapshot) {
             throw httpErrors.notFound("Market snapshot not found");
         }
 
-        return MarketSnapshot.parse(marketsnapshot);
+        const { success, data, error } = MarketSnapshot.safeParse(marketsnapshot);
+
+        if (!success) {
+            console.error(error);
+            throw httpErrors.internalServerError("Invalid market snapshot data");
+        }
+
+        this.cache.set_json(cacheKey, data, 300);
+
+        return data;
     }
 
     async getLatestSnapshotByAssetId(assetId: number): Promise<MarketSnapshotType> {
+        const cacheKey = `marketsnapshots:latest:${assetId}`;
+
+        const cachedSnapshot = await this.cache.get_json<MarketSnapshotType>(
+            cacheKey,
+            MarketSnapshot,
+        );
+
+        if (cachedSnapshot) {
+            return cachedSnapshot;
+        }
+
         const marketsnapshot = await this.prisma.marketSnapshot.findFirst({
             where: { assetId: assetId },
             orderBy: { createdAt: "desc" },
         });
+
         if (!marketsnapshot) {
             throw httpErrors.notFound("Market snapshot not found");
         }
-        return MarketSnapshot.parse(marketsnapshot);
+        const { success, data, error } = MarketSnapshot.safeParse(marketsnapshot);
+
+        if (!success) {
+            console.error(error);
+            throw httpErrors.internalServerError("Invalid market snapshot data");
+        }
+
+        this.cache.set_json(cacheKey, data, 300);
+
+        return data;
     }
 
     async getLatestSnapshotBySymbol(symbol: string): Promise<MarketSnapshotType> {
-        const { id } = await new AssetService(this.prisma).findBySymbol(symbol);
-        return await this.getLatestSnapshotByAssetId(id);
+        const cacheKey = `marketsnapshots:latest:symbol:${symbol}`;
+
+        const cachedSnapshot = await this.cache.get_json<MarketSnapshotType>(
+            cacheKey,
+            MarketSnapshot,
+        );
+
+        if (cachedSnapshot) {
+            return cachedSnapshot;
+        }
+        try {
+            const { id } = await new AssetService(this.prisma).findBySymbol(symbol);
+            return await this.getLatestSnapshotByAssetId(id);
+        } catch (error) {
+            console.error(error);
+            throw httpErrors.internalServerError(
+                "Failed to fetch latest market snapshot by symbol",
+            );
+        }
     }
 
     async create(data: MarketSnapshotCreateType): Promise<MarketSnapshotType> {
