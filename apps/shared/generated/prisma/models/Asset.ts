@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.js"
-import type * as Prisma from "../internal/prismaNamespace.js"
+import type * as $Enums from "../enums.ts"
+import type * as Prisma from "../internal/prismaNamespace.ts"
 
 /**
  * Model Asset
@@ -36,6 +36,7 @@ export type AssetSumAggregateOutputType = {
 
 export type AssetMinAggregateOutputType = {
   id: number | null
+  public_Id: string | null
   symbol: string | null
   name: string | null
   createdAt: Date | null
@@ -43,6 +44,7 @@ export type AssetMinAggregateOutputType = {
 
 export type AssetMaxAggregateOutputType = {
   id: number | null
+  public_Id: string | null
   symbol: string | null
   name: string | null
   createdAt: Date | null
@@ -50,8 +52,10 @@ export type AssetMaxAggregateOutputType = {
 
 export type AssetCountAggregateOutputType = {
   id: number
+  public_Id: number
   symbol: number
   name: number
+  extras: number
   createdAt: number
   _all: number
 }
@@ -67,6 +71,7 @@ export type AssetSumAggregateInputType = {
 
 export type AssetMinAggregateInputType = {
   id?: true
+  public_Id?: true
   symbol?: true
   name?: true
   createdAt?: true
@@ -74,6 +79,7 @@ export type AssetMinAggregateInputType = {
 
 export type AssetMaxAggregateInputType = {
   id?: true
+  public_Id?: true
   symbol?: true
   name?: true
   createdAt?: true
@@ -81,8 +87,10 @@ export type AssetMaxAggregateInputType = {
 
 export type AssetCountAggregateInputType = {
   id?: true
+  public_Id?: true
   symbol?: true
   name?: true
+  extras?: true
   createdAt?: true
   _all?: true
 }
@@ -175,8 +183,10 @@ export type AssetGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type AssetGroupByOutputType = {
   id: number
+  public_Id: string
   symbol: string
   name: string
+  extras: runtime.JsonValue | null
   createdAt: Date
   _count: AssetCountAggregateOutputType | null
   _avg: AssetAvgAggregateOutputType | null
@@ -205,8 +215,10 @@ export type AssetWhereInput = {
   OR?: Prisma.AssetWhereInput[]
   NOT?: Prisma.AssetWhereInput | Prisma.AssetWhereInput[]
   id?: Prisma.IntFilter<"Asset"> | number
+  public_Id?: Prisma.UuidFilter<"Asset"> | string
   symbol?: Prisma.StringFilter<"Asset"> | string
   name?: Prisma.StringFilter<"Asset"> | string
+  extras?: Prisma.JsonNullableFilter<"Asset">
   createdAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
   snapshots?: Prisma.MarketSnapshotListRelationFilter
   analyses?: Prisma.AnalysisListRelationFilter
@@ -214,8 +226,10 @@ export type AssetWhereInput = {
 
 export type AssetOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  public_Id?: Prisma.SortOrder
   symbol?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  extras?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   snapshots?: Prisma.MarketSnapshotOrderByRelationAggregateInput
   analyses?: Prisma.AnalysisOrderByRelationAggregateInput
@@ -223,20 +237,24 @@ export type AssetOrderByWithRelationInput = {
 
 export type AssetWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  public_Id?: string
   symbol?: string
   AND?: Prisma.AssetWhereInput | Prisma.AssetWhereInput[]
   OR?: Prisma.AssetWhereInput[]
   NOT?: Prisma.AssetWhereInput | Prisma.AssetWhereInput[]
   name?: Prisma.StringFilter<"Asset"> | string
+  extras?: Prisma.JsonNullableFilter<"Asset">
   createdAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
   snapshots?: Prisma.MarketSnapshotListRelationFilter
   analyses?: Prisma.AnalysisListRelationFilter
-}, "id" | "symbol">
+}, "id" | "public_Id" | "symbol">
 
 export type AssetOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  public_Id?: Prisma.SortOrder
   symbol?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  extras?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.AssetCountOrderByAggregateInput
   _avg?: Prisma.AssetAvgOrderByAggregateInput
@@ -250,14 +268,18 @@ export type AssetScalarWhereWithAggregatesInput = {
   OR?: Prisma.AssetScalarWhereWithAggregatesInput[]
   NOT?: Prisma.AssetScalarWhereWithAggregatesInput | Prisma.AssetScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Asset"> | number
+  public_Id?: Prisma.UuidWithAggregatesFilter<"Asset"> | string
   symbol?: Prisma.StringWithAggregatesFilter<"Asset"> | string
   name?: Prisma.StringWithAggregatesFilter<"Asset"> | string
+  extras?: Prisma.JsonNullableWithAggregatesFilter<"Asset">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Asset"> | Date | string
 }
 
 export type AssetCreateInput = {
+  public_Id?: string
   symbol: string
   name: string
+  extras?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   snapshots?: Prisma.MarketSnapshotCreateNestedManyWithoutAssetInput
   analyses?: Prisma.AnalysisCreateNestedManyWithoutAssetInput
@@ -265,16 +287,20 @@ export type AssetCreateInput = {
 
 export type AssetUncheckedCreateInput = {
   id?: number
+  public_Id?: string
   symbol: string
   name: string
+  extras?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   snapshots?: Prisma.MarketSnapshotUncheckedCreateNestedManyWithoutAssetInput
   analyses?: Prisma.AnalysisUncheckedCreateNestedManyWithoutAssetInput
 }
 
 export type AssetUpdateInput = {
+  public_Id?: Prisma.StringFieldUpdateOperationsInput | string
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  extras?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   snapshots?: Prisma.MarketSnapshotUpdateManyWithoutAssetNestedInput
   analyses?: Prisma.AnalysisUpdateManyWithoutAssetNestedInput
@@ -282,8 +308,10 @@ export type AssetUpdateInput = {
 
 export type AssetUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  public_Id?: Prisma.StringFieldUpdateOperationsInput | string
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  extras?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   snapshots?: Prisma.MarketSnapshotUncheckedUpdateManyWithoutAssetNestedInput
   analyses?: Prisma.AnalysisUncheckedUpdateManyWithoutAssetNestedInput
@@ -291,28 +319,36 @@ export type AssetUncheckedUpdateInput = {
 
 export type AssetCreateManyInput = {
   id?: number
+  public_Id?: string
   symbol: string
   name: string
+  extras?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
 export type AssetUpdateManyMutationInput = {
+  public_Id?: Prisma.StringFieldUpdateOperationsInput | string
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  extras?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AssetUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  public_Id?: Prisma.StringFieldUpdateOperationsInput | string
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  extras?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AssetCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  public_Id?: Prisma.SortOrder
   symbol?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  extras?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -322,6 +358,7 @@ export type AssetAvgOrderByAggregateInput = {
 
 export type AssetMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  public_Id?: Prisma.SortOrder
   symbol?: Prisma.SortOrder
   name?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -329,6 +366,7 @@ export type AssetMaxOrderByAggregateInput = {
 
 export type AssetMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  public_Id?: Prisma.SortOrder
   symbol?: Prisma.SortOrder
   name?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -388,16 +426,20 @@ export type AssetUpdateOneRequiredWithoutAnalysesNestedInput = {
 }
 
 export type AssetCreateWithoutSnapshotsInput = {
+  public_Id?: string
   symbol: string
   name: string
+  extras?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   analyses?: Prisma.AnalysisCreateNestedManyWithoutAssetInput
 }
 
 export type AssetUncheckedCreateWithoutSnapshotsInput = {
   id?: number
+  public_Id?: string
   symbol: string
   name: string
+  extras?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   analyses?: Prisma.AnalysisUncheckedCreateNestedManyWithoutAssetInput
 }
@@ -419,31 +461,39 @@ export type AssetUpdateToOneWithWhereWithoutSnapshotsInput = {
 }
 
 export type AssetUpdateWithoutSnapshotsInput = {
+  public_Id?: Prisma.StringFieldUpdateOperationsInput | string
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  extras?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   analyses?: Prisma.AnalysisUpdateManyWithoutAssetNestedInput
 }
 
 export type AssetUncheckedUpdateWithoutSnapshotsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  public_Id?: Prisma.StringFieldUpdateOperationsInput | string
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  extras?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   analyses?: Prisma.AnalysisUncheckedUpdateManyWithoutAssetNestedInput
 }
 
 export type AssetCreateWithoutAnalysesInput = {
+  public_Id?: string
   symbol: string
   name: string
+  extras?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   snapshots?: Prisma.MarketSnapshotCreateNestedManyWithoutAssetInput
 }
 
 export type AssetUncheckedCreateWithoutAnalysesInput = {
   id?: number
+  public_Id?: string
   symbol: string
   name: string
+  extras?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   snapshots?: Prisma.MarketSnapshotUncheckedCreateNestedManyWithoutAssetInput
 }
@@ -465,16 +515,20 @@ export type AssetUpdateToOneWithWhereWithoutAnalysesInput = {
 }
 
 export type AssetUpdateWithoutAnalysesInput = {
+  public_Id?: Prisma.StringFieldUpdateOperationsInput | string
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  extras?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   snapshots?: Prisma.MarketSnapshotUpdateManyWithoutAssetNestedInput
 }
 
 export type AssetUncheckedUpdateWithoutAnalysesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  public_Id?: Prisma.StringFieldUpdateOperationsInput | string
   symbol?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  extras?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   snapshots?: Prisma.MarketSnapshotUncheckedUpdateManyWithoutAssetNestedInput
 }
@@ -521,8 +575,10 @@ export type AssetCountOutputTypeCountAnalysesArgs<ExtArgs extends runtime.Types.
 
 export type AssetSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  public_Id?: boolean
   symbol?: boolean
   name?: boolean
+  extras?: boolean
   createdAt?: boolean
   snapshots?: boolean | Prisma.Asset$snapshotsArgs<ExtArgs>
   analyses?: boolean | Prisma.Asset$analysesArgs<ExtArgs>
@@ -531,26 +587,32 @@ export type AssetSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 
 export type AssetSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  public_Id?: boolean
   symbol?: boolean
   name?: boolean
+  extras?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["asset"]>
 
 export type AssetSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  public_Id?: boolean
   symbol?: boolean
   name?: boolean
+  extras?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["asset"]>
 
 export type AssetSelectScalar = {
   id?: boolean
+  public_Id?: boolean
   symbol?: boolean
   name?: boolean
+  extras?: boolean
   createdAt?: boolean
 }
 
-export type AssetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "symbol" | "name" | "createdAt", ExtArgs["result"]["asset"]>
+export type AssetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "public_Id" | "symbol" | "name" | "extras" | "createdAt", ExtArgs["result"]["asset"]>
 export type AssetInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   snapshots?: boolean | Prisma.Asset$snapshotsArgs<ExtArgs>
   analyses?: boolean | Prisma.Asset$analysesArgs<ExtArgs>
@@ -567,8 +629,10 @@ export type $AssetPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
+    public_Id: string
     symbol: string
     name: string
+    extras: runtime.JsonValue | null
     createdAt: Date
   }, ExtArgs["result"]["asset"]>
   composites: {}
@@ -996,8 +1060,10 @@ export interface Prisma__AssetClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface AssetFieldRefs {
   readonly id: Prisma.FieldRef<"Asset", 'Int'>
+  readonly public_Id: Prisma.FieldRef<"Asset", 'String'>
   readonly symbol: Prisma.FieldRef<"Asset", 'String'>
   readonly name: Prisma.FieldRef<"Asset", 'String'>
+  readonly extras: Prisma.FieldRef<"Asset", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Asset", 'DateTime'>
 }
     

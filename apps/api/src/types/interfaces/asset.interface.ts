@@ -7,8 +7,6 @@ export const Asset = z.object({
         .string()
         .min(1)
         .transform((str) => str.charAt(0).toUpperCase() + str.slice(1)),
-    // snapshots MarketSnapshot[]
-    // analyses  Analysis[]
 
     createdAt: z.coerce.date(),
 });

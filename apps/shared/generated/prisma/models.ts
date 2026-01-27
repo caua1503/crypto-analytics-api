@@ -8,10 +8,10 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Asset.js'
-export type * from './models/MarketSnapshot.js'
-export type * from './models/AnalysisEngineVersion.js'
-export type * from './models/Criterion.js'
-export type * from './models/CriterionWeight.js'
-export type * from './models/Analysis.js'
-export type * from './commonInputTypes.js'
+export type * from './models/Asset.ts'
+export type * from './models/MarketSnapshot.ts'
+export type * from './models/AnalysisEngineVersion.ts'
+export type * from './models/Criterion.ts'
+export type * from './models/CriterionWeight.ts'
+export type * from './models/Analysis.ts'
+export type * from './commonInputTypes.ts'
