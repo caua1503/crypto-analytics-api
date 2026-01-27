@@ -47,7 +47,7 @@ export class AssetService {
             }),
             this.prisma.asset.count(),
         ]);
-
+        console.log(assets);
         if (!assets) {
             throw httpErrors.notFound("Assets not found");
         }

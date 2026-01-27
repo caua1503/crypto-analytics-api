@@ -8,10 +8,6 @@ export const Criterion = z.object({
     name: z.string(),
     description: z.string().nullable(),
     category: CriterionCategory,
-
-    // weights: CriterionWeight[]
-
-    // createdAt: z.coerce.date(),
 });
 
 export const CriterionArray = z.array(Criterion);

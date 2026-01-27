@@ -16,10 +16,7 @@ export const Analysis = z.object({
     recommendation: Recommendation,
 
     snapshotId: z.number(),
-    // snapshot
-
     engineVersionId: z.number(),
-    // engineVersion
 
     createdAt: z.coerce.date(),
 });
