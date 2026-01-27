@@ -11,6 +11,10 @@ import {
     AssetExtrasType,
     AssetResponse,
     AssetResponseType,
+    AssetPublic,
+    AssetPublicType,
+    AssetPublicResponse,
+    AssetPublicResponseType,
 } from "../types/interfaces/asset.interface.js";
 import {
     PaginationParams,
@@ -26,16 +30,16 @@ export class AssetService {
 
     async findAll(
         pagination: PaginationParamsType = PaginationParams.parse({}),
-    ): Promise<AssetResponseType> {
+    ): Promise<AssetPublicResponseType> {
         const cacheKey = buildCacheKey("assets:findAll:", pagination);
 
-        const cachedResponse = await this.cache.get_json<AssetResponseType>(
+        const cachedResponse = await this.cache.get_json<AssetPublicResponseType>(
             cacheKey,
-            AssetResponse,
+            AssetPublicResponse,
         );
 
         if (cachedResponse) {
-            return cachedResponse;
+            // return cachedResponse;
         }
         const { skip, take, order } = pagination;
 
@@ -47,12 +51,14 @@ export class AssetService {
             }),
             this.prisma.asset.count(),
         ]);
+
         console.log(assets);
+
         if (!assets) {
             throw httpErrors.notFound("Assets not found");
         }
 
-        const data = AssetResponse.parse({
+        const data = AssetPublicResponse.parse({
             meta: { total },
             data: assets,
         });
@@ -95,9 +101,9 @@ export class AssetService {
         return data;
     }
 
-    async findById(id: number): Promise<AssetType> {
+    async findById(id: number): Promise<AssetPublicType> {
         const cacheKey = `asset:id:${id}`;
-        const cachedAsset = await this.cache.get_json<AssetType>(cacheKey, Asset);
+        const cachedAsset = await this.cache.get_json<AssetPublicType>(cacheKey, AssetPublic);
 
         if (cachedAsset) {
             return cachedAsset;
@@ -109,7 +115,7 @@ export class AssetService {
             throw httpErrors.notFound("Asset not found");
         }
 
-        const { success, data, error } = Asset.safeParse(asset);
+        const { success, data, error } = AssetPublic.safeParse(asset);
 
         if (!success) {
             console.error(error);
@@ -145,7 +151,30 @@ export class AssetService {
 
         return data;
     }
+    async findByPublicId(public_Id: string): Promise<AssetType> {
+        const cacheKey = `asset:publicId:${public_Id}`;
+        const cachedAsset = await this.cache.get_json<AssetType>(cacheKey, Asset);
 
+        if (cachedAsset) {
+            return cachedAsset;
+        }
+
+        const asset = await this.prisma.asset.findUnique({ where: { public_Id } });
+
+        if (!asset) {
+            throw httpErrors.notFound("Asset not found");
+        }
+
+        const { success, data, error } = Asset.safeParse(asset);
+        
+        if (!success) {
+            console.error(error);
+            throw httpErrors.notFound("Invalid asset data");
+        }
+        this.cache.set_json(cacheKey, data, 300).catch(console.error); // Cache for 5 minutes
+        
+        return data;
+    }
     async findBySymbol(symbol: string): Promise<AssetType> {
         const cacheKey = `asset:symbol:${symbol}`;
         const cachedAsset = await this.cache.get_json<AssetType>(cacheKey, Asset);

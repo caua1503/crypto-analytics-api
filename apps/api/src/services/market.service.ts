@@ -93,8 +93,8 @@ export class MarketSnapshotService {
         return data;
     }
 
-    async getLatestSnapshotByAssetId(assetId: number): Promise<MarketSnapshotType> {
-        const cacheKey = `marketsnapshots:latest:${assetId}`;
+    async getLatestSnapshotByPublicId(PublicId: string): Promise<MarketSnapshotType> {
+        const cacheKey = `marketsnapshots:latest:${PublicId}`;
 
         const cachedSnapshot = await this.cache.get_json<MarketSnapshotType>(
             cacheKey,
@@ -104,9 +104,9 @@ export class MarketSnapshotService {
         if (cachedSnapshot) {
             return cachedSnapshot;
         }
-
+        const {id} = await new AssetService(this.prisma).findByPublicId(PublicId);
         const marketsnapshot = await this.prisma.marketSnapshot.findFirst({
-            where: { assetId: assetId },
+            where: { assetId: id },
             orderBy: { createdAt: "desc" },
         });
 
@@ -137,8 +137,8 @@ export class MarketSnapshotService {
             return cachedSnapshot;
         }
         try {
-            const { id } = await new AssetService(this.prisma).findBySymbol(symbol);
-            return await this.getLatestSnapshotByAssetId(id);
+            const { public_Id } = await new AssetService(this.prisma).findBySymbol(symbol);
+            return await this.getLatestSnapshotByPublicId(public_Id);
         } catch (error) {
             console.error(error);
             throw httpErrors.internalServerError(

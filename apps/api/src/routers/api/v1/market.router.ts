@@ -2,7 +2,7 @@ import { z } from "zod";
 import { StatusCodes } from "http-status-codes";
 import { FastifyInstanceTyped } from "../../../types/common.js";
 import { prisma } from "../../../config/prisma.js";
-import { IdSchema, SymbolSchema } from "../../../types/schemas/common.schemas.js";
+import { IdSchema, SymbolSchema, PublicIdSchema } from "../../../types/schemas/common.schemas.js";
 import { PaginationParams } from "../../../types/interfaces/common.interface.js";
 import {
     MarketSnapshotCreate,
@@ -47,19 +47,19 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
         },
     );
     app.get(
-        "/asset/:id/latest",
+        "/asset/:public_Id/latest",
         {
             schema: {
                 tags: ["Market"],
-                params: IdSchema,
+                params: PublicIdSchema,
                 response: {
                     [StatusCodes.OK]: MarketSnapshotResponse,
                 },
             },
         },
         async (req) => {
-            return await new MarketSnapshotService(prisma).getLatestSnapshotByAssetId(
-                req.params.id,
+            return await new MarketSnapshotService(prisma).getLatestSnapshotByPublicId(
+                req.params.public_Id,
             );
         },
     );

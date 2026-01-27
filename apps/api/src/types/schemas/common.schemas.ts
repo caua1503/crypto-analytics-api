@@ -7,3 +7,7 @@ export const SymbolSchema = z.object({
 export const IdSchema = z.object({
     id: z.coerce.number().int().positive().min(1).describe("ID parameter"),
 });
+
+export const PublicIdSchema = z.object({
+    public_Id: z.uuid().describe("Public ID parameter"),
+});

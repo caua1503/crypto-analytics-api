@@ -3,10 +3,11 @@ import { AssetService } from "../../../services/asset.service.js";
 import { prisma } from "../../../config/prisma.js";
 import {
     Asset,
+    AssetPublic,
     AssetCreate,
     AssetExtras,
     AssetExtrasArray,
-    AssetResponse,
+    AssetPublicResponse,
 } from "../../../types/interfaces/asset.interface.js";
 import { IdSchema, SymbolSchema } from "../../../types/schemas/common.schemas.js";
 import { z } from "zod";
@@ -22,7 +23,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
                 tags: ["Asset"],
                 querystring: PaginationParams,
                 response: {
-                    [StatusCodes.OK]: AssetResponse,
+                    [StatusCodes.OK]: AssetPublicResponse,
                 },
             },
         },
@@ -50,13 +51,13 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
     );
 
     app.get(
-        "/symbol/:symbol",
+        "/:symbol",
         {
             schema: {
                 tags: ["Asset"],
                 params: SymbolSchema,
                 response: {
-                    [StatusCodes.OK]: Asset,
+                    [StatusCodes.OK]: AssetPublic,
                 },
             },
         },
@@ -66,7 +67,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
     );
 
     app.get(
-        "/symbol/:symbol/extras",
+        "/:symbol/extras",
         {
             schema: {
                 tags: ["Asset"],
@@ -82,13 +83,13 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
     );
 
     app.get(
-        "/:id",
+        "/id/:id",
         {
             schema: {
                 tags: ["Asset"],
                 params: IdSchema,
                 response: {
-                    [StatusCodes.OK]: Asset,
+                    [StatusCodes.OK]: AssetPublic,
                 },
             },
         },
@@ -98,7 +99,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
     );
 
     app.get(
-        "/:id/extras",
+        "/id/:id/extras",
         {
             schema: {
                 tags: ["Asset"],
@@ -129,7 +130,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
         },
     );
     app.patch(
-        "/:id",
+        "/id/:id",
         {
             schema: {
                 tags: ["Asset"],
@@ -145,7 +146,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
         },
     );
     app.delete(
-        "/:id",
+        "/id/:id",
         {
             schema: {
                 tags: ["Asset"],
