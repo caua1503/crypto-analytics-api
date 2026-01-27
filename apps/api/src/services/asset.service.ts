@@ -63,7 +63,7 @@ export class AssetService {
             data: assets,
         });
 
-        this.cache.set_json(cacheKey, data, 300).catch(console.error); // Cache for 5 minutes
+        this.cache.set_json(cacheKey, data).catch(console.error); 
 
         return data;
     }
@@ -96,7 +96,7 @@ export class AssetService {
             throw httpErrors.internalServerError("Invalid assets data");
         }
 
-        this.cache.set_json(cacheKey, data, 300).catch(console.error); // Cache for 5 minutes
+        this.cache.set_json(cacheKey, data).catch(console.error); 
 
         return data;
     }
@@ -121,7 +121,7 @@ export class AssetService {
             console.error(error);
             throw httpErrors.notFound("Invalid asset data");
         }
-        this.cache.set_json(cacheKey, data, 300).catch(console.error); // Cache for 5 minutes
+        this.cache.set_json(cacheKey, data).catch(console.error); 
 
         return data;
     }
@@ -147,7 +147,7 @@ export class AssetService {
             throw httpErrors.notFound("Invalid asset data");
         }
 
-        this.cache.set_json(cacheKey, data, 300).catch(console.error); // Cache for 5 minutes
+        this.cache.set_json(cacheKey, data).catch(console.error); 
 
         return data;
     }
@@ -171,7 +171,7 @@ export class AssetService {
             console.error(error);
             throw httpErrors.notFound("Invalid asset data");
         }
-        this.cache.set_json(cacheKey, data, 300).catch(console.error); // Cache for 5 minutes
+        this.cache.set_json(cacheKey, data).catch(console.error); 
         
         return data;
     }
@@ -195,7 +195,7 @@ export class AssetService {
             console.error(error);
             throw httpErrors.notFound("Invalid asset data");
         }
-        this.cache.set_json(cacheKey, data, 300).catch(console.error); // Cache for 5 minutes
+        this.cache.set_json(cacheKey, data).catch(console.error); 
 
         return data;
     }
@@ -220,7 +220,7 @@ export class AssetService {
             throw httpErrors.notFound("Invalid asset data");
         }
 
-        this.cache.set_json(cacheKey, data, 300).catch(console.error); // Cache for 5 minutes
+        this.cache.set_json(cacheKey, data).catch(console.error); 
 
         return data;
     }

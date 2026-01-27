@@ -204,7 +204,7 @@ export class AnalysisEngineVersionService {
             throw httpErrors.internalServerError("Invalid analysis engine versions data");
         }
 
-        this.cache.set_json(cacheKey, data, 300);
+        this.cache.set_json(cacheKey, data);
 
         return data;
     }
@@ -234,7 +234,7 @@ export class AnalysisEngineVersionService {
             throw httpErrors.internalServerError("Invalid analysis engine version data");
         }
 
-        this.cache.set_json(cacheKey, data, 300);
+        this.cache.set_json(cacheKey, data);
 
         return data;
     }

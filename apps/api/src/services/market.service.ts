@@ -55,7 +55,7 @@ export class MarketSnapshotService {
             throw httpErrors.internalServerError("Invalid market snapshots data");
         }
 
-        this.cache.set_json(cacheKey, data, 300);
+        this.cache.set_json(cacheKey, data);
 
         return data;
     }
@@ -88,7 +88,7 @@ export class MarketSnapshotService {
             throw httpErrors.internalServerError("Invalid market snapshot data");
         }
 
-        this.cache.set_json(cacheKey, data, 300);
+        this.cache.set_json(cacheKey, data);
 
         return data;
     }
@@ -120,7 +120,7 @@ export class MarketSnapshotService {
             throw httpErrors.internalServerError("Invalid market snapshot data");
         }
 
-        this.cache.set_json(cacheKey, data, 300);
+        this.cache.set_json(cacheKey, data);
 
         return data;
     }
