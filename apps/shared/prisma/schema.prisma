@@ -48,7 +48,7 @@ enum CriterionCategory {
 
 model Asset {
   id     Int    @id @default(autoincrement())
-  public_Id  String  @unique @default(uuid()) @db.Uuid
+  publicId  String  @unique @default(uuid()) @db.Uuid
   symbol String @unique // BTC, ETH, SOL...
   name   String
   extras Json? // qualquer dado extra (ex: CoinGecko ID, CoinMarketCap ID, etc)

@@ -77,7 +77,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const AssetScalarFieldEnum = {
   id: 'id',
-  public_Id: 'public_Id',
+  publicId: 'publicId',
   symbol: 'symbol',
   name: 'name',
   extras: 'extras',
