@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const Asset = z.object({
     id: z.number(),
-    public_Id: z.uuid(),
+    publicId: z.uuid(),
     symbol: z.string().min(1).toUpperCase(),
     name: z
         .string()
@@ -19,13 +19,13 @@ export const AssetExtras = Asset.extend({
 export const AssetCreate = Asset.omit({
     id: true,
     createdAt: true,
-    public_Id: true,
+    publicId: true,
 });
 
 export const AssetPublic = Asset.omit({
     id: true,
     createdAt: true,
-});    
+});
 
 export const AssetPublicArray = z.array(AssetPublic);
 export const AssetArray = z.array(Asset);

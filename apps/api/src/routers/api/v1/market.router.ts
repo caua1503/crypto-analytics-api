@@ -12,11 +12,11 @@ import { MarketSnapshotService } from "../../../services/market.service.js";
 
 export async function marketRoutes(app: FastifyInstanceTyped) {
     app.get(
-        "/asset/:id",
+        "/asset/:symbol",
         {
             schema: {
                 tags: ["Market"],
-                params: IdSchema,
+                params: SymbolSchema,
                 querystring: PaginationParams,
                 response: {
                     [StatusCodes.OK]: z.object({
@@ -27,7 +27,33 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
         },
         async (req) => {
             return {
-                markets: await new MarketSnapshotService(prisma).findAll(req.params.id, req.query),
+                markets: await new MarketSnapshotService(prisma).findAllBySymbol(
+                    req.params.symbol,
+                    req.query,
+                ),
+            };
+        },
+    );
+    app.get(
+        "/asset/id/:publicId",
+        {
+            schema: {
+                tags: ["Market"],
+                params: PublicIdSchema,
+                querystring: PaginationParams,
+                response: {
+                    [StatusCodes.OK]: z.object({
+                        markets: z.array(MarketSnapshotResponse),
+                    }),
+                },
+            },
+        },
+        async (req) => {
+            return {
+                markets: await new MarketSnapshotService(prisma).findAllByPublicID(
+                    req.params.publicId,
+                    req.query,
+                ),
             };
         },
     );
@@ -47,7 +73,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
         },
     );
     app.get(
-        "/asset/:public_Id/latest",
+        "/asset/:publicId/latest",
         {
             schema: {
                 tags: ["Market"],
@@ -59,7 +85,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
         },
         async (req) => {
             return await new MarketSnapshotService(prisma).getLatestSnapshotByPublicId(
-                req.params.public_Id,
+                req.params.publicId,
             );
         },
     );

@@ -9,5 +9,5 @@ export const IdSchema = z.object({
 });
 
 export const PublicIdSchema = z.object({
-    public_Id: z.uuid().describe("Public ID parameter"),
+    publicId: z.uuid().describe("Public ID parameter"),
 });

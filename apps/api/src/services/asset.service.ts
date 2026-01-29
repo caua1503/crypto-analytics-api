@@ -52,7 +52,7 @@ export class AssetService {
             this.prisma.asset.count(),
         ]);
 
-        console.log(assets);
+        // console.log(assets);
 
         if (!assets) {
             throw httpErrors.notFound("Assets not found");
@@ -63,7 +63,7 @@ export class AssetService {
             data: assets,
         });
 
-        this.cache.set_json(cacheKey, data).catch(console.error); 
+        this.cache.set_json(cacheKey, data).catch(console.error);
 
         return data;
     }
@@ -96,7 +96,7 @@ export class AssetService {
             throw httpErrors.internalServerError("Invalid assets data");
         }
 
-        this.cache.set_json(cacheKey, data).catch(console.error); 
+        this.cache.set_json(cacheKey, data).catch(console.error);
 
         return data;
     }
@@ -121,7 +121,7 @@ export class AssetService {
             console.error(error);
             throw httpErrors.notFound("Invalid asset data");
         }
-        this.cache.set_json(cacheKey, data).catch(console.error); 
+        this.cache.set_json(cacheKey, data).catch(console.error);
 
         return data;
     }
@@ -147,32 +147,32 @@ export class AssetService {
             throw httpErrors.notFound("Invalid asset data");
         }
 
-        this.cache.set_json(cacheKey, data).catch(console.error); 
+        this.cache.set_json(cacheKey, data).catch(console.error);
 
         return data;
     }
-    async findByPublicId(public_Id: string): Promise<AssetType> {
-        const cacheKey = `asset:publicId:${public_Id}`;
+    async findByPublicId(publicId: string): Promise<AssetType> {
+        const cacheKey = `asset:publicId:${publicId}`;
         const cachedAsset = await this.cache.get_json<AssetType>(cacheKey, Asset);
 
         if (cachedAsset) {
             return cachedAsset;
         }
 
-        const asset = await this.prisma.asset.findUnique({ where: { public_Id } });
+        const asset = await this.prisma.asset.findUnique({ where: { publicId } });
 
         if (!asset) {
             throw httpErrors.notFound("Asset not found");
         }
 
         const { success, data, error } = Asset.safeParse(asset);
-        
+
         if (!success) {
             console.error(error);
             throw httpErrors.notFound("Invalid asset data");
         }
-        this.cache.set_json(cacheKey, data).catch(console.error); 
-        
+        this.cache.set_json(cacheKey, data).catch(console.error);
+
         return data;
     }
     async findBySymbol(symbol: string): Promise<AssetType> {
@@ -195,7 +195,7 @@ export class AssetService {
             console.error(error);
             throw httpErrors.notFound("Invalid asset data");
         }
-        this.cache.set_json(cacheKey, data).catch(console.error); 
+        this.cache.set_json(cacheKey, data).catch(console.error);
 
         return data;
     }
@@ -220,7 +220,7 @@ export class AssetService {
             throw httpErrors.notFound("Invalid asset data");
         }
 
-        this.cache.set_json(cacheKey, data).catch(console.error); 
+        this.cache.set_json(cacheKey, data).catch(console.error);
 
         return data;
     }
