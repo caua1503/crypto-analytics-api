@@ -4,12 +4,11 @@
     "description": "",
     "main": "build/index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "build": "tsc",
-        "dev": "tsx --watch src/index.ts",
-        "lint": "npx @biomejs/biome format --write",
-        "migrate": "prisma migrate dev --schema=../shared/prisma/schema.prisma",
-        "start": "node ."
+        "dev": "bun run lint && bun --watch run src/index.ts",
+        "lint": "bunx @biomejs/biome format --write",
+        "migrate": "prisma migrate dev",
+        "generate": "prisma generate"
     },
     "type": "module",
     "dependencies": {
