@@ -25,6 +25,5 @@ export const EnvConfigSchema = z.object({
     COINPAPRIKA_API_KEY: z.string().default("no-key"),
 
     // JWT_SECRET: z.string().min(256),
-
 });
 export const env = EnvConfigSchema.parse(process.env);
