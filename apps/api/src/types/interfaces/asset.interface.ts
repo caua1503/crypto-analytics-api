@@ -3,7 +3,7 @@ import { z } from "zod";
 export const Asset = z.object({
     id: z.number(),
     publicId: z.uuid(),
-    symbol: z.string().min(1).toUpperCase(),
+    symbol: z.string().min(1).max(10).toUpperCase(),
     name: z
         .string()
         .min(1)
