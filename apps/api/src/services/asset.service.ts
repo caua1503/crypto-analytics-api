@@ -229,10 +229,9 @@ export class AssetService {
         try {
             const validatedData = AssetCreate.parse(data);
 
-            const asset = this.prisma.asset.findUnique({where: {symbol: validatedData.symbol}})
+            const asset = this.prisma.asset.findUnique({ where: { symbol: validatedData.symbol } });
 
-            if (!asset)
-                throw httpErrors.notFound("Asset already exists")
+            if (!asset) throw httpErrors.notFound("Asset already exists");
 
             return this.prisma.asset.create({ data: validatedData });
         } catch (error) {
