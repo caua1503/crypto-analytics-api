@@ -1,5 +1,5 @@
 import "dotenv/config";
-import fastify, { FastifyInstance } from "fastify";
+import fastify from "fastify";
 import cors from "@fastify/cors";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
