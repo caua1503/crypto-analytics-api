@@ -45,6 +45,7 @@ Ela integra múltiplas fontes de dados para gerar uma **pontuação composta (sc
 
 ## Tecnologias Utilizadas
 
+- **Bun** —  Runtime JavaScript moderno e extremamente rápido, com bundler, test runner e gerenciador de pacotes integrados.
 - **TypeScript** — Tipagem estática e maior segurança na lógica de negócio
 - **Fastify** — Framework web de alta performance e baixo overhead
 - **Redis** — Cache distribuído para armazenamento rápido de dados processados

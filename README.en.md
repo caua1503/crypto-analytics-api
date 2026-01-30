@@ -44,6 +44,7 @@ It integrates multiple data sources to generate a **composite score** and an **a
 
 ## Technologies Used
 
+- **Bun** — A modern and extremely fast JavaScript runtime, with integrated bundler, test runner, and package manager.
 - **TypeScript** — Static typing and greater business logic safety
 - **Fastify** — High-performance, low-overhead web framework
 - **Redis** — Distributed cache for fast storage of processed data
