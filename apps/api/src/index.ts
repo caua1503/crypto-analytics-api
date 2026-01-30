@@ -24,12 +24,12 @@ const app = fastify().withTypeProvider<ZodTypeProvider>();
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
-await app.register(cors, {
+app.register(cors, {
     origin: "*", // Allows all origins
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Specify allowed methods
 });
 
-await app.register(swagger, {
+app.register(swagger, {
     openapi: {
         info: {
             title: "crypto-analytics-api",
@@ -41,7 +41,7 @@ await app.register(swagger, {
     transform: jsonSchemaTransform,
 });
 
-await app.register(swaggerUI, {
+app.register(swaggerUI, {
     routePrefix: "/docs",
 });
 
