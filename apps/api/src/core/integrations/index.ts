@@ -2,16 +2,15 @@ import { CoinGeckoService } from "./coingecko.js";
 import { CoinPaprikaService } from "./coincaprika.js";
 import { CoinMarketCapService } from "./coinmarketcap.js";
 import { env } from "../../config/env.js";
-import { SourceEnum } from "../../types/common.js";
+import { MarketDataProviderEnum } from "../../types/common.js";
 import { ServiceContract, ServiceConfig, ServiceConstructor } from "./types.js";
 
-const serviceRegistry: Record<SourceEnum, ServiceConstructor> = {
-    [SourceEnum.COINGECKO]: CoinGeckoService,
-    [SourceEnum.COINPAPRIKA]: CoinPaprikaService,
-    [SourceEnum.COINMARKETCAP]: CoinMarketCapService,
+const serviceRegistry: Record<MarketDataProviderEnum, ServiceConstructor> = {
+    [MarketDataProviderEnum.COINGECKO]: CoinGeckoService,
+    [MarketDataProviderEnum.COINPAPRIKA]: CoinPaprikaService,
+    [MarketDataProviderEnum.COINMARKETCAP]: CoinMarketCapService,
 };
 
-// Singleton instance
 let _serviceInstance: ServiceContract | null = null;
 
 function verifyApiKey(apikey: string | undefined): string {
@@ -22,7 +21,7 @@ function verifyApiKey(apikey: string | undefined): string {
 }
 
 function createMarketDataService(
-    provider: SourceEnum = env.MARKET_DATA_PROVIDER as SourceEnum,
+    provider: MarketDataProviderEnum = env.MARKET_DATA_PROVIDER as MarketDataProviderEnum,
 ): ServiceContract {
     const ServiceClass = serviceRegistry[provider];
 
@@ -30,16 +29,16 @@ function createMarketDataService(
         throw new Error(`Unsupported market data provider: ${provider}`);
     }
 
-    const configs: Record<SourceEnum, ServiceConfig> = {
-        [SourceEnum.COINGECKO]: {
+    const configs: Record<MarketDataProviderEnum, ServiceConfig> = {
+        [MarketDataProviderEnum.COINGECKO]: {
             apiUrl: env.COINGECKO_API_URL,
             apiKey: env.COINGECKO_API_KEY,
         },
-        [SourceEnum.COINPAPRIKA]: {
+        [MarketDataProviderEnum.COINPAPRIKA]: {
             apiUrl: env.COINPAPRIKA_API_URL,
             apiKey: env.COINPAPRIKA_API_KEY,
         },
-        [SourceEnum.COINMARKETCAP]: {
+        [MarketDataProviderEnum.COINMARKETCAP]: {
             apiUrl: env.COINMARKETCAP_API_URL,
             apiKey: env.COINMARKETCAP_API_KEY,
         },
