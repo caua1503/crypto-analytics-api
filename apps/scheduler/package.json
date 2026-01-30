@@ -2,10 +2,27 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
+    "biome": "^0.3.3",
     "bullmq": "^5.66.5",
     "dotenv": "^17.2.3",
-    "pg": "^8.17.1",
+    "pg": "^8.17.2",
     "prisma": "^7.2.0",
     "zod": "^4.3.5"
+  },
+  "name": "scheduler",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/pg": "^8.16.0",
+    "install": "^0.13.0"
+  },
+  "scripts": {
+    "dev": "bun run lint && bun --watch run src/index.ts",
+    "lint": "bunx @biomejs/biome format --write"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
   }
 }
