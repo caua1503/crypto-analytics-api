@@ -19,6 +19,7 @@ export type FastifyInstanceTyped = FastifyInstance<
 >;
 
 export const Recommendation = z.enum(["STRONG_BUY", "BUY", "HOLD", "SELL", "STRONG_SELL"]);
+export const Period = z.enum(["1H", "4H", "8H", "24H", "7D", "14D", "30D"])
 export const CriterionCategory = z.enum(["SENTIMENT", "TECHNICAL", "MACRO"]);
 export const enum MarketDataProviderEnum {
     COINGECKO = "COINGECKO",

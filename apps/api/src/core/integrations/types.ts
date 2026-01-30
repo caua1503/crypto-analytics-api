@@ -1,9 +1,13 @@
-import { ApiMarketSnapshot, ApiMacroData } from "../../types/interfaces/integrations.interface.js";
+import { ApiMarketSnapshot, ApiMacroData, ApiOHLC } from "../../types/interfaces/integrations.interface.js";
 
 export interface ServiceContract {
     fetchMarketDataBySymbol(assetSymbol: string): Promise<ApiMarketSnapshot>;
     fetchMarketDataById(assetId: number): Promise<ApiMarketSnapshot>;
+    
     fetchMacroData(): Promise<ApiMacroData>;
+    
+    fetchOHLCBySymbol?(assetSymbol: string): Promise<ApiOHLC>;
+    fetchOHLCById?(assetId: number): Promise<ApiOHLC>; 
 }
 
 export interface ServiceConfig {

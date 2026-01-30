@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Period } from "../common.js";
 
 export const ApiMarketSnapshotSchema = z.object({
     assetSymbol: z.string().min(1), // Símbolo do ativo (BTC, ETH, SOL)
@@ -77,9 +78,18 @@ export const ApiAnalysisInputSchema = z.object({
     generatedAt: z.date(), // Momento da geração da análise
 });
 
+export const ApiOHLCSchema = z.object({
+    open: z.coerce.number(),
+    high: z.coerce.number(),
+    low: z.coerce.number(),
+    close: z.coerce.number(),
+    period: Period,
+})
+
 export type ApiMarketSnapshot = z.infer<typeof ApiMarketSnapshotSchema>;
 export type ApiSentimentData = z.infer<typeof ApiSentimentDataSchema>;
 export type ApiMacroData = z.infer<typeof ApiMacroDataSchema>;
 export type ApiTechnicalData = z.infer<typeof ApiTechnicalDataSchema>;
 export type ApiAnalysisInput = z.infer<typeof ApiAnalysisInputSchema>;
 export type ApiTechnicalIndicators = z.infer<typeof ApiTechnicalIndicatorsSchema>;
+export type ApiOHLC= z.infer<typeof ApiOHLCSchema>
