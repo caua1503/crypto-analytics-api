@@ -6,7 +6,7 @@ export const EnvConfigSchema = z.object({
     HOST: z.string().default("0.0.0.0"),
     PORT: z.coerce.number().default(3000),
 
-    DATABASE_URL: z.string().min(1),
+    DATABASE_URL: z.string().startsWith("postgresql://"),
     REDIS_HOST: z.string().min(1),
     REDIS_PORT: z.coerce.number().min(1).default(6379),
     REDIS_TIMEOUT_SECONDS: z.coerce.number().min(1).default(120),
