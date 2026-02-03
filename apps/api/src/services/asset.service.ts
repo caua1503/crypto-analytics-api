@@ -228,7 +228,17 @@ export class AssetService {
     async create(data: AssetCreateType): Promise<AssetType> {
         try {
             const validatedData = AssetCreate.parse(data);
-            return this.prisma.asset.create({ data: validatedData });
+
+            const asset = await this.prisma.asset.findUnique({ where: { symbol: validatedData.symbol } });
+
+            if (asset) throw httpErrors.conflict("Asset already exists");
+            
+
+            const assetCreated = this.prisma.asset.create({ data: validatedData });
+            const cacheKey = `asset:symbol:${validatedData.symbol}`;
+
+            this.cache.set_json(cacheKey, assetCreated).catch(console.error);
+            return assetCreated;
         } catch (error) {
             throw httpErrors.badRequest("Invalid asset data");
         }
