@@ -2,21 +2,18 @@
     "name": "crypto-analytics-api",
     "version": "1.0.0",
     "description": "",
-    "main": "build/index.js",
+    "main": "src/index.js",
     "scripts": {
-        "build": "tsc",
+        "build": "bun build --compile --minify --bytecode src/index.ts  --outfile api",
         "dev": "bun run lint && bun --watch run src/index.ts",
-        "lint": "bunx @biomejs/biome format --write",
-        "migrate": "prisma migrate dev",
-        "generate": "prisma generate"
+        "lint": "bunx @biomejs/biome format --write"
     },
     "type": "module",
     "dependencies": {
         "@fastify/cors": "^11.2.0",
         "@fastify/sensible": "^6.0.4",
         "@fastify/swagger-ui": "^5.2.4",
-        "@prisma/adapter-pg": "^7.2.0",
-        "@prisma/client": "^7.2.0",
+        "@repo/shared": "../shared",
         "axios": "^1.13.2",
         "cors": "^2.8.5",
         "dotenv": "^17.2.3",
@@ -25,7 +22,6 @@
         "http-status-codes": "^2.3.0",
         "ioredis": "^5.9.2",
         "pg": "^8.16.3",
-        "prisma": "^7.2.0",
         "zod": "^4.2.1"
     },
     "devDependencies": {
