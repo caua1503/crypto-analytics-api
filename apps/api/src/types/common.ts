@@ -8,7 +8,7 @@ import {
 } from "fastify";
 
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { Prisma } from "../../generated/prisma/client.js";
+import { Prisma } from "@repo/shared";
 
 export type FastifyInstanceTyped = FastifyInstance<
     RawServerDefault,

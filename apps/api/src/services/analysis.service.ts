@@ -1,6 +1,6 @@
 import { httpErrors } from "@fastify/sensible";
 import { z } from "zod";
-import { Prisma } from "../../generated/prisma/client.js";
+import { Prisma } from "@repo/shared";
 import type { PrismaClientType } from "../config/prisma.js";
 
 import {
@@ -29,7 +29,7 @@ export class AnalysisService {
     constructor(
         private prisma: PrismaClientType,
         private cache: RedisClient = new RedisClient(redis),
-    ) {}
+    ) { }
 
     async create(data: AnalysisCreateType): Promise<AnalysisType> {
         try {
@@ -155,7 +155,7 @@ export class AnalysisEngineVersionService {
     constructor(
         private prisma: PrismaClientType,
         private cache: RedisClient = new RedisClient(redis),
-    ) {}
+    ) { }
 
     async create(data: AnalysisEngineVersionCreateType): Promise<AnalysisEngineVersionType> {
         try {

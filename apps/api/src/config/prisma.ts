@@ -1,6 +1,4 @@
-import { PrismaClient } from "../../generated/prisma/client.js";
-import { PrismaPg } from "@prisma/adapter-pg";
-import { Pool } from "pg";
+import { createPrismaClient, type PrismaClient } from "@repo/shared";
 
 const connectionString = process.env.DATABASE_URL;
 
@@ -11,20 +9,15 @@ const globalForPrisma = globalThis as unknown as {
     prisma?: PrismaClient;
 };
 
-const pool = new Pool({
-    connectionString,
+export const prisma = globalForPrisma.prisma ?? createPrismaClient(connectionString, {
     max: 20,
     idleTimeoutMillis: 10_000,
     connectionTimeoutMillis: 3_000,
 });
 
-const adapter = new PrismaPg(pool);
-
-export const prisma = globalForPrisma.prisma ?? new PrismaClient({ adapter });
-
 if (process.env.RUN_MODE !== "production") {
-    // console.log(process.env.RUN_MODE);
     globalForPrisma.prisma = prisma;
 }
 
 export type PrismaClientType = PrismaClient;
+
