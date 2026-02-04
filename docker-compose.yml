@@ -44,6 +44,8 @@ services:
       - pgbouncer_data:/etc/pgbouncer
   redis:
     image: redis:8.0-alpine
+    container_name: crypto_api_redis
+    restart: unless-stopped
     ports:
       - "6379:6379"
     mem_limit: 128m
