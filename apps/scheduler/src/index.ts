@@ -1,30 +1,20 @@
 import { Worker } from "bullmq";
-import { heavyQueue } from "./queues/processing.queue";
+import { dispatchQueue, processingQueue } from "./queues/processing.queue";
 import { registerDailyScheduler } from "./schedulers/daily.scheduler";
 import { prisma } from "./config/db";
 import { redisConnection } from "./config/env";
+import { heavyDispatcher } from "./dispatchers/heavy.dispatch";
 
-await registerDailyScheduler();
+async function main() {
+  await registerDailyScheduler();
 
-new Worker(
-  heavyQueue.name,
-  async job => {
-    if (job.name !== "dispatch-heavy") return;
+  const dispatchers = [
+    heavyDispatcher
+  ];
 
-    console.log("Dispatch job started");
+  console.log(`\n🚀 Scheduler running with ${dispatchers.length} active dispatchers\n`);
+}
 
-    const assets = await prisma.asset.findMany({});
 
-    console.log(`Dispatching ${assets.length} assets`);
 
-     await heavyQueue.addBulk(
-       assets.map(asset => ({
-         name: "process-heavy",
-         data: asset
-       }))
-     );
-  },
-  { connection: redisConnection }
-);
-
-console.log("Scheduler app running");
+main().catch(console.error);
