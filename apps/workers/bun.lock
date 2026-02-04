@@ -4,6 +4,7 @@
   "workspaces": {
     "": {
       "dependencies": {
+        "@repo/shared": "../shared",
         "@prisma/adapter-pg": "^7.2.0",
         "@prisma/client": "^7.2.0",
         "bullmq": "^5.66.5",
@@ -78,6 +79,8 @@
     "@prisma/query-plan-executor": ["@prisma/query-plan-executor@7.2.0", "", {}, "sha512-EOZmNzcV8uJ0mae3DhTsiHgoNCuu1J9mULQpGCh62zN3PxPTd+qI9tJvk5jOst8WHKQNwJWR3b39t0XvfBB0WQ=="],
 
     "@prisma/studio-core": ["@prisma/studio-core@0.13.1", "", { "peerDependencies": { "@types/react": "^18.0.0 || ^19.0.0", "react": "^18.0.0 || ^19.0.0", "react-dom": "^18.0.0 || ^19.0.0" } }, "sha512-agdqaPEePRHcQ7CexEfkX1RvSH9uWDb6pXrZnhCRykhDFAV0/0P3d07WtfiY8hZWb7oRU4v+NkT4cGFHkQJIPg=="],
+
+    "@repo/shared": ["@repo/shared@file:../shared", { "dependencies": { "@prisma/adapter-pg": "^7.2.0", "@prisma/client": "^7.2.0", "dotenv": "^17.2.3", "pg": "^8.17.1", "prisma": "^7.2.0", "zod": "^4.3.5" } }],
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 

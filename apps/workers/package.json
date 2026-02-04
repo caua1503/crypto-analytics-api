@@ -2,6 +2,7 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
+    "@repo/shared": "../shared",
     "bullmq": "^5.66.5",
     "dotenv": "^17.2.3",
     "pg": "^8.17.1",
@@ -14,6 +15,10 @@
   "private": true,
   "devDependencies": {
     "@types/bun": "latest"
+  },
+  "scripts": {
+    "dev": "bun run lint && bun --watch run src/index.ts",
+    "lint": "bunx @biomejs/biome format --write"
   },
   "peerDependencies": {
     "typescript": "^5"
