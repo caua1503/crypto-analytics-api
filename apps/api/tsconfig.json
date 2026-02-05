@@ -12,9 +12,6 @@
         "paths": {
             "@repo/shared": [
                 "../shared/src/index.ts"
-            ],
-            "@repo/shared/types": [
-                "../shared/src/types/"
             ]
         },
         "baseUrl": ".",
