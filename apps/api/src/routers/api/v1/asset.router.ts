@@ -1,6 +1,6 @@
 import { FastifyInstanceTyped } from "../../../types/common.js";
-import { AssetService } from "../../../services/asset.service.js";
-import { prisma } from "../../../config/prisma.js";
+import { AssetService } from "@repo/shared/services/asset.service";
+import { prisma } from "@repo/shared";
 import {
     Asset,
     AssetPublic,

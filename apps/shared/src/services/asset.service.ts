@@ -1,16 +1,13 @@
 import { httpErrors } from "@fastify/sensible";
-import type { PrismaClientType } from "../config/prisma.js";
+import type { PrismaClientType } from "@repo/shared";
 import {
     Asset,
     AssetCreate,
-    AssetArray,
     type AssetCreateType,
     type AssetType,
     AssetExtras,
     AssetExtrasArray,
     AssetExtrasType,
-    AssetResponse,
-    AssetResponseType,
     AssetPublic,
     AssetPublicType,
     AssetPublicResponse,
@@ -20,13 +17,13 @@ import {
     PaginationParams,
     type PaginationParamsType,
 } from "@repo/shared/types/interfaces/common.interface";
-import { RedisClient, buildCacheKey, redis } from "../config/redis.js";
+import { RedisClient, buildCacheKey, redis } from "@repo/shared";
 
 export class AssetService {
     constructor(
         private prisma: PrismaClientType,
         private cache: RedisClient = new RedisClient(redis),
-    ) {}
+    ) { }
 
     async findAll(
         pagination: PaginationParamsType = PaginationParams.parse({}),
@@ -39,7 +36,7 @@ export class AssetService {
         );
 
         if (cachedResponse) {
-            // return cachedResponse;
+            return cachedResponse;
         }
         const { skip, take, order } = pagination;
 

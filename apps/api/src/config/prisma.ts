@@ -1,6 +1,7 @@
 import { createPrismaClient, type PrismaClient } from "@repo/shared";
+import { env } from "@repo/shared/env";
 
-const connectionString = process.env.DATABASE_URL;
+const connectionString = env.DATABASE_URL;
 
 if (!connectionString) {
     throw new Error("DATABASE_URL environment variable is not set");
@@ -17,7 +18,7 @@ export const prisma =
         connectionTimeoutMillis: 3_000,
     });
 
-if (process.env.RUN_MODE !== "production") {
+if (env.NODE_ENV !== "production") {
     globalForPrisma.prisma = prisma;
 }
 

@@ -1,14 +1,14 @@
 import { z } from "zod";
 import { StatusCodes } from "http-status-codes";
 import { FastifyInstanceTyped } from "../../../types/common.js";
-import { prisma } from "../../../config/prisma.js";
+import { prisma } from "@repo/shared";
 import { IdSchema, SymbolSchema, PublicIdSchema } from "@repo/shared/types/schemas/common.schemas";
 import { PaginationParams } from "@repo/shared/types/interfaces/common.interface";
 import {
     MarketSnapshotCreate,
     MarketSnapshotResponse,
 } from "@repo/shared/types/interfaces/market.interface";
-import { MarketSnapshotService } from "../../../services/market.service.js";
+import { MarketSnapshotService } from "@repo/shared/services/market.service";
 
 export async function marketRoutes(app: FastifyInstanceTyped) {
     app.get(

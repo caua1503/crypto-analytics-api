@@ -3,7 +3,7 @@ import fastify from "fastify";
 import cors from "@fastify/cors";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
-import { getMarketDataService } from "./core/integrations/index.js";
+import { getMarketDataService } from "@repo/shared/integrations";
 import sensible from "@fastify/sensible";
 
 import {
@@ -61,8 +61,9 @@ app.get("/health", async (req, res) => {
 getMarketDataService();
 
 // const service = getMarketDataService();
-// const result = await service.fetchMacroData()
-// console.log("Macro Data:", result);
+// service.fetchMacroData().then((result) => {
+//     console.log("Macro Data:", result);
+// });
 
 app.listen({ port: PORT, host: HOST }).then(() => {
     console.log(

@@ -1,6 +1,5 @@
 import { httpErrors } from "@fastify/sensible";
-import { ca } from "zod/locales";
-import type { PrismaClientType } from "../config/prisma.js";
+import type { PrismaClientType } from "@repo/shared";
 import { CriterionCategory, type CriterionCategoryType } from "@repo/shared/types/common";
 import {
     Criterion,
@@ -15,7 +14,7 @@ import {
 } from "@repo/shared/types/interfaces/criteria.interface";
 
 export class CriterionService {
-    constructor(private prisma: PrismaClientType) {}
+    constructor(private prisma: PrismaClientType) { }
 
     async findAllCategories(): Promise<CriterionCategoryType[]> {
         return CriterionCategory.options;
@@ -78,7 +77,7 @@ export class CriterionService {
 }
 
 export class CriterionWeightService {
-    constructor(private prisma: PrismaClientType) {}
+    constructor(private prisma: PrismaClientType) { }
 
     async findById(id: number): Promise<CriterionWeightType> {
         try {

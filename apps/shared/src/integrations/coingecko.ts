@@ -1,5 +1,5 @@
 import { ServiceContract, ServiceConfig } from "./types.js";
-import { env } from "../../config/env.js";
+import { env } from "@repo/shared/env";
 import { getDefaultCacheUntil } from "./common.js";
 import {
     ApiMarketSnapshotSchema,
@@ -9,8 +9,8 @@ import {
     ApiMacroDataSchemaDTO,
 } from "@repo/shared/types/interfaces/integrations.interface";
 import { SourceEnum } from "@repo/shared/types/common";
-import { AssetService } from "../../services/asset.service.js";
-import { prisma } from "../../config/prisma.js";
+import { AssetService } from "@repo/shared/services/asset.service";
+import { prisma } from "@repo/shared";
 import axios, { AxiosInstance } from "axios";
 
 export class CoinGeckoService implements ServiceContract {

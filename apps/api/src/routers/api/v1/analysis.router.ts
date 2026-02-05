@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { FastifyInstanceTyped } from "../../../types/common.js";
-import { AnalysisService } from "../../../services/analysis.service.js";
-import { prisma } from "../../../config/prisma.js";
+import { AnalysisService } from "@repo/shared/services/analysis.service";
+import { prisma } from "@repo/shared";
 import { AnalysisResponse } from "@repo/shared/types/interfaces/analysis.interface";
 import { PaginationParams } from "@repo/shared/types/interfaces/common.interface";
 import { StatusCodes } from "http-status-codes";

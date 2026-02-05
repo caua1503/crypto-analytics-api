@@ -1,9 +1,9 @@
-import { prisma } from "../../../config/prisma.js";
+import { z } from "zod";
+import { prisma } from "@repo/shared";
 import { FastifyInstanceTyped } from "../../../types/common.js";
 import { CriterionCategory } from "@repo/shared/types/common";
 import { StatusCodes } from "http-status-codes";
-import z from "zod";
-import { CriterionService } from "../../../services/criteria.service.js";
+import { CriterionService } from "@repo/shared/services/criteria.service";
 import { Criterion, CriterionCreate } from "@repo/shared/types/interfaces/criteria.interface";
 import { IdSchema } from "@repo/shared/types/schemas/common.schemas";
 

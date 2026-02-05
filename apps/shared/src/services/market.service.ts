@@ -1,4 +1,4 @@
-import type { PrismaClientType } from "../config/prisma.js";
+import type { PrismaClientType } from "@repo/shared";
 import { httpErrors } from "@fastify/sensible";
 import {
     type PaginationParamsType,
@@ -13,13 +13,13 @@ import {
 } from "@repo/shared/types/interfaces/market.interface";
 import { AssetService } from "./asset.service.js";
 import { z } from "zod";
-import { RedisClient, buildCacheKey, redis } from "../config/redis.js";
+import { RedisClient, buildCacheKey, redis } from "@repo/shared";
 
 export class MarketSnapshotService {
     constructor(
         private prisma: PrismaClientType,
         private cache: RedisClient = new RedisClient(redis),
-    ) {}
+    ) { }
 
     async findAllBySymbol(
         symbol: string,
