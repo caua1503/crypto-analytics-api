@@ -9,15 +9,16 @@ const globalForPrisma = globalThis as unknown as {
     prisma?: PrismaClient;
 };
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient(connectionString, {
-    max: 20,
-    idleTimeoutMillis: 10_000,
-    connectionTimeoutMillis: 3_000,
-});
+export const prisma =
+    globalForPrisma.prisma ??
+    createPrismaClient(connectionString, {
+        max: 20,
+        idleTimeoutMillis: 10_000,
+        connectionTimeoutMillis: 3_000,
+    });
 
 if (process.env.RUN_MODE !== "production") {
     globalForPrisma.prisma = prisma;
 }
 
 export type PrismaClientType = PrismaClient;
-

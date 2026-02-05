@@ -3,14 +3,29 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "strict": true,
-        "lib": ["ESNext"],
+        "lib": [
+            "ESNext"
+        ],
         "target": "esnext",
         "module": "nodenext",
         "moduleResolution": "nodenext",
-
-        "rootDir": ".",
+        "paths": {
+            "@repo/shared": [
+                "../shared/src/index.ts"
+            ],
+            "@repo/shared/types": [
+                "../shared/src/types/"
+            ]
+        },
+        "baseUrl": ".",
         "outDir": "build"
     },
-    "include": ["src", "generated"],
-    "exclude": ["node_modules", "prisma"]
+    "include": [
+        "src",
+        "generated"
+    ],
+    "exclude": [
+        "node_modules",
+        "prisma"
+    ]
 }

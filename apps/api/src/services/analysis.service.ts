@@ -17,19 +17,19 @@ import {
     type AnalysisEngineVersionType,
     PaginatiomAnalysisEngineVersionParams,
     type PaginatiomAnalysisEngineVersionParamsType,
-} from "../types/interfaces/analysis.interface.js";
+} from "@repo/shared/types/interfaces/analysis.interface";
 
 import {
     PaginationParams,
     type PaginationParamsType,
-} from "../types/interfaces/common.interface.js";
+} from "@repo/shared/types/interfaces/common.interface";
 import { RedisClient, buildCacheKey, redis } from "../config/redis.js";
 
 export class AnalysisService {
     constructor(
         private prisma: PrismaClientType,
         private cache: RedisClient = new RedisClient(redis),
-    ) { }
+    ) {}
 
     async create(data: AnalysisCreateType): Promise<AnalysisType> {
         try {
@@ -155,7 +155,7 @@ export class AnalysisEngineVersionService {
     constructor(
         private prisma: PrismaClientType,
         private cache: RedisClient = new RedisClient(redis),
-    ) { }
+    ) {}
 
     async create(data: AnalysisEngineVersionCreateType): Promise<AnalysisEngineVersionType> {
         try {

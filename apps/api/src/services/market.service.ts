@@ -3,14 +3,14 @@ import { httpErrors } from "@fastify/sensible";
 import {
     type PaginationParamsType,
     PaginationParams,
-} from "../types/interfaces/common.interface.js";
+} from "@repo/shared/types/interfaces/common.interface";
 import {
     MarketSnapshot,
     MarketSnapshotArray,
     MarketSnapshotCreate,
     MarketSnapshotCreateType,
     MarketSnapshotType,
-} from "../types/interfaces/market.interface.js";
+} from "@repo/shared/types/interfaces/market.interface";
 import { AssetService } from "./asset.service.js";
 import { z } from "zod";
 import { RedisClient, buildCacheKey, redis } from "../config/redis.js";

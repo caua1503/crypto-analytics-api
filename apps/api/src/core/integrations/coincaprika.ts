@@ -7,8 +7,8 @@ import {
     ApiMacroData,
     ApiMacroDataSchema,
     ApiMacroDataSchemaDTO,
-} from "../../types/interfaces/integrations.interface.js";
-import { SourceEnum } from "../../types/common.js";
+} from "@repo/shared/types/interfaces/integrations.interface";
+import { SourceEnum } from "@repo/shared/types/common";
 import { AssetService } from "../../services/asset.service.js";
 import { prisma } from "../../config/prisma.js";
 import axios, { AxiosInstance } from "axios";

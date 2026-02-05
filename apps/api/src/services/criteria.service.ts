@@ -1,7 +1,7 @@
 import { httpErrors } from "@fastify/sensible";
 import { ca } from "zod/locales";
 import type { PrismaClientType } from "../config/prisma.js";
-import { CriterionCategory, type CriterionCategoryType } from "../types/common.js";
+import { CriterionCategory, type CriterionCategoryType } from "@repo/shared/types/common";
 import {
     Criterion,
     CriterionCreate,
@@ -12,7 +12,7 @@ import {
     CriterionWeightCreate,
     type CriterionWeightCreateType,
     type CriterionWeightType,
-} from "../types/interfaces/criteria.interface.js";
+} from "@repo/shared/types/interfaces/criteria.interface";
 
 export class CriterionService {
     constructor(private prisma: PrismaClientType) {}

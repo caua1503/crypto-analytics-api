@@ -8,10 +8,10 @@ import {
     AssetExtras,
     AssetExtrasArray,
     AssetPublicResponse,
-} from "../../../types/interfaces/asset.interface.js";
-import { IdSchema, SymbolSchema } from "../../../types/schemas/common.schemas.js";
+} from "@repo/shared/types/interfaces/asset.interface";
+import { IdSchema, SymbolSchema } from "@repo/shared/types/schemas/common.schemas";
 import { z } from "zod";
-import { PaginationParams } from "../../../types/interfaces/common.interface.js";
+import { PaginationParams } from "@repo/shared/types/interfaces/common.interface";
 
 import { StatusCodes } from "http-status-codes";
 

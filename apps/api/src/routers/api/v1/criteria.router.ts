@@ -1,10 +1,11 @@
 import { prisma } from "../../../config/prisma.js";
-import { CriterionCategory, FastifyInstanceTyped } from "../../../types/common.js";
+import { FastifyInstanceTyped } from "../../../types/common.js";
+import { CriterionCategory } from "@repo/shared/types/common";
 import { StatusCodes } from "http-status-codes";
 import z from "zod";
 import { CriterionService } from "../../../services/criteria.service.js";
-import { Criterion, CriterionCreate } from "../../../types/interfaces/criteria.interface.js";
-import { IdSchema } from "../../../types/schemas/common.schemas.js";
+import { Criterion, CriterionCreate } from "@repo/shared/types/interfaces/criteria.interface";
+import { IdSchema } from "@repo/shared/types/schemas/common.schemas";
 
 export async function criterionRoutes(app: FastifyInstanceTyped) {
     app.get(

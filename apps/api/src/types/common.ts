@@ -1,4 +1,3 @@
-import { z } from "zod";
 import {
     FastifyInstance,
     RawServerDefault,
@@ -8,7 +7,6 @@ import {
 } from "fastify";
 
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { Prisma } from "@repo/shared";
 
 export type FastifyInstanceTyped = FastifyInstance<
     RawServerDefault,
@@ -17,27 +15,3 @@ export type FastifyInstanceTyped = FastifyInstance<
     FastifyBaseLogger,
     ZodTypeProvider
 >;
-
-export const Recommendation = z.enum(["STRONG_BUY", "BUY", "HOLD", "SELL", "STRONG_SELL"]);
-export const Period = z.enum(["1H", "4H", "8H", "24H", "7D", "14D", "30D"])
-export const CriterionCategory = z.enum(["SENTIMENT", "TECHNICAL", "MACRO"]);
-export const enum MarketDataProviderEnum {
-    COINGECKO = "COINGECKO",
-    COINPAPRIKA = "COINPAPRIKA",
-    COINMARKETCAP = "COINMARKETCAP",
-}
-export const enum SourceEnum {
-    COINMARKETCAP = "COINMARKETCAP",
-    COINGECKO = "COINGECKO",
-    COINPAPRIKA = "COINPAPRIKA",
-    ALTERNATIVE_ME = "ALTERNATIVE_ME",
-}
-
-export const zDecimal = z
-    .union([z.string(), z.number(), z.instanceof(Prisma.Decimal)])
-    .transform((val) => new Prisma.Decimal(val));
-
-export const zDecimaltoString = z.instanceof(Prisma.Decimal).transform((val) => val.toString());
-
-export type RecommendationType = z.infer<typeof Recommendation>;
-export type CriterionCategoryType = z.infer<typeof CriterionCategory>;

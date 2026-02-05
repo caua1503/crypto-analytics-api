@@ -17,7 +17,7 @@
     "@types/bun": "latest"
   },
   "scripts": {
-    "build": "bun build --compile --minify --bytecode src/index.ts --outfile workers",
+    "build": "bun run lint && bun build --compile --minify --bytecode src/index.ts --outfile ../../build/workers",
     "dev": "bun run lint && bun --watch run src/index.ts",
     "lint": "bunx @biomejs/biome format --write"
   },

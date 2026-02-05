@@ -2,7 +2,7 @@ import { CoinGeckoService } from "./coingecko.js";
 import { CoinPaprikaService } from "./coincaprika.js";
 import { CoinMarketCapService } from "./coinmarketcap.js";
 import { env } from "../../config/env.js";
-import { MarketDataProviderEnum } from "../../types/common.js";
+import { MarketDataProviderEnum } from "@repo/shared/types/common";
 import { ServiceContract, ServiceConfig, ServiceConstructor } from "./types.js";
 
 const serviceRegistry: Record<MarketDataProviderEnum, ServiceConstructor> = {

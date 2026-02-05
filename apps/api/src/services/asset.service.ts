@@ -15,11 +15,11 @@ import {
     AssetPublicType,
     AssetPublicResponse,
     AssetPublicResponseType,
-} from "../types/interfaces/asset.interface.js";
+} from "@repo/shared/types/interfaces/asset.interface";
 import {
     PaginationParams,
     type PaginationParamsType,
-} from "../types/interfaces/common.interface.js";
+} from "@repo/shared/types/interfaces/common.interface";
 import { RedisClient, buildCacheKey, redis } from "../config/redis.js";
 
 export class AssetService {
@@ -229,10 +229,11 @@ export class AssetService {
         try {
             const validatedData = AssetCreate.parse(data);
 
-            const asset = await this.prisma.asset.findUnique({ where: { symbol: validatedData.symbol } });
+            const asset = await this.prisma.asset.findUnique({
+                where: { symbol: validatedData.symbol },
+            });
 
             if (asset) throw httpErrors.conflict("Asset already exists");
-            
 
             const assetCreated = this.prisma.asset.create({ data: validatedData });
             const cacheKey = `asset:symbol:${validatedData.symbol}`;
