@@ -39,6 +39,7 @@ It integrates multiple data sources to generate a **composite score** and an **a
 
 - Entry points (buy) during excessive market panic
 - Exit points (sell) during irrational euphoria
+- Basically going against the market
 
 ---
 
@@ -105,8 +106,8 @@ The final score is calculated with specific weights for each dimension:
 
 ### Prerequisites
 
-- Node.js ≥ 18
-- Docker & Docker Compose (optional but recommended)
+- Docker & Docker Compose
+- Bun ≥ 1.0 (optional)
 
 ### With Docker (recommended)
 

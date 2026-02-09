@@ -40,6 +40,7 @@ Ela integra múltiplas fontes de dados para gerar uma **pontuação composta (sc
 
 - Pontos de entrada (compra) em momentos de pânico excessivo no mercado
 - Pontos de saída (venda) em períodos de euforia irracional
+- Basicamente indo contra o mercado
 
 ---
 
@@ -106,8 +107,8 @@ A pontuação final é calculada com pesos específicos para cada dimensão:
 
 ### Pré-requisitos
 
-- Node.js ≥ 18
-- Docker & Docker Compose (opcional, mas recomendado)
+- Docker & Docker Compose
+- Bun ≥ 1.0 (opcional)
 
 ### Com Docker (recomendado)
 
