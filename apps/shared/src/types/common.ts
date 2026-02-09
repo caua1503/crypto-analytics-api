@@ -2,8 +2,20 @@ import { z } from "zod";
 import { Prisma } from "../../generated/prisma/client.js";
 
 export const Recommendation = z.enum(["STRONG_BUY", "BUY", "HOLD", "SELL", "STRONG_SELL"]);
-export const Period = z.enum(["1H", "4H", "8H", "24H", "7D", "14D", "30D"])
+export const enum RecommendationEnum {
+    STRONG_BUY = "STRONG_BUY",
+    BUY = "BUY",
+    HOLD = "HOLD",
+    SELL = "SELL",
+    STRONG_SELL = "STRONG_SELL",
+}
+export const Period = z.enum(["1H", "4H", "8H", "24H", "7D", "14D", "30D"]);
 export const CriterionCategory = z.enum(["SENTIMENT", "TECHNICAL", "MACRO"]);
+export const enum CriterionCategoryEnum {
+    SENTIMENT = "SENTIMENT",
+    TECHNICAL = "TECHNICAL",
+    MACRO = "MACRO",
+}
 export const enum MarketDataProviderEnum {
     COINGECKO = "COINGECKO",
     COINPAPRIKA = "COINPAPRIKA",
