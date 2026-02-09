@@ -103,14 +103,24 @@ A pontuação final é calculada com pesos específicos para cada dimensão:
 
 ---
 
-## Como Executar
+## Arquitetura do Projeto
+
+O ecossistema é dividido em sub-módulos especializados:
+
+- [**API**](apps/api/README.md) — Interface REST e documentação Swagger.
+- [**Scheduler**](apps/scheduler/README.md) — Agendamento de tarefas e orquestração de jobs.
+- [**Workers**](apps/workers/README.md) — Processamento assíncrono e tarefas intensivas.
+- **Shared** — Biblioteca interna de serviços, modelos e utilitários (usada por todos os módulos).
+
+---
 
 ### Pré-requisitos
 
 - Docker & Docker Compose
-- Bun ≥ 1.0 (opcional)
+- Bun ≥ 1.3.4 (opcional)
 
 ### Com Docker (recomendado)
 
 ```bash
 docker compose up --build
+```
