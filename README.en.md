@@ -102,14 +102,24 @@ The final score is calculated with specific weights for each dimension:
 
 ---
 
-## How to Run
+## Project Architecture
+
+The ecosystem is divided into specialized sub-modules:
+
+- [**API**](apps/api/README.en.md) — REST interface and Swagger documentation.
+- [**Scheduler**](apps/scheduler/README.md) — Task scheduling and job orchestration.
+- [**Workers**](apps/workers/README.md) — Asynchronous processing and intensive tasks.
+- **Shared** — Internal library of services, models, and utilities (used by all modules).
+
+---
 
 ### Prerequisites
 
 - Docker & Docker Compose
-- Bun ≥ 1.0 (optional)
+- Bun ≥ 1.3.4 (optional)
 
 ### With Docker (recommended)
 
 ```bash
 docker compose up --build
+```
