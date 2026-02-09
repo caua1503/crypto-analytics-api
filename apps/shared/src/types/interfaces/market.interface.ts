@@ -40,4 +40,4 @@ export const MarketSnapshotResponse = MarketSnapshot.extend({
 });
 
 export type MarketSnapshotType = z.infer<typeof MarketSnapshot>;
-export type MarketSnapshotCreateType = z.infer<typeof MarketSnapshotCreate>;
+export type MarketSnapshotCreateType = z.input<typeof MarketSnapshotCreate>;

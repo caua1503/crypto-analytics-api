@@ -84,7 +84,7 @@ export const ApiOHLCSchema = z.object({
     low: z.coerce.number(),
     close: z.coerce.number(),
     period: Period,
-})
+});
 
 export type ApiMarketSnapshot = z.infer<typeof ApiMarketSnapshotSchema>;
 export type ApiSentimentData = z.infer<typeof ApiSentimentDataSchema>;
@@ -92,4 +92,4 @@ export type ApiMacroData = z.infer<typeof ApiMacroDataSchema>;
 export type ApiTechnicalData = z.infer<typeof ApiTechnicalDataSchema>;
 export type ApiAnalysisInput = z.infer<typeof ApiAnalysisInputSchema>;
 export type ApiTechnicalIndicators = z.infer<typeof ApiTechnicalIndicatorsSchema>;
-export type ApiOHLC= z.infer<typeof ApiOHLCSchema>
+export type ApiOHLC = z.infer<typeof ApiOHLCSchema>;

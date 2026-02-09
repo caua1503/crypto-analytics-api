@@ -19,7 +19,7 @@ export class MarketSnapshotService {
     constructor(
         private prisma: PrismaClientType,
         private cache: RedisClient = new RedisClient(redis),
-    ) { }
+    ) {}
 
     async findAllBySymbol(
         symbol: string,

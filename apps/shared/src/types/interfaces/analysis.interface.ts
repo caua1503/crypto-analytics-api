@@ -58,7 +58,7 @@ export const PaginatiomAnalysisEngineVersionParams = PaginationParams.extend({
 });
 
 export type AnalysisType = z.infer<typeof Analysis>;
-export type AnalysisCreateType = z.infer<typeof AnalysisCreate>;
+export type AnalysisCreateType = z.input<typeof AnalysisCreate>;
 export type AnalysisArrayType = z.infer<typeof AnalysisArray>;
 
 export type AnalysisEngineVersionType = z.infer<typeof AnalysisEngineVersion>;
