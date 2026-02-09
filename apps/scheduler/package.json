@@ -20,8 +20,8 @@
     "install": "^0.13.0"
   },
   "scripts": {
-    "build": "bun run lint && bun build --compile --minify --bytecode src/index.ts --outfile ../../build/scheduler",
-    "dev": "bun run lint && bun --watch run src/index.ts",
+    "build": "bun i && bun run lint && bun build --compile --minify --bytecode src/index.ts --outfile ../../build/scheduler",
+    "dev": "bun i && bun run lint && bun --watch run src/index.ts",
     "lint": "bunx @biomejs/biome format --write"
   },
   "peerDependencies": {
