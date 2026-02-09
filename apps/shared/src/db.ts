@@ -5,7 +5,10 @@ import { env } from "@repo/shared/env";
 
 const connectionString = env.DATABASE_URL;
 
-export const createPrismaClient = (connectionString: string, poolConfig?: ConstructorParameters<typeof Pool>[0]) => {
+export const createPrismaClient = (
+    connectionString: string,
+    poolConfig?: ConstructorParameters<typeof Pool>[0],
+) => {
     const pool = new Pool({ connectionString, ...poolConfig });
     const adapter = new PrismaPg(pool);
     return new PrismaClient({ adapter });
