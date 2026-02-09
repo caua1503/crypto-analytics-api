@@ -1,17 +1,17 @@
-import { ServiceContract, ServiceConfig } from "./types.js";
+import type { ServiceContract, ServiceConfig } from "./types.js";
 import { env } from "@repo/shared/env";
 import { getDefaultCacheUntil } from "./common.js";
 import {
     ApiMarketSnapshotSchema,
-    ApiMarketSnapshot,
-    ApiMacroData,
+    type ApiMarketSnapshot,
+    type ApiMacroData,
     ApiMacroDataSchema,
     ApiMacroDataSchemaDTO,
 } from "@repo/shared/types/interfaces/integrations.interface";
 import { SourceEnum } from "@repo/shared/types/common";
 import { AssetService } from "@repo/shared/services/asset.service";
 import { prisma } from "@repo/shared";
-import axios, { AxiosInstance } from "axios";
+import axios, { type AxiosInstance } from "axios";
 
 export class CoinPaprikaService implements ServiceContract {
     private apiKey?: string;
@@ -32,7 +32,7 @@ export class CoinPaprikaService implements ServiceContract {
 
     async fetchMarketDataBySymbol(assetSymbol: string): Promise<ApiMarketSnapshot> {
         const { name: assetName } = await new AssetService(prisma).findBySymbol(assetSymbol);
-        const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase()}`;
+        const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase().replace(" ", "-")}`;
 
         const response = await this.httpsInterface
             .get(`/tickers/${queryApi}`)
@@ -62,7 +62,7 @@ export class CoinPaprikaService implements ServiceContract {
             assetId,
         );
 
-        const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase()}`;
+        const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase().replace(" ", "-")}`;
 
         const response = await this.httpsInterface
             .get(`/tickers/${queryApi}`)
