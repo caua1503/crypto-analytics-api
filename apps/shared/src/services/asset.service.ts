@@ -264,7 +264,16 @@ export class AssetService {
 
     async delete(id: number): Promise<void> {
         try {
+            const asset = await this.findById(id);
+
+            if (!asset) throw httpErrors.notFound("Asset not found");
+
             await this.prisma.asset.delete({ where: { id } });
+
+            this.cache.del(`asset:id:${id}`).catch(console.error);
+            this.cache.del(`asset:id:extras:${id}`).catch(console.error);
+            this.cache.del(`asset:symbol:${asset.symbol}`).catch(console.error);
+            this.cache.del(`asset:symbol:extras:${asset.symbol}`).catch(console.error);
         } catch (error) {
             throw httpErrors.notFound("Asset not found");
         }
