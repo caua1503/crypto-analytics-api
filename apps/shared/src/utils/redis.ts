@@ -61,8 +61,12 @@ export class RedisClient {
         }
     }
 
-    async del(key: string): Promise<number> {
-        return await this.client.del(key);
+    async del(key: string): Promise<void> {
+        try {
+            await this.client.del(key);
+        } catch (e) {
+            console.error(`Failed to delete key ${key}:`, e);
+        }
     }
 }
 
