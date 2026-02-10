@@ -8,8 +8,8 @@ import {
     MarketSnapshot,
     MarketSnapshotArray,
     MarketSnapshotCreate,
-    MarketSnapshotCreateType,
-    MarketSnapshotType,
+    type MarketSnapshotCreateType,
+    type MarketSnapshotType,
 } from "@repo/shared/types/interfaces/market.interface";
 import { AssetService } from "./asset.service.js";
 import { z } from "zod";
@@ -19,7 +19,7 @@ export class MarketSnapshotService {
     constructor(
         private prisma: PrismaClientType,
         private cache: RedisClient = new RedisClient(redis),
-    ) {}
+    ) { }
 
     async findAllBySymbol(
         symbol: string,
