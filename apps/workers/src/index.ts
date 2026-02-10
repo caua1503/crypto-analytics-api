@@ -1,18 +1,104 @@
 import { Worker } from "bullmq";
 import { redisConnection } from "./config/env.js";
+import { prisma, Logger, RedisClient, redis } from "@repo/shared";
+import { zDecimal } from "@repo/shared/types/common";
+
+import { MarketSnapshotService } from "@repo/shared/services/market.service";
+import { AnalysisService } from "@repo/shared/services/analysis.service";
+import { getMarketDataService } from "@repo/shared/integrations";
+import { FearAndGreedIndex } from "@repo/shared/integrations";
+import {
+    ApiMacroDataSchema,
+    type ApiMacroData,
+} from "@repo/shared/types/interfaces/integrations.interface";
 
 const QUEUE_NAME = "processing-queue";
+const logger = new Logger("Worker");
+
+const marketSnapshotService = new MarketSnapshotService(prisma);
+const analysisService = new AnalysisService(prisma);
+const marketDataIntegration = getMarketDataService();
+
+const redisClient = new RedisClient(redis);
+
+let cachedMacroData: ApiMacroData | null = null;
+let cachedFearGreed: number | null = null;
+let lastGlobalDataFetch = 0;
+const GLOBAL_DATA_TTL = 60 * 60 * 1000; // 1 hora
+
+async function getGlobalMarketData() {
+    const now = Date.now();
+    const isCacheExpired = now - lastGlobalDataFetch > GLOBAL_DATA_TTL;
+
+    if (!cachedMacroData || !cachedFearGreed || isCacheExpired) {
+        const macroData = await redisClient.get_json<ApiMacroData>("macroData", ApiMacroDataSchema);
+
+        const fearGreedRaw = await redisClient.get("fearGreedIndex");
+        const fearGreed = fearGreedRaw ? Number.parseInt(fearGreedRaw, 10) : null;
+
+        if (!macroData || fearGreed === null) {
+            logger.log("⚠️ Dados globais ausentes no Redis, tentando coletar como fallback...");
+
+            const newMacroData = macroData || await marketDataIntegration.fetchMacroData();
+            const newFearGreed = fearGreed ?? await new FearAndGreedIndex().getIndexValue();
+
+            if (!macroData) await redisClient.set_json("macroData", newMacroData, 60 * 60);
+            if (fearGreed === null) await redisClient.set("fearGreedIndex", newFearGreed.toString(), 60 * 60);
+
+            cachedMacroData = newMacroData;
+            cachedFearGreed = newFearGreed;
+        } else {
+            cachedMacroData = macroData;
+            cachedFearGreed = fearGreed;
+        }
+
+        lastGlobalDataFetch = now;
+    }
+
+    return {
+        macroData: cachedMacroData!,
+        fearGreed: cachedFearGreed!,
+    };
+}
 
 new Worker(
     QUEUE_NAME,
     async (job) => {
         if (job.name !== "process-heavy") return;
 
-        console.log("⚙️ Processando:", job.data);
+        const asset = job.data;
+        logger.log(`⚙️ Processando ativo: ${asset.symbol} (${asset.id})`);
 
-        // await new Promise(r => setTimeout(r, 300));
+        try {
+            logger.log(`[${asset.symbol}] Coletando dados de mercado...`);
+            const marketData = await marketDataIntegration.fetchMarketDataBySymbol(asset.symbol);
 
-        // console.log("✅ Finalizado:", job.data.id);
+            const { macroData, fearGreed } = await getGlobalMarketData();
+
+            logger.log(`[${asset.symbol}] Criando snapshot no banco...`);
+            const snapshot = await marketSnapshotService.create({
+                assetId: asset.id,
+                priceUsd: zDecimal.parse(marketData.priceUsd ?? 0),
+                volume24hUsd: zDecimal.parse(marketData.volume24hUsd ?? 0),
+                marketCapUsd: zDecimal.parse(marketData.marketCapUsd ?? 0),
+                btcDominance: zDecimal.parse(macroData.btcDominance ?? 0),
+                fearGreed,
+                source: marketData.source,
+                cachedUntil: marketData.cachedUntil,
+            });
+
+            logger.log(
+                `[${asset.symbol}] Executando motor de análise (ID Snapshot: ${snapshot.id})...`,
+            );
+            const analysis = await analysisService.performAnalysis(asset.id, snapshot.id);
+
+            logger.log(
+                `Finalizado [${asset.symbol}]: Recomendação = ${analysis.recommendation} (Score: ${analysis.finalScore})`,
+            );
+        } catch (error) {
+            logger.error(`Erro ao processar ativo ${asset.symbol}:`, error);
+            throw error;
+        }
     },
     {
         connection: redisConnection,
