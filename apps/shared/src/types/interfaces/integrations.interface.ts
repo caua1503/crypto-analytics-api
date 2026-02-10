@@ -37,12 +37,12 @@ export const ApiTechnicalDataSchema = z.object({
 });
 
 export const ApiMacroDataSchema = z.object({
-    btcDominance: z.number().min(0).max(100).optional(), // Dominância do Bitcoin (%)
-    totalMarketCapUsd: z.number().positive().optional(), // Market cap total do mercado
-    liquidityIndex: z.number().optional(), // Indicador agregado de liquidez
+    btcDominance: z.coerce.number().min(0).max(100).optional(), // Dominância do Bitcoin (%)
+    totalMarketCapUsd: z.coerce.number().positive().optional(), // Market cap total do mercado
+    liquidityIndex: z.coerce.number().optional(), // Indicador agregado de liquidez
 
     source: z.string(), // Fonte dos dados macro
-    timestamp: z.date(), // Momento da medição
+    timestamp: z.coerce.date(), // Momento da medição
 });
 
 export const ApiMacroDataSchemaDTO = ApiMacroDataSchema.extend({
