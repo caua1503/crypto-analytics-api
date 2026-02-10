@@ -4,7 +4,7 @@
     "description": "",
     "main": "src/index.js",
     "scripts": {
-        "build": "bun i && bun run lint && bun build --compile --minify --bytecode src/index.ts --outfile ../../build/api",
+        "build": "bun i && bun run lint && bun build --compile --minify --sourcemap --bytecode src/index.ts --outfile ../../build/api",
         "dev": "bun i && bun run lint && bun --watch run src/index.ts",
         "lint": "bunx @biomejs/biome format --write"
     },
