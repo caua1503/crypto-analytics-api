@@ -23,7 +23,7 @@ export class AssetService {
     constructor(
         private prisma: PrismaClientType,
         private cache: RedisClient = new RedisClient(redis),
-    ) { }
+    ) {}
 
     async findAll(
         pagination: PaginationParamsType = PaginationParams.parse({}),
