@@ -58,7 +58,7 @@ app.get("/health", async (req, res) => {
 });
 
 //Inicialisa a integração de dados de mercado
-getMarketDataService();
+// getMarketDataService();
 
 // const service = getMarketDataService();
 // service.fetchMacroData().then((result) => {
