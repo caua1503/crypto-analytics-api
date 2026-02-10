@@ -32,7 +32,9 @@ export const zDecimal = z
     .union([z.string(), z.number(), z.instanceof(Prisma.Decimal)])
     .transform((val) => new Prisma.Decimal(val));
 
-export const zDecimaltoString = z.instanceof(Prisma.Decimal).transform((val) => val.toString());
+export const zDecimaltoString = z
+    .union([z.string(), z.number(), z.instanceof(Prisma.Decimal)])
+    .transform((val) => val.toString());
 
 export type RecommendationType = z.infer<typeof Recommendation>;
 export type CriterionCategoryType = z.infer<typeof CriterionCategory>;
