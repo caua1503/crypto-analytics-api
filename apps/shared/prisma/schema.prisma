@@ -47,11 +47,11 @@ enum CriterionCategory {
 // MODELS
 
 model Asset {
-  id     Int    @id @default(autoincrement())
-  publicId  String  @unique @default(uuid()) @db.Uuid
-  symbol String @unique // BTC, ETH, SOL...
-  name   String
-  extras Json? // qualquer dado extra (ex: CoinGecko ID, CoinMarketCap ID, etc)
+  id       Int    @id @default(autoincrement())
+  publicId String @unique @default(uuid()) @db.Uuid
+  symbol   String @unique // BTC, ETH, SOL...
+  name     String
+  extras   Json? // qualquer dado extra (ex: CoinGecko ID, CoinMarketCap ID, etc)
 
   snapshots MarketSnapshot[]
   analyses  Analysis[]
@@ -67,6 +67,11 @@ model MarketSnapshot {
   priceUsd     Decimal  @db.Decimal(18, 8)
   volume24hUsd Decimal  @db.Decimal(24, 2)
   marketCapUsd Decimal? @db.Decimal(24, 2)
+
+  open  Decimal? @db.Decimal(18, 8)
+  high  Decimal? @db.Decimal(18, 8)
+  low   Decimal? @db.Decimal(18, 8)
+  close Decimal? @db.Decimal(18, 8)
 
   btcDominance Decimal? @db.Decimal(5, 2)
   fearGreed    Int? // 0-100
@@ -117,7 +122,6 @@ model CriterionWeight {
 
   @@unique([engineVersionId, criterionId])
 }
-
 
 model Analysis {
   id      Int   @id @default(autoincrement())

@@ -39,11 +39,12 @@ async function getGlobalMarketData() {
         if (!macroData || fearGreed === null) {
             logger.log("⚠️ Dados globais ausentes no Redis, tentando coletar como fallback...");
 
-            const newMacroData = macroData || await marketDataIntegration.fetchMacroData();
-            const newFearGreed = fearGreed ?? await new FearAndGreedIndex().getIndexValue();
+            const newMacroData = macroData || (await marketDataIntegration.fetchMacroData());
+            const newFearGreed = fearGreed ?? (await new FearAndGreedIndex().getIndexValue());
 
             if (!macroData) await redisClient.set_json("macroData", newMacroData, 60 * 60);
-            if (fearGreed === null) await redisClient.set("fearGreedIndex", newFearGreed.toString(), 60 * 60);
+            if (fearGreed === null)
+                await redisClient.set("fearGreedIndex", newFearGreed.toString(), 60 * 60);
 
             cachedMacroData = newMacroData;
             cachedFearGreed = newFearGreed;
@@ -75,16 +76,28 @@ new Worker(
 
             const { macroData, fearGreed } = await getGlobalMarketData();
 
+            let ohlcData;
+            try {
+                logger.log(`[${asset.symbol}] Coletando dados OHLC...`);
+                ohlcData = await marketDataIntegration.fetchOHLCBySymbol(asset.symbol);
+            } catch (error) {
+                logger.error(`[${asset.symbol}] Falha ao coletar OHLC (continuando sem): ${error}`);
+            }
+
             logger.log(`[${asset.symbol}] Criando snapshot no banco...`);
             const snapshot = await marketSnapshotService.create({
                 assetId: asset.id,
-                priceUsd: zDecimal.parse(marketData.priceUsd ?? 0),
-                volume24hUsd: zDecimal.parse(marketData.volume24hUsd ?? 0),
-                marketCapUsd: zDecimal.parse(marketData.marketCapUsd ?? 0),
-                btcDominance: zDecimal.parse(macroData.btcDominance ?? 0),
+                priceUsd: zDecimal.parse(marketData.priceUsd),
+                volume24hUsd: zDecimal.parse(marketData.volume24hUsd),
+                marketCapUsd: zDecimal.parse(marketData.marketCapUsd),
+                btcDominance: zDecimal.parse(macroData.btcDominance),
                 fearGreed,
                 source: marketData.source,
                 cachedUntil: marketData.cachedUntil,
+                open: ohlcData ? zDecimal.parse(ohlcData.open) : undefined,
+                high: ohlcData ? zDecimal.parse(ohlcData.high) : undefined,
+                low: ohlcData ? zDecimal.parse(ohlcData.low) : undefined,
+                close: ohlcData ? zDecimal.parse(ohlcData.close) : undefined,
             });
 
             logger.log(

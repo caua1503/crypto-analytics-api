@@ -1,6 +1,6 @@
 import { httpErrors } from "@fastify/sensible";
 import type { PrismaClientType } from "@repo/shared";
-import { MacroCalculators } from "../integrations/calculators.js";
+import { MacroCalculators, TechnicalCalculators } from "../integrations/calculators.js";
 
 import {
     Analysis,
@@ -36,7 +36,7 @@ export class AnalysisService {
     constructor(
         private prisma: PrismaClientType,
         private cache: RedisClient = new RedisClient(redis),
-    ) {}
+    ) { }
 
     async create(data: AnalysisCreateType): Promise<AnalysisType> {
         try {
@@ -218,13 +218,64 @@ export class AnalysisService {
                 } else if (code === "TECHNICAL_TREND") {
                     if (isStable) {
                         technicalScore = 5;
-                    } else if (assetHistoricalSnapshot) {
-                        const currentPrice = Number(snapshot.priceUsd);
-                        const oldPrice = Number(assetHistoricalSnapshot.priceUsd);
-                        const priceChange = (currentPrice - oldPrice) / oldPrice;
-                        technicalScore = Math.max(0, Math.min(10, 5 + priceChange * 50));
                     } else {
-                        technicalScore = 5;
+                        // Buscar histórico para calculos técnicos (ultimos 30 snapshots ~ 1 mes se diario)
+                        // Idealmente deveria buscar candles diarios, mas snapshots servem como proxy se frequentes
+                        const historicalSnapshots = await this.prisma.marketSnapshot.findMany({
+                            where: { assetId: asset.id },
+                            orderBy: { createdAt: "desc" },
+                            take: 30,
+                        });
+
+                        // Reverter para ordem cronologica (antigo -> novo) para calculos
+                        const prices = historicalSnapshots
+                            .map((s: any) => Number(s.close ?? s.priceUsd))
+                            .reverse();
+
+                        let trendScore = 5;
+                        let rsiScore = 5;
+                        let momentumScore = 5;
+
+                        if (prices.length >= 15) { // Minimo para RSI
+                            const techCalc = new TechnicalCalculators();
+
+                            // 1. RSI (Relative Strength Index)
+                            try {
+                                const rsi = techCalc.RSI(prices, 14);
+                                // RSI < 30 -> Oversold (Bullish) -> Score 8-10
+                                // RSI > 70 -> Overbought (Bearish) -> Score 0-2
+                                // RSI 50 -> Neutral -> Score 5
+                                if (rsi <= 30) rsiScore = 8 + ((30 - rsi) / 30) * 2;
+                                else if (rsi >= 70) rsiScore = 2 - ((rsi - 70) / 30) * 2;
+                                else rsiScore = 5 + ((50 - rsi) / 20); // 50->5, 30->6, 70->4 (Linear suave invertido)
+                            } catch (e) {
+                                console.warn(`Error calculating RSI for ${asset.symbol}: ${e}`);
+                            }
+
+                            // 2. SMA Trend
+                            try {
+                                const sma20 = techCalc.SMA(prices, Math.min(20, prices.length));
+                                const currentPrice = prices[prices.length - 1];
+                                if (currentPrice > sma20) trendScore = 7; // Bullish trend
+                                else trendScore = 3; // Bearish trend
+                            } catch (e) {
+                                console.warn(`Error calculating SMA for ${asset.symbol}: ${e}`);
+                            }
+                        }
+
+                        // 3. Momentum (7d Price Change) - Logica Antiga mantida como componente
+                        if (assetHistoricalSnapshot) {
+                            const currentPrice = Number(snapshot.priceUsd);
+                            const oldPrice = Number(assetHistoricalSnapshot.priceUsd);
+                            const priceChange = (currentPrice - oldPrice) / oldPrice;
+                            momentumScore = Math.max(0, Math.min(10, 5 + priceChange * 50));
+                        }
+
+                        // Composição Final do Technical Score
+                        // 40% RSI, 30% Trend, 30% Momentum
+                        technicalScore = (rsiScore * 0.4) + (trendScore * 0.3) + (momentumScore * 0.3);
+
+                        console.log(`[Technical] ${asset.symbol}: RSI=${rsiScore.toFixed(2)}, Trend=${trendScore}, Momentum=${momentumScore.toFixed(2)} -> Final=${technicalScore.toFixed(2)}`);
                     }
                 } else if (code === "MACRO_BTC_DOMINANCE" && snapshot.btcDominance !== null) {
                     if (isStable) {
@@ -307,7 +358,7 @@ export class AnalysisEngineVersionService {
     constructor(
         private prisma: PrismaClientType,
         private cache: RedisClient = new RedisClient(redis),
-    ) {}
+    ) { }
 
     async create(data: AnalysisEngineVersionCreateType): Promise<AnalysisEngineVersionType> {
         try {

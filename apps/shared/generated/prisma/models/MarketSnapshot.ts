@@ -32,6 +32,10 @@ export type MarketSnapshotAvgAggregateOutputType = {
   priceUsd: runtime.Decimal | null
   volume24hUsd: runtime.Decimal | null
   marketCapUsd: runtime.Decimal | null
+  open: runtime.Decimal | null
+  high: runtime.Decimal | null
+  low: runtime.Decimal | null
+  close: runtime.Decimal | null
   btcDominance: runtime.Decimal | null
   fearGreed: number | null
 }
@@ -42,6 +46,10 @@ export type MarketSnapshotSumAggregateOutputType = {
   priceUsd: runtime.Decimal | null
   volume24hUsd: runtime.Decimal | null
   marketCapUsd: runtime.Decimal | null
+  open: runtime.Decimal | null
+  high: runtime.Decimal | null
+  low: runtime.Decimal | null
+  close: runtime.Decimal | null
   btcDominance: runtime.Decimal | null
   fearGreed: number | null
 }
@@ -52,6 +60,10 @@ export type MarketSnapshotMinAggregateOutputType = {
   priceUsd: runtime.Decimal | null
   volume24hUsd: runtime.Decimal | null
   marketCapUsd: runtime.Decimal | null
+  open: runtime.Decimal | null
+  high: runtime.Decimal | null
+  low: runtime.Decimal | null
+  close: runtime.Decimal | null
   btcDominance: runtime.Decimal | null
   fearGreed: number | null
   source: string | null
@@ -65,6 +77,10 @@ export type MarketSnapshotMaxAggregateOutputType = {
   priceUsd: runtime.Decimal | null
   volume24hUsd: runtime.Decimal | null
   marketCapUsd: runtime.Decimal | null
+  open: runtime.Decimal | null
+  high: runtime.Decimal | null
+  low: runtime.Decimal | null
+  close: runtime.Decimal | null
   btcDominance: runtime.Decimal | null
   fearGreed: number | null
   source: string | null
@@ -78,6 +94,10 @@ export type MarketSnapshotCountAggregateOutputType = {
   priceUsd: number
   volume24hUsd: number
   marketCapUsd: number
+  open: number
+  high: number
+  low: number
+  close: number
   btcDominance: number
   fearGreed: number
   source: number
@@ -93,6 +113,10 @@ export type MarketSnapshotAvgAggregateInputType = {
   priceUsd?: true
   volume24hUsd?: true
   marketCapUsd?: true
+  open?: true
+  high?: true
+  low?: true
+  close?: true
   btcDominance?: true
   fearGreed?: true
 }
@@ -103,6 +127,10 @@ export type MarketSnapshotSumAggregateInputType = {
   priceUsd?: true
   volume24hUsd?: true
   marketCapUsd?: true
+  open?: true
+  high?: true
+  low?: true
+  close?: true
   btcDominance?: true
   fearGreed?: true
 }
@@ -113,6 +141,10 @@ export type MarketSnapshotMinAggregateInputType = {
   priceUsd?: true
   volume24hUsd?: true
   marketCapUsd?: true
+  open?: true
+  high?: true
+  low?: true
+  close?: true
   btcDominance?: true
   fearGreed?: true
   source?: true
@@ -126,6 +158,10 @@ export type MarketSnapshotMaxAggregateInputType = {
   priceUsd?: true
   volume24hUsd?: true
   marketCapUsd?: true
+  open?: true
+  high?: true
+  low?: true
+  close?: true
   btcDominance?: true
   fearGreed?: true
   source?: true
@@ -139,6 +175,10 @@ export type MarketSnapshotCountAggregateInputType = {
   priceUsd?: true
   volume24hUsd?: true
   marketCapUsd?: true
+  open?: true
+  high?: true
+  low?: true
+  close?: true
   btcDominance?: true
   fearGreed?: true
   source?: true
@@ -239,6 +279,10 @@ export type MarketSnapshotGroupByOutputType = {
   priceUsd: runtime.Decimal
   volume24hUsd: runtime.Decimal
   marketCapUsd: runtime.Decimal | null
+  open: runtime.Decimal | null
+  high: runtime.Decimal | null
+  low: runtime.Decimal | null
+  close: runtime.Decimal | null
   btcDominance: runtime.Decimal | null
   fearGreed: number | null
   source: string
@@ -275,6 +319,10 @@ export type MarketSnapshotWhereInput = {
   priceUsd?: Prisma.DecimalFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd?: Prisma.DecimalFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: Prisma.IntNullableFilter<"MarketSnapshot"> | number | null
   source?: Prisma.StringFilter<"MarketSnapshot"> | string
@@ -290,6 +338,10 @@ export type MarketSnapshotOrderByWithRelationInput = {
   priceUsd?: Prisma.SortOrder
   volume24hUsd?: Prisma.SortOrder
   marketCapUsd?: Prisma.SortOrderInput | Prisma.SortOrder
+  open?: Prisma.SortOrderInput | Prisma.SortOrder
+  high?: Prisma.SortOrderInput | Prisma.SortOrder
+  low?: Prisma.SortOrderInput | Prisma.SortOrder
+  close?: Prisma.SortOrderInput | Prisma.SortOrder
   btcDominance?: Prisma.SortOrderInput | Prisma.SortOrder
   fearGreed?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrder
@@ -308,6 +360,10 @@ export type MarketSnapshotWhereUniqueInput = Prisma.AtLeast<{
   priceUsd?: Prisma.DecimalFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd?: Prisma.DecimalFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: Prisma.IntNullableFilter<"MarketSnapshot"> | number | null
   source?: Prisma.StringFilter<"MarketSnapshot"> | string
@@ -323,6 +379,10 @@ export type MarketSnapshotOrderByWithAggregationInput = {
   priceUsd?: Prisma.SortOrder
   volume24hUsd?: Prisma.SortOrder
   marketCapUsd?: Prisma.SortOrderInput | Prisma.SortOrder
+  open?: Prisma.SortOrderInput | Prisma.SortOrder
+  high?: Prisma.SortOrderInput | Prisma.SortOrder
+  low?: Prisma.SortOrderInput | Prisma.SortOrder
+  close?: Prisma.SortOrderInput | Prisma.SortOrder
   btcDominance?: Prisma.SortOrderInput | Prisma.SortOrder
   fearGreed?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrder
@@ -344,6 +404,10 @@ export type MarketSnapshotScalarWhereWithAggregatesInput = {
   priceUsd?: Prisma.DecimalWithAggregatesFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd?: Prisma.DecimalWithAggregatesFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: Prisma.DecimalNullableWithAggregatesFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: Prisma.DecimalNullableWithAggregatesFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: Prisma.DecimalNullableWithAggregatesFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: Prisma.DecimalNullableWithAggregatesFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: Prisma.DecimalNullableWithAggregatesFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: Prisma.DecimalNullableWithAggregatesFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: Prisma.IntNullableWithAggregatesFilter<"MarketSnapshot"> | number | null
   source?: Prisma.StringWithAggregatesFilter<"MarketSnapshot"> | string
@@ -355,6 +419,10 @@ export type MarketSnapshotCreateInput = {
   priceUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: number | null
   source: string
@@ -370,6 +438,10 @@ export type MarketSnapshotUncheckedCreateInput = {
   priceUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: number | null
   source: string
@@ -382,6 +454,10 @@ export type MarketSnapshotUpdateInput = {
   priceUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
@@ -397,6 +473,10 @@ export type MarketSnapshotUncheckedUpdateInput = {
   priceUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
@@ -411,6 +491,10 @@ export type MarketSnapshotCreateManyInput = {
   priceUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: number | null
   source: string
@@ -422,6 +506,10 @@ export type MarketSnapshotUpdateManyMutationInput = {
   priceUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
@@ -435,6 +523,10 @@ export type MarketSnapshotUncheckedUpdateManyInput = {
   priceUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
@@ -458,6 +550,10 @@ export type MarketSnapshotCountOrderByAggregateInput = {
   priceUsd?: Prisma.SortOrder
   volume24hUsd?: Prisma.SortOrder
   marketCapUsd?: Prisma.SortOrder
+  open?: Prisma.SortOrder
+  high?: Prisma.SortOrder
+  low?: Prisma.SortOrder
+  close?: Prisma.SortOrder
   btcDominance?: Prisma.SortOrder
   fearGreed?: Prisma.SortOrder
   source?: Prisma.SortOrder
@@ -471,6 +567,10 @@ export type MarketSnapshotAvgOrderByAggregateInput = {
   priceUsd?: Prisma.SortOrder
   volume24hUsd?: Prisma.SortOrder
   marketCapUsd?: Prisma.SortOrder
+  open?: Prisma.SortOrder
+  high?: Prisma.SortOrder
+  low?: Prisma.SortOrder
+  close?: Prisma.SortOrder
   btcDominance?: Prisma.SortOrder
   fearGreed?: Prisma.SortOrder
 }
@@ -481,6 +581,10 @@ export type MarketSnapshotMaxOrderByAggregateInput = {
   priceUsd?: Prisma.SortOrder
   volume24hUsd?: Prisma.SortOrder
   marketCapUsd?: Prisma.SortOrder
+  open?: Prisma.SortOrder
+  high?: Prisma.SortOrder
+  low?: Prisma.SortOrder
+  close?: Prisma.SortOrder
   btcDominance?: Prisma.SortOrder
   fearGreed?: Prisma.SortOrder
   source?: Prisma.SortOrder
@@ -494,6 +598,10 @@ export type MarketSnapshotMinOrderByAggregateInput = {
   priceUsd?: Prisma.SortOrder
   volume24hUsd?: Prisma.SortOrder
   marketCapUsd?: Prisma.SortOrder
+  open?: Prisma.SortOrder
+  high?: Prisma.SortOrder
+  low?: Prisma.SortOrder
+  close?: Prisma.SortOrder
   btcDominance?: Prisma.SortOrder
   fearGreed?: Prisma.SortOrder
   source?: Prisma.SortOrder
@@ -507,6 +615,10 @@ export type MarketSnapshotSumOrderByAggregateInput = {
   priceUsd?: Prisma.SortOrder
   volume24hUsd?: Prisma.SortOrder
   marketCapUsd?: Prisma.SortOrder
+  open?: Prisma.SortOrder
+  high?: Prisma.SortOrder
+  low?: Prisma.SortOrder
+  close?: Prisma.SortOrder
   btcDominance?: Prisma.SortOrder
   fearGreed?: Prisma.SortOrder
 }
@@ -600,6 +712,10 @@ export type MarketSnapshotCreateWithoutAssetInput = {
   priceUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: number | null
   source: string
@@ -613,6 +729,10 @@ export type MarketSnapshotUncheckedCreateWithoutAssetInput = {
   priceUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: number | null
   source: string
@@ -656,6 +776,10 @@ export type MarketSnapshotScalarWhereInput = {
   priceUsd?: Prisma.DecimalFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd?: Prisma.DecimalFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: Prisma.DecimalNullableFilter<"MarketSnapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: Prisma.IntNullableFilter<"MarketSnapshot"> | number | null
   source?: Prisma.StringFilter<"MarketSnapshot"> | string
@@ -667,6 +791,10 @@ export type MarketSnapshotCreateWithoutAnalysesInput = {
   priceUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: number | null
   source: string
@@ -681,6 +809,10 @@ export type MarketSnapshotUncheckedCreateWithoutAnalysesInput = {
   priceUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: number | null
   source: string
@@ -708,6 +840,10 @@ export type MarketSnapshotUpdateWithoutAnalysesInput = {
   priceUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
@@ -722,6 +858,10 @@ export type MarketSnapshotUncheckedUpdateWithoutAnalysesInput = {
   priceUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
@@ -734,6 +874,10 @@ export type MarketSnapshotCreateManyAssetInput = {
   priceUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: number | null
   source: string
@@ -745,6 +889,10 @@ export type MarketSnapshotUpdateWithoutAssetInput = {
   priceUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
@@ -758,6 +906,10 @@ export type MarketSnapshotUncheckedUpdateWithoutAssetInput = {
   priceUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
@@ -771,6 +923,10 @@ export type MarketSnapshotUncheckedUpdateManyWithoutAssetInput = {
   priceUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   volume24hUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   marketCapUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  open?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  high?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  low?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  close?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   btcDominance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   fearGreed?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
@@ -815,6 +971,10 @@ export type MarketSnapshotSelect<ExtArgs extends runtime.Types.Extensions.Intern
   priceUsd?: boolean
   volume24hUsd?: boolean
   marketCapUsd?: boolean
+  open?: boolean
+  high?: boolean
+  low?: boolean
+  close?: boolean
   btcDominance?: boolean
   fearGreed?: boolean
   source?: boolean
@@ -831,6 +991,10 @@ export type MarketSnapshotSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   priceUsd?: boolean
   volume24hUsd?: boolean
   marketCapUsd?: boolean
+  open?: boolean
+  high?: boolean
+  low?: boolean
+  close?: boolean
   btcDominance?: boolean
   fearGreed?: boolean
   source?: boolean
@@ -845,6 +1009,10 @@ export type MarketSnapshotSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   priceUsd?: boolean
   volume24hUsd?: boolean
   marketCapUsd?: boolean
+  open?: boolean
+  high?: boolean
+  low?: boolean
+  close?: boolean
   btcDominance?: boolean
   fearGreed?: boolean
   source?: boolean
@@ -859,6 +1027,10 @@ export type MarketSnapshotSelectScalar = {
   priceUsd?: boolean
   volume24hUsd?: boolean
   marketCapUsd?: boolean
+  open?: boolean
+  high?: boolean
+  low?: boolean
+  close?: boolean
   btcDominance?: boolean
   fearGreed?: boolean
   source?: boolean
@@ -866,7 +1038,7 @@ export type MarketSnapshotSelectScalar = {
   createdAt?: boolean
 }
 
-export type MarketSnapshotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "assetId" | "priceUsd" | "volume24hUsd" | "marketCapUsd" | "btcDominance" | "fearGreed" | "source" | "cachedUntil" | "createdAt", ExtArgs["result"]["marketSnapshot"]>
+export type MarketSnapshotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "assetId" | "priceUsd" | "volume24hUsd" | "marketCapUsd" | "open" | "high" | "low" | "close" | "btcDominance" | "fearGreed" | "source" | "cachedUntil" | "createdAt", ExtArgs["result"]["marketSnapshot"]>
 export type MarketSnapshotInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
   analyses?: boolean | Prisma.MarketSnapshot$analysesArgs<ExtArgs>
@@ -891,6 +1063,10 @@ export type $MarketSnapshotPayload<ExtArgs extends runtime.Types.Extensions.Inte
     priceUsd: runtime.Decimal
     volume24hUsd: runtime.Decimal
     marketCapUsd: runtime.Decimal | null
+    open: runtime.Decimal | null
+    high: runtime.Decimal | null
+    low: runtime.Decimal | null
+    close: runtime.Decimal | null
     btcDominance: runtime.Decimal | null
     fearGreed: number | null
     source: string
@@ -1326,6 +1502,10 @@ export interface MarketSnapshotFieldRefs {
   readonly priceUsd: Prisma.FieldRef<"MarketSnapshot", 'Decimal'>
   readonly volume24hUsd: Prisma.FieldRef<"MarketSnapshot", 'Decimal'>
   readonly marketCapUsd: Prisma.FieldRef<"MarketSnapshot", 'Decimal'>
+  readonly open: Prisma.FieldRef<"MarketSnapshot", 'Decimal'>
+  readonly high: Prisma.FieldRef<"MarketSnapshot", 'Decimal'>
+  readonly low: Prisma.FieldRef<"MarketSnapshot", 'Decimal'>
+  readonly close: Prisma.FieldRef<"MarketSnapshot", 'Decimal'>
   readonly btcDominance: Prisma.FieldRef<"MarketSnapshot", 'Decimal'>
   readonly fearGreed: Prisma.FieldRef<"MarketSnapshot", 'Int'>
   readonly source: Prisma.FieldRef<"MarketSnapshot", 'String'>

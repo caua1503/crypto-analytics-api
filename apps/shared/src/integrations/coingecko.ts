@@ -1,17 +1,17 @@
-import { ServiceContract, ServiceConfig } from "./types.js";
+import type { ServiceContract, ServiceConfig } from "./types.js";
 import { env } from "@repo/shared/env";
 import { getDefaultCacheUntil } from "./common.js";
 import {
     ApiMarketSnapshotSchema,
-    ApiMarketSnapshot,
-    ApiMacroData,
+    type ApiMarketSnapshot,
+    type ApiMacroData,
     ApiMacroDataSchema,
     ApiMacroDataSchemaDTO,
 } from "@repo/shared/types/interfaces/integrations.interface";
 import { SourceEnum } from "@repo/shared/types/common";
 import { AssetService } from "@repo/shared/services/asset.service";
 import { prisma } from "@repo/shared";
-import axios, { AxiosInstance } from "axios";
+import axios, { type AxiosInstance } from "axios";
 
 export class CoinGeckoService implements ServiceContract {
     private apiKey?: string;

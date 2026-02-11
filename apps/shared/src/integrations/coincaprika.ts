@@ -1,12 +1,13 @@
 import type { ServiceContract, ServiceConfig } from "./types.js";
-import { env } from "@repo/shared/env";
 import { getDefaultCacheUntil } from "./common.js";
+import { Period } from "@repo/shared/types/common";
 import {
     ApiMarketSnapshotSchema,
     type ApiMarketSnapshot,
     type ApiMacroData,
-    ApiMacroDataSchema,
     ApiMacroDataSchemaDTO,
+    type ApiOHLC,
+    ApiOHLCSchema,
 } from "@repo/shared/types/interfaces/integrations.interface";
 import { SourceEnum } from "@repo/shared/types/common";
 import { AssetService } from "@repo/shared/services/asset.service";
@@ -105,6 +106,63 @@ export class CoinPaprikaService implements ServiceContract {
             source: SourceEnum.COINPAPRIKA,
             timestamp: new Date(),
         });
+
+        return data;
+    }
+
+    async fetchOHLCBySymbol(assetSymbol: string): Promise<ApiOHLC> {
+        const { name: assetName } = await new AssetService(prisma).findBySymbol(assetSymbol);
+        const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase().replace(" ", "-")}`;
+
+        const response = await this.httpsInterface
+            .get(`/coins/${queryApi}/ohlcv/today`)
+            .then((res) => res.data);
+
+        const {
+            open,
+            high,
+            low,
+            close,
+        } = response[0];
+
+        const data = ApiOHLCSchema.parse({
+            assetSymbol: assetSymbol.toUpperCase(),
+            open,
+            high,
+            low,
+            close,
+            period: "24H"
+        })
+
+        return data;
+    }
+
+    async fetchOHLCById(assetId: number): Promise<ApiOHLC> {
+        const { symbol: assetSymbol, name: assetName } = await new AssetService(prisma).findById(
+            assetId,
+        );
+
+        const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase().replace(" ", "-")}`;
+
+        const response = await this.httpsInterface
+            .get(`/coins/${queryApi}/ohlcv/today`)
+            .then((res) => res.data);
+
+        const {
+            open,
+            high,
+            low,
+            close,
+        } = response[0];
+
+        const data = ApiOHLCSchema.parse({
+            assetSymbol: assetSymbol.toUpperCase(),
+            open,
+            high,
+            low,
+            close,
+            period: "24H"
+        })
 
         return data;
     }

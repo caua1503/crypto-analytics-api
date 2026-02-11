@@ -11,6 +11,11 @@ export const MarketSnapshot = z.object({
     volume24hUsd: zDecimaltoString,
     marketCapUsd: zDecimaltoString,
 
+    open: zDecimaltoString.nullable().optional(),
+    high: zDecimaltoString.nullable().optional(),
+    low: zDecimaltoString.nullable().optional(),
+    close: zDecimaltoString.nullable().optional(),
+
     btcDominance: zDecimaltoString,
     fearGreed: z.number().optional(),
 
@@ -29,6 +34,10 @@ export const MarketSnapshotCreate = MarketSnapshot.omit({
     priceUsd: zDecimal,
     volume24hUsd: zDecimal,
     marketCapUsd: zDecimal,
+    open: zDecimal.optional(),
+    high: zDecimal.optional(),
+    low: zDecimal.optional(),
+    close: zDecimal.optional(),
     btcDominance: zDecimal,
 });
 
@@ -36,6 +45,10 @@ export const MarketSnapshotResponse = MarketSnapshot.extend({
     priceUsd: z.string(),
     volume24hUsd: z.string(),
     marketCapUsd: z.string(),
+    open: z.string().nullable().optional(),
+    high: z.string().nullable().optional(),
+    low: z.string().nullable().optional(),
+    close: z.string().nullable().optional(),
     btcDominance: z.string(),
 });
 

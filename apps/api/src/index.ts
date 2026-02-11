@@ -61,8 +61,8 @@ app.get("/health", async (req, res) => {
 // getMarketDataService();
 
 // const service = getMarketDataService();
-// service.fetchMacroData().then((result) => {
-//     console.log("Macro Data:", result);
+// service.fetchOHLCById(1).then((result) => {
+//     console.log("OHLC Data:", result);
 // });
 
 app.listen({ port: PORT, host: HOST }).then(() => {
@@ -72,8 +72,7 @@ app.listen({ port: PORT, host: HOST }).then(() => {
     console.log(`\n📚 Docs available at: http://localhost:${PORT}/docs`);
     if (env.NODE_ENV === "production") {
         console.log(`🔥 Running in mode: "${env.NODE_ENV}"`);
-    }
-    else {
+    } else {
         console.log(`📚 Running in mode: "${env.NODE_ENV}"`);
     }
 });

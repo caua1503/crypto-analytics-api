@@ -10,8 +10,8 @@ export interface ServiceContract {
 
     fetchMacroData(): Promise<ApiMacroData>;
 
-    fetchOHLCBySymbol?(assetSymbol: string): Promise<ApiOHLC>;
-    fetchOHLCById?(assetId: number): Promise<ApiOHLC>;
+    fetchOHLCBySymbol(assetSymbol: string): Promise<ApiOHLC>;
+    fetchOHLCById(assetId: number): Promise<ApiOHLC>;
 }
 
 export interface ServiceConfig {

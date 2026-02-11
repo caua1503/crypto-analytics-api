@@ -1,8 +1,4 @@
-import { Worker } from "bullmq";
-import { dispatchQueue, processingQueue } from "./queues/processing.queue";
 import { registerDailyScheduler } from "./schedulers/daily.scheduler";
-import { prisma } from "./config/db";
-import { redisConnection } from "./config/env";
 import { heavyDispatcher } from "./dispatchers/heavy.dispatch";
 
 async function main() {
