@@ -56,6 +56,57 @@ services:
       timeout: 5s
       retries: 5
 
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: crypto_api_service
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_healthy
+      pgbouncer:
+        condition: service_started
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:5432/crypto_api
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile.scheduler
+    container_name: crypto_api_scheduler
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_started
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:5432/crypto_api
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: crypto_api_worker
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_started
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:5432/crypto_api
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
 volumes:
   postgres_data:
   pgbouncer_data:

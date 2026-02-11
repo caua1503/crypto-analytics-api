@@ -3,14 +3,10 @@ FROM alpine:latest
 WORKDIR /app
 
 # Copiar o binário pré-compilado do diretório de build
-COPY build/api /app/api
+COPY build/scheduler /app/scheduler
 
 # Dar permissão de execução
-RUN chmod +x /app/api
-
-# Variáveis de ambiente padrão
-ENV PORT=3000
-EXPOSE 3000
+RUN chmod +x /app/scheduler
 
 # Iniciar o serviço
-CMD ["./api"]
+CMD ["./scheduler"]
