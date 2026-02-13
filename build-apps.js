@@ -3,7 +3,7 @@ import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { platform } from "node:os";
 
-const apps = ["api", "scheduler", "workers"];
+const apps = ["shared", "api", "scheduler", "workers"];
 const buildDir = join(import.meta.dirname, "build");
 
 if (!existsSync(buildDir)) {
@@ -31,6 +31,11 @@ for (const app of apps) {
     if (installResult.status !== 0) {
         console.error(`Error installing dependencies for ${app}`);
         process.exit(1);
+    }
+
+    if (app === "shared") {
+        console.log(`Skipping build for ${app} as it only needs install.`);
+        continue;
     }
 
     console.log(`Building ${app}...`);
