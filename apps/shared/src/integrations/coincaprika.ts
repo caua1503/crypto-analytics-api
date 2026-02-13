@@ -58,15 +58,17 @@ export class CoinPaprikaService implements ServiceContract {
 
             return data;
         } catch (error: any) {
-            throw new Error(`Erro ao buscar dados de mercado para ${assetSymbol}: ${error.message}`);
+            throw new Error(
+                `Erro ao buscar dados de mercado para ${assetSymbol}: ${error.message}`,
+            );
         }
     }
 
     async fetchMarketDataById(assetId: number): Promise<ApiMarketSnapshot> {
         try {
-            const { symbol: assetSymbol, name: assetName } = await new AssetService(prisma).findById(
-                assetId,
-            );
+            const { symbol: assetSymbol, name: assetName } = await new AssetService(
+                prisma,
+            ).findById(assetId);
 
             const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase().replace(" ", "-")}`;
 
@@ -131,12 +133,7 @@ export class CoinPaprikaService implements ServiceContract {
                 .get(`/coins/${queryApi}/ohlcv/today`)
                 .then((res) => res.data);
 
-            const {
-                open,
-                high,
-                low,
-                close,
-            } = response[0];
+            const { open, high, low, close } = response[0];
 
             const data = ApiOHLCSchema.parse({
                 assetSymbol: assetSymbol.toUpperCase(),
@@ -144,8 +141,8 @@ export class CoinPaprikaService implements ServiceContract {
                 high,
                 low,
                 close,
-                period: "24H"
-            })
+                period: "24H",
+            });
 
             return data;
         } catch (error: any) {
@@ -155,9 +152,9 @@ export class CoinPaprikaService implements ServiceContract {
 
     async fetchOHLCById(assetId: number): Promise<ApiOHLC> {
         try {
-            const { symbol: assetSymbol, name: assetName } = await new AssetService(prisma).findById(
-                assetId,
-            );
+            const { symbol: assetSymbol, name: assetName } = await new AssetService(
+                prisma,
+            ).findById(assetId);
 
             const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase().replace(" ", "-")}`;
 
@@ -165,12 +162,7 @@ export class CoinPaprikaService implements ServiceContract {
                 .get(`/coins/${queryApi}/ohlcv/today`)
                 .then((res) => res.data);
 
-            const {
-                open,
-                high,
-                low,
-                close,
-            } = response[0];
+            const { open, high, low, close } = response[0];
 
             const data = ApiOHLCSchema.parse({
                 assetSymbol: assetSymbol.toUpperCase(),
@@ -178,8 +170,8 @@ export class CoinPaprikaService implements ServiceContract {
                 high,
                 low,
                 close,
-                period: "24H"
-            })
+                period: "24H",
+            });
 
             return data;
         } catch (error: any) {
