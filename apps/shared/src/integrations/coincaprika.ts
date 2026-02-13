@@ -32,138 +32,158 @@ export class CoinPaprikaService implements ServiceContract {
     }
 
     async fetchMarketDataBySymbol(assetSymbol: string): Promise<ApiMarketSnapshot> {
-        const { name: assetName } = await new AssetService(prisma).findBySymbol(assetSymbol);
-        const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase().replace(" ", "-")}`;
+        try {
+            const { name: assetName } = await new AssetService(prisma).findBySymbol(assetSymbol);
+            const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase().replace(" ", "-")}`;
 
-        const response = await this.httpsInterface
-            .get(`/tickers/${queryApi}`)
-            .then((res) => res.data);
+            const response = await this.httpsInterface
+                .get(`/tickers/${queryApi}`)
+                .then((res) => res.data);
 
-        const {
-            price: current_price,
-            volume_24h: total_volume,
-            market_cap: market_cap,
-        } = response.quotes.USD;
+            const {
+                price: current_price,
+                volume_24h: total_volume,
+                market_cap: market_cap,
+            } = response.quotes.USD;
 
-        const data = ApiMarketSnapshotSchema.parse({
-            assetSymbol: assetSymbol.toUpperCase(),
-            priceUsd: current_price,
-            volume24hUsd: total_volume,
-            marketCapUsd: market_cap,
-            source: SourceEnum.COINPAPRIKA,
-            fetchedAt: new Date(),
-            cachedUntil: getDefaultCacheUntil(),
-        });
+            const data = ApiMarketSnapshotSchema.parse({
+                assetSymbol: assetSymbol.toUpperCase(),
+                priceUsd: current_price,
+                volume24hUsd: total_volume,
+                marketCapUsd: market_cap,
+                source: SourceEnum.COINPAPRIKA,
+                fetchedAt: new Date(),
+                cachedUntil: getDefaultCacheUntil(),
+            });
 
-        return data;
+            return data;
+        } catch (error: any) {
+            throw new Error(`Erro ao buscar dados de mercado para ${assetSymbol}: ${error.message}`);
+        }
     }
 
     async fetchMarketDataById(assetId: number): Promise<ApiMarketSnapshot> {
-        const { symbol: assetSymbol, name: assetName } = await new AssetService(prisma).findById(
-            assetId,
-        );
+        try {
+            const { symbol: assetSymbol, name: assetName } = await new AssetService(prisma).findById(
+                assetId,
+            );
 
-        const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase().replace(" ", "-")}`;
+            const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase().replace(" ", "-")}`;
 
-        const response = await this.httpsInterface
-            .get(`/tickers/${queryApi}`)
-            .then((res) => res.data);
+            const response = await this.httpsInterface
+                .get(`/tickers/${queryApi}`)
+                .then((res) => res.data);
 
-        const {
-            price: current_price,
-            volume_24h: total_volume,
-            market_cap: market_cap,
-        } = response.quotes.USD;
+            const {
+                price: current_price,
+                volume_24h: total_volume,
+                market_cap: market_cap,
+            } = response.quotes.USD;
 
-        const data = ApiMarketSnapshotSchema.parse({
-            assetSymbol: assetSymbol.toUpperCase(),
-            priceUsd: current_price,
-            volume24hUsd: total_volume,
-            marketCapUsd: market_cap,
-            source: SourceEnum.COINPAPRIKA,
-            fetchedAt: new Date(),
-            cachedUntil: getDefaultCacheUntil(),
-        });
+            const data = ApiMarketSnapshotSchema.parse({
+                assetSymbol: assetSymbol.toUpperCase(),
+                priceUsd: current_price,
+                volume24hUsd: total_volume,
+                marketCapUsd: market_cap,
+                source: SourceEnum.COINPAPRIKA,
+                fetchedAt: new Date(),
+                cachedUntil: getDefaultCacheUntil(),
+            });
 
-        return data;
+            return data;
+        } catch (error: any) {
+            throw new Error(`Erro ao buscar dados de mercado para ID ${assetId}: ${error.message}`);
+        }
     }
 
     async fetchMacroData(): Promise<ApiMacroData> {
-        const response = await this.httpsInterface.get(`/global`).then((res) => res.data);
+        try {
+            const response = await this.httpsInterface.get(`/global`).then((res) => res.data);
 
-        const {
-            bitcoin_dominance_percentage: btcDominance,
-            market_cap_usd: totalMarketCapUsd,
-            volume_24h_usd: totalVolumeUsd,
-        } = response;
+            const {
+                bitcoin_dominance_percentage: btcDominance,
+                market_cap_usd: totalMarketCapUsd,
+                volume_24h_usd: totalVolumeUsd,
+            } = response;
 
-        const liquidityIndex = (totalVolumeUsd / totalMarketCapUsd) * 100;
+            const liquidityIndex = (totalVolumeUsd / totalMarketCapUsd) * 100;
 
-        const data = ApiMacroDataSchemaDTO.parse({
-            btcDominance: btcDominance,
-            totalMarketCapUsd: totalMarketCapUsd,
-            liquidityIndex: liquidityIndex,
-            source: SourceEnum.COINPAPRIKA,
-            timestamp: new Date(),
-        });
+            const data = ApiMacroDataSchemaDTO.parse({
+                btcDominance: btcDominance,
+                totalMarketCapUsd: totalMarketCapUsd,
+                liquidityIndex: liquidityIndex,
+                source: SourceEnum.COINPAPRIKA,
+                timestamp: new Date(),
+            });
 
-        return data;
+            return data;
+        } catch (error: any) {
+            throw new Error(`Erro ao buscar dados macroeconômicos: ${error.message}`);
+        }
     }
 
     async fetchOHLCBySymbol(assetSymbol: string): Promise<ApiOHLC> {
-        const { name: assetName } = await new AssetService(prisma).findBySymbol(assetSymbol);
-        const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase().replace(" ", "-")}`;
+        try {
+            const { name: assetName } = await new AssetService(prisma).findBySymbol(assetSymbol);
+            const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase().replace(" ", "-")}`;
 
-        const response = await this.httpsInterface
-            .get(`/coins/${queryApi}/ohlcv/today`)
-            .then((res) => res.data);
+            const response = await this.httpsInterface
+                .get(`/coins/${queryApi}/ohlcv/today`)
+                .then((res) => res.data);
 
-        const {
-            open,
-            high,
-            low,
-            close,
-        } = response[0];
+            const {
+                open,
+                high,
+                low,
+                close,
+            } = response[0];
 
-        const data = ApiOHLCSchema.parse({
-            assetSymbol: assetSymbol.toUpperCase(),
-            open,
-            high,
-            low,
-            close,
-            period: "24H"
-        })
+            const data = ApiOHLCSchema.parse({
+                assetSymbol: assetSymbol.toUpperCase(),
+                open,
+                high,
+                low,
+                close,
+                period: "24H"
+            })
 
-        return data;
+            return data;
+        } catch (error: any) {
+            throw new Error(`Erro ao buscar OHLC para ${assetSymbol}: ${error.message}`);
+        }
     }
 
     async fetchOHLCById(assetId: number): Promise<ApiOHLC> {
-        const { symbol: assetSymbol, name: assetName } = await new AssetService(prisma).findById(
-            assetId,
-        );
+        try {
+            const { symbol: assetSymbol, name: assetName } = await new AssetService(prisma).findById(
+                assetId,
+            );
 
-        const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase().replace(" ", "-")}`;
+            const queryApi = `${assetSymbol.toLowerCase()}-${assetName.toLowerCase().replace(" ", "-")}`;
 
-        const response = await this.httpsInterface
-            .get(`/coins/${queryApi}/ohlcv/today`)
-            .then((res) => res.data);
+            const response = await this.httpsInterface
+                .get(`/coins/${queryApi}/ohlcv/today`)
+                .then((res) => res.data);
 
-        const {
-            open,
-            high,
-            low,
-            close,
-        } = response[0];
+            const {
+                open,
+                high,
+                low,
+                close,
+            } = response[0];
 
-        const data = ApiOHLCSchema.parse({
-            assetSymbol: assetSymbol.toUpperCase(),
-            open,
-            high,
-            low,
-            close,
-            period: "24H"
-        })
+            const data = ApiOHLCSchema.parse({
+                assetSymbol: assetSymbol.toUpperCase(),
+                open,
+                high,
+                low,
+                close,
+                period: "24H"
+            })
 
-        return data;
+            return data;
+        } catch (error: any) {
+            throw new Error(`Erro ao buscar OHLC para ID ${assetId}: ${error.message}`);
+        }
     }
 }
