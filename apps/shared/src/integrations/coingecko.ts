@@ -7,6 +7,7 @@ import {
     type ApiMacroData,
     ApiMacroDataSchema,
     ApiMacroDataSchemaDTO,
+    ApiOHLC,
 } from "@repo/shared/types/interfaces/integrations.interface";
 import { SourceEnum } from "@repo/shared/types/common";
 import { AssetService } from "@repo/shared/services/asset.service";
@@ -106,6 +107,14 @@ export class CoinGeckoService implements ServiceContract {
         });
 
         return data;
+    }
+
+    async fetchOHLCBySymbol(assetSymbol: string): Promise<ApiOHLC> {
+        throw new Error("CoinGeckoService not implemented yet");
+    }
+
+    async fetchOHLCById(assetId: number): Promise<ApiOHLC> {
+        throw new Error("CoinGeckoService not implemented yet");
     }
 }
 
