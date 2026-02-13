@@ -2,6 +2,8 @@ FROM oven/bun:alpine AS runtime
 
 WORKDIR /app
 
+
+RUN apk add --no-cache libstdc++ libgcc
 COPY build/shared /app/shared
 
 COPY apps/shared/prisma /app/prisma

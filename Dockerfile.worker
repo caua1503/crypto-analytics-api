@@ -1,5 +1,7 @@
 FROM alpine:latest
 
+RUN apk add --no-cache libstdc++ libgcc
+
 WORKDIR /app
 
 # Copiar o binário pré-compilado do diretório de build

@@ -2,6 +2,9 @@ FROM alpine:latest
 
 WORKDIR /app
 
+# Instalar dependências C++ necessárias para executar binários compilados com Bun
+RUN apk add --no-cache libstdc++ libgcc
+
 # Copiar o binário pré-compilado do diretório de build
 COPY build/api /app/api
 
