@@ -74,7 +74,6 @@ services:
         condition: service_healthy
     environment:
       - DATABASE_URL=postgresql://crypto_api:crypto_api@postgres:5432/crypto_api
-      - MIGRATE_DB=postgresql://crypto_api:crypto_api@postgres:5432/crypto_api
     networks:
       - crypto_api_network
 
