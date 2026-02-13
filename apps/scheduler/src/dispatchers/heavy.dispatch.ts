@@ -1,7 +1,7 @@
 import { Worker } from "bullmq";
 import { dispatchQueue, processingQueue } from "../queues/processing.queue";
 import { prisma } from "../config/db";
-import { redisConnection } from "../config/env";
+import { redisConnection, env } from "../config/env";
 import { Logger, RedisClient, redis } from "@repo/shared";
 import { getMarketDataService, FearAndGreedIndex } from "@repo/shared/integrations";
 
@@ -21,7 +21,10 @@ export const heavyDispatcher = new Worker(
         try {
             logger.log("🌐 Coletando e semeando dados globais (Macro + Fear & Greed)...");
             const macroData = await marketDataIntegration.fetchMacroData();
+            // console.log("MacroData", macroData);
             const fearGreed = await fearGreedService.getIndexValue();
+            // console.log("FearGreed", fearGreed);
+
 
             await redisClient.set_json("macroData", macroData, 60 * 60); // 1 hora
             await redisClient.set("fearGreedIndex", fearGreed.toString(), 60 * 60);
@@ -29,14 +32,25 @@ export const heavyDispatcher = new Worker(
             logger.error("❌ Erro ao coletar dados globais no Scheduler:", error);
         }
 
+
         const assets = await prisma.asset.findMany({});
 
-        logger.log(`Dispatching ${assets.length} assets`);
+        // Chunk assets based on batch size
+        const batchSize = env.BATCH_SIZE;
+        const chunks = [];
+        for (let i = 0; i < assets.length; i += batchSize) {
+            chunks.push(assets.slice(i, i + batchSize));
+        }
+
+        logger.log(`Dispatching ${assets.length} assets in ${chunks.length} batches (Size: ${batchSize})`);
 
         await processingQueue.addBulk(
-            assets.map(asset => ({
+            chunks.map((batch, index) => ({
                 name: "process-heavy",
-                data: asset
+                data: batch,
+                opts: {
+                    jobId: `batch-${Date.now()}-${index}` // Optional: helps with tracking
+                }
             }))
         );
     },
