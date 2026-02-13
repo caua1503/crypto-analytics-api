@@ -11,8 +11,18 @@ COPY build/shared /app/shared
 # Copiar schema e migrations do Prisma
 COPY apps/shared/prisma /app/prisma
 
+# Copiar prisma.config.ts (necessário para o Prisma CLI acessar em runtime)
+COPY apps/shared/prisma.config.ts /app/prisma.config.ts
+
+# Copiar package.json para ter acesso às dependências do Prisma
+COPY apps/shared/package.json /app/package.json
+
+# Instalar apenas as dependências necessárias para o Prisma CLI
+RUN bun install --production --no-save
+
 # Dar permissão de execução
 RUN chmod +x /app/shared
 
 # Executar o script de migração
 CMD ["./shared"]
+
