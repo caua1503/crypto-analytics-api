@@ -28,23 +28,23 @@ app.register(cors, {
     origin: "*", // Allows all origins
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Specify allowed methods
 });
-
-app.register(swagger, {
-    openapi: {
-        info: {
-            title: "crypto-analytics-api",
-            description:
-                "Uma API de análise de criptomoedas que combina indicadores técnicos, sentimento de mercado e dados macroeconômicos para gerar recomendações objetivas e baseadas em dados.",
-            version: "1.0.0",
+if (env.NODE_ENV !== "production") {
+    app.register(swagger, {
+        openapi: {
+            info: {
+                title: "crypto-analytics-api",
+                description:
+                    "Uma API de análise de criptomoedas que combina indicadores técnicos, sentimento de mercado e dados macroeconômicos para gerar recomendações objetivas e baseadas em dados.",
+                version: "1.0.0",
+            },
         },
-    },
-    transform: jsonSchemaTransform,
-});
+        transform: jsonSchemaTransform,
+    });
 
-app.register(swaggerUI, {
-    routePrefix: "/docs",
-});
-
+    app.register(swaggerUI, {
+        routePrefix: "/docs",
+    });
+}
 app.register(registerAllRoutes);
 
 app.register(sensible);
