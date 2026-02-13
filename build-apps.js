@@ -21,17 +21,17 @@ for (const app of apps) {
     const fileName = isWindowsTarget ? `${app}.exe` : app;
     const outfile = join(buildDir, fileName);
 
-    // console.log(`Installing dependencies for ${app}...`);
-    // const installResult = spawnSync("bun", ["install"], {
-    //     cwd: appPath,
-    //     stdio: "inherit",
-    //     shell: true,
-    // });
+    console.log(`Installing dependencies for ${app}...`);
+    const installResult = spawnSync("bun", ["install"], {
+        cwd: appPath,
+        stdio: "inherit",
+        shell: true,
+    });
 
-    // if (installResult.status !== 0) {
-    //     console.error(`Error installing dependencies for ${app}`);
-    //     process.exit(1);
-    // }
+    if (installResult.status !== 0) {
+        console.error(`Error installing dependencies for ${app}`);
+        process.exit(1);
+    }
 
     console.log(`Building ${app}...`);
 
