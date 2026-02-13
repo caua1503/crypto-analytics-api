@@ -1,9 +1,10 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync } from "node:fs";
+import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { platform } from "node:os";
 
 const apps = ["shared", "api", "scheduler", "workers"];
+const shouldClean = process.argv.includes("--clean");
 const buildDir = join(import.meta.dirname, "build");
 
 if (!existsSync(buildDir)) {
@@ -35,6 +36,14 @@ for (const app of apps) {
 
     if (app === "shared") {
         console.log(`Skipping build for ${app} as it only needs install.`);
+
+        if (shouldClean) {
+            const nmPath = join(appPath, "node_modules");
+            if (existsSync(nmPath)) {
+                console.log(`Cleaning node_modules for ${app}...`);
+                rmSync(nmPath, { recursive: true, force: true });
+            }
+        }
         continue;
     }
 
@@ -66,6 +75,14 @@ for (const app of apps) {
     }
 
     console.log(`Successfully built ${app} to ${outfile}`);
+
+    if (shouldClean) {
+        const nmPath = join(appPath, "node_modules");
+        if (existsSync(nmPath)) {
+            console.log(`Cleaning node_modules for ${app}...`);
+            rmSync(nmPath, { recursive: true, force: true });
+        }
+    }
 }
 
 console.log("\nAll builds completed successfully!");
