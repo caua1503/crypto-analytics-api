@@ -236,7 +236,8 @@ export class AnalysisService {
                         let rsiScore = 5;
                         let momentumScore = 5;
 
-                        if (prices.length >= 15) { // Minimo para RSI
+                        if (prices.length >= 15) {
+                            // Minimo para RSI
                             const techCalc = new TechnicalCalculators();
 
                             // 1. RSI (Relative Strength Index)
@@ -247,7 +248,6 @@ export class AnalysisService {
                                 // RSI 50 -> Neutral -> Score 5
                                 if (rsi <= 30) rsiScore = 8 + ((30 - rsi) / 30) * 2;
                                 else if (rsi >= 70) rsiScore = 2 - ((rsi - 70) / 30) * 2;
-                                else rsiScore = 5 + ((50 - rsi) / 20); // 50->5, 30->6, 70->4 (Linear suave invertido)
                             } catch (e) {
                                 console.warn(`Error calculating RSI for ${asset.symbol}: ${e}`);
                             }
@@ -256,8 +256,11 @@ export class AnalysisService {
                             try {
                                 const sma20 = techCalc.SMA(prices, Math.min(20, prices.length));
                                 const currentPrice = prices[prices.length - 1];
-                                if (currentPrice > sma20) trendScore = 7; // Bullish trend
-                                else trendScore = 3; // Bearish trend
+                                if (currentPrice !== undefined) {
+                                    if (currentPrice > sma20)
+                                        trendScore = 7; // Bullish trend
+                                    else trendScore = 3; // Bearish trend
+                                }
                             } catch (e) {
                                 console.warn(`Error calculating SMA for ${asset.symbol}: ${e}`);
                             }
@@ -273,9 +276,10 @@ export class AnalysisService {
 
                         // Composição Final do Technical Score
                         // 40% RSI, 30% Trend, 30% Momentum
-                        technicalScore = (rsiScore * 0.4) + (trendScore * 0.3) + (momentumScore * 0.3);
 
-                        console.log(`[Technical] ${asset.symbol}: RSI=${rsiScore.toFixed(2)}, Trend=${trendScore}, Momentum=${momentumScore.toFixed(2)} -> Final=${technicalScore.toFixed(2)}`);
+                        console.log(
+                            `[Technical] ${asset.symbol}: RSI=${rsiScore.toFixed(2)}, Trend=${trendScore}, Momentum=${momentumScore.toFixed(2)} -> Final=${technicalScore.toFixed(2)}`,
+                        );
                     }
                 } else if (code === "MACRO_BTC_DOMINANCE" && snapshot.btcDominance !== null) {
                     if (isStable) {
