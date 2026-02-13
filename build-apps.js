@@ -13,10 +13,25 @@ if (!existsSync(buildDir)) {
 
 const isWindows = platform() === "win32";
 
+const target = "bun-linux-x64-musl";
+const isWindowsTarget = target.includes("windows");
+
 for (const app of apps) {
     const appPath = join(import.meta.dirname, "apps", app);
-    const fileName = isWindows ? `${app}.exe` : app;
+    const fileName = isWindowsTarget ? `${app}.exe` : app;
     const outfile = join(buildDir, fileName);
+
+    // console.log(`Installing dependencies for ${app}...`);
+    // const installResult = spawnSync("bun", ["install"], {
+    //     cwd: appPath,
+    //     stdio: "inherit",
+    //     shell: true,
+    // });
+
+    // if (installResult.status !== 0) {
+    //     console.error(`Error installing dependencies for ${app}`);
+    //     process.exit(1);
+    // }
 
     console.log(`Building ${app}...`);
 
@@ -28,7 +43,7 @@ for (const app of apps) {
             "--minify",
             "--bytecode",
             "--sourcemap",
-            "--target=bun-linux-x64-musl",
+            `--target=${target}`,
             "src/index.ts",
             "--outfile",
             outfile,
