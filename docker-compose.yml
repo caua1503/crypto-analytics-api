@@ -116,6 +116,7 @@ services:
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:6432/crypto_api
+      - MIGRATE_DB=postgresql://crypto_api:crypto_api@postgres:5432/crypto_api
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     networks:
