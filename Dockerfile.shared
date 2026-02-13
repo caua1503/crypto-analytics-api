@@ -1,28 +1,15 @@
-FROM oven/bun:alpine AS runtime
+FROM oven/bun:alpine
 
 WORKDIR /app
 
 # Instalar dependências necessárias para o Prisma
 RUN apk add --no-cache openssl
 
-# Copiar o binário pré-compilado do diretório de build
-COPY build/shared /app/shared
+# Copiar todo o diretório shared
+COPY apps/shared /app
 
-# Copiar schema e migrations do Prisma
-COPY apps/shared/prisma /app/prisma
+# Instalar dependências
+RUN bun install
 
-# Copiar prisma.config.ts (necessário para o Prisma CLI acessar em runtime)
-COPY apps/shared/prisma.config.ts /app/prisma.config.ts
-
-# Copiar package.json para ter acesso às dependências do Prisma
-COPY apps/shared/package.json /app/package.json
-
-# Instalar apenas as dependências necessárias para o Prisma CLI
-RUN bun install --production --no-save
-
-# Dar permissão de execução
-RUN chmod +x /app/shared
-
-# Executar o script de migração
-CMD ["./shared"]
-
+# Executar o script de migração diretamente
+CMD ["bun", "run", "migrate.ts"]
