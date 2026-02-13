@@ -36,14 +36,6 @@ for (const app of apps) {
 
     if (app === "shared") {
         console.log(`Skipping build for ${app} as it only needs install.`);
-
-        if (shouldClean) {
-            const nmPath = join(appPath, "node_modules");
-            if (existsSync(nmPath)) {
-                console.log(`Cleaning node_modules for ${app}...`);
-                rmSync(nmPath, { recursive: true, force: true });
-            }
-        }
         continue;
     }
 
@@ -75,11 +67,15 @@ for (const app of apps) {
     }
 
     console.log(`Successfully built ${app} to ${outfile}`);
+}
 
-    if (shouldClean) {
+if (shouldClean) {
+    console.log("\nCleaning up node_modules for all apps...");
+    for (const app of apps) {
+        const appPath = join(import.meta.dirname, "apps", app);
         const nmPath = join(appPath, "node_modules");
         if (existsSync(nmPath)) {
-            console.log(`Cleaning node_modules for ${app}...`);
+            console.log(`Removing node_modules for ${app}...`);
             rmSync(nmPath, { recursive: true, force: true });
         }
     }
