@@ -6,6 +6,7 @@ console.log("Iniciando migrações do banco de dados...");
 
 // Executar migrações
 console.log(`DATABASE_URL: ${process.env.DATABASE_URL}`)
+
 const result = spawnSync("bunx", ["prisma", "migrate", "deploy"], {
     stdio: "inherit",
     shell: true,
