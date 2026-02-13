@@ -9,19 +9,23 @@ services:
       POSTGRES_USER: crypto_api
       POSTGRES_PASSWORD: crypto_api
       POSTGRES_DB: crypto_api
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U crypto_api"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - crypto_api_network
 
   pgbouncer:
     image: edoburu/pgbouncer:latest
     container_name: crypto_api_pgbouncer
     restart: unless-stopped
     depends_on:
-      - postgres
-    ports:
-      - "6432:5432"
+      postgres:
+        condition: service_healthy
     environment:
       DB_HOST: postgres
       DB_PORT: 5432
@@ -42,12 +46,13 @@ services:
       AUTH_TYPE: plain
     volumes:
       - pgbouncer_data:/etc/pgbouncer
+    networks:
+      - crypto_api_network
+
   redis:
     image: redis:8.0-alpine
     container_name: crypto_api_redis
     restart: unless-stopped
-    ports:
-      - "6379:6379"
     mem_limit: 128m
     cpus: 0.1
     healthcheck:
@@ -70,12 +75,14 @@ services:
       pgbouncer:
         condition: service_started
     ports:
-      - "3000:3000"
+      - "6800:3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:5432/crypto_api
+      - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:6432/crypto_api
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+    networks:
+      - crypto_api_network
 
   scheduler:
     build:
@@ -88,9 +95,11 @@ services:
         condition: service_started
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:5432/crypto_api
+      - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:6432/crypto_api
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+    networks:
+      - crypto_api_network
 
   worker:
     build:
@@ -103,10 +112,16 @@ services:
         condition: service_started
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:5432/crypto_api
+      - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:6432/crypto_api
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+    networks:
+      - crypto_api_network
 
 volumes:
   postgres_data:
   pgbouncer_data:
+
+networks:
+  crypto_api_network:
+    driver: bridge
