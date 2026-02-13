@@ -1,0 +1,18 @@
+FROM oven/bun:alpine AS runtime
+
+WORKDIR /app
+
+# Instalar dependências necessárias para o Prisma
+RUN apk add --no-cache openssl
+
+# Copiar o binário pré-compilado do diretório de build
+COPY build/shared /app/shared
+
+# Copiar schema e migrations do Prisma
+COPY apps/shared/prisma /app/prisma
+
+# Dar permissão de execução
+RUN chmod +x /app/shared
+
+# Executar o script de migração
+CMD ["./shared"]

@@ -60,6 +60,22 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - crypto_api_network
+
+  shared:
+    build:
+      context: .
+      dockerfile: Dockerfile.shared
+    container_name: crypto_api_shared
+    restart: on-failure
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://crypto_api:crypto_api@postgres:5432/crypto_api
+    networks:
+      - crypto_api_network
 
   api:
     build:
@@ -74,6 +90,8 @@ services:
         condition: service_healthy
       pgbouncer:
         condition: service_started
+      shared:
+        condition: service_completed_successfully
     ports:
       - "6800:3000"
     environment:
@@ -91,6 +109,8 @@ services:
     container_name: crypto_api_scheduler
     restart: unless-stopped
     depends_on:
+      shared:
+        condition: service_completed_successfully
       api:
         condition: service_started
     environment:
@@ -108,6 +128,8 @@ services:
     container_name: crypto_api_worker
     restart: unless-stopped
     depends_on:
+      shared:
+        condition: service_completed_successfully
       api:
         condition: service_started
     environment:

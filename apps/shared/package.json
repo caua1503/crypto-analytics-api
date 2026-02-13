@@ -16,7 +16,9 @@
     "lint": "bunx @biomejs/biome format --write",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
-    "db:dev": "prisma migrate dev"
+    "db:dev": "prisma migrate dev",
+    "migrate": "bun run migrate.ts",
+    "build": "bun build --compile --minify --bytecode --sourcemap migrate.ts --outfile ../../build/shared"
   },
   "type": "module",
   "dependencies": {

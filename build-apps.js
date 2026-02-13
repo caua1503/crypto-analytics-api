@@ -34,12 +34,10 @@ for (const app of apps) {
         process.exit(1);
     }
 
-    if (app === "shared") {
-        console.log(`Skipping build for ${app} as it only needs install.`);
-        continue;
-    }
-
     console.log(`Building ${app}...`);
+
+    // Definir entry point baseado no app
+    const entryPoint = app === "shared" ? "migrate.ts" : "src/index.ts";
 
     const result = spawnSync(
         "bun",
@@ -50,7 +48,7 @@ for (const app of apps) {
             "--bytecode",
             "--sourcemap",
             `--target=${target}`,
-            "src/index.ts",
+            entryPoint,
             "--outfile",
             outfile,
         ],
