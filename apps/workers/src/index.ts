@@ -92,19 +92,20 @@ new Worker(
                 }
 
                 logger.log(`[${asset.symbol}] Criando snapshot no banco...`);
+
                 const snapshot = await marketSnapshotService.create({
                     assetId: asset.id,
-                    priceUsd: zDecimal.parse(marketData.priceUsd),
-                    volume24hUsd: zDecimal.parse(marketData.volume24hUsd),
-                    marketCapUsd: zDecimal.parse(marketData.marketCapUsd),
-                    btcDominance: zDecimal.parse(macroData.btcDominance),
+                    priceUsd: marketData.priceUsd,
+                    volume24hUsd: marketData.volume24hUsd,
+                    marketCapUsd: marketData.marketCapUsd,
+                    btcDominance: macroData.btcDominance,
                     fearGreed,
                     source: marketData.source,
                     cachedUntil: marketData.cachedUntil,
-                    open: ohlcData ? zDecimal.parse(ohlcData.open) : undefined,
-                    high: ohlcData ? zDecimal.parse(ohlcData.high) : undefined,
-                    low: ohlcData ? zDecimal.parse(ohlcData.low) : undefined,
-                    close: ohlcData ? zDecimal.parse(ohlcData.close) : undefined,
+                    open: ohlcData?.open,
+                    high: ohlcData?.high,
+                    low: ohlcData?.low,
+                    close: ohlcData?.close,
                 });
 
                 logger.log(
@@ -117,7 +118,6 @@ new Worker(
                 );
             } catch (error) {
                 logger.error(`Erro ao processar ativo ${asset.symbol}:`, error);
-                // Continue to next asset, do not throw to avoid failing the whole batch
             }
         }
     },
