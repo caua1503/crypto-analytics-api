@@ -29,12 +29,18 @@ export const enum SourceEnum {
 }
 
 export const zDecimal = z
-    .union([z.string(), z.number(), z.instanceof(Prisma.Decimal)])
-    .transform((val) => new Prisma.Decimal(val));
+    .union([z.string(), z.number(), z.instanceof(Prisma.Decimal), z.undefined()])
+    .transform((val) => {
+        if (val === undefined) return new Prisma.Decimal(0);
+        return new Prisma.Decimal(val);
+    });
 
 export const zDecimaltoString = z
-    .union([z.string(), z.number(), z.instanceof(Prisma.Decimal)])
-    .transform((val) => val.toString());
+    .union([z.string(), z.number(), z.instanceof(Prisma.Decimal), z.undefined()])
+    .transform((val) => {
+        if (val === undefined) return "0";
+        return val.toString();
+    });
 
 export type RecommendationType = z.infer<typeof Recommendation>;
 export type CriterionCategoryType = z.infer<typeof CriterionCategory>;
