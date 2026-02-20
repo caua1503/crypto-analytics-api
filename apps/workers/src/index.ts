@@ -74,7 +74,7 @@ new Worker(
             logger.log(`⚙️ Processando ativo: ${asset.symbol} (${asset.id})`);
 
             try {
-                logger.log(`[${asset.symbol}] Coletando dados de mercado...`);
+                // logger.log(`[${asset.symbol}] Coletando dados de mercado...`);
                 const marketData = await marketDataIntegration.fetchMarketDataBySymbol(
                     asset.symbol,
                 );
@@ -83,7 +83,7 @@ new Worker(
 
                 let ohlcData;
                 try {
-                    logger.log(`[${asset.symbol}] Coletando dados OHLC...`);
+                    // logger.log(`[${asset.symbol}] Coletando dados OHLC...`);
                     ohlcData = await marketDataIntegration.fetchOHLCBySymbol(asset.symbol);
                 } catch (error) {
                     logger.error(
@@ -91,7 +91,7 @@ new Worker(
                     );
                 }
 
-                logger.log(`[${asset.symbol}] Criando snapshot no banco...`);
+                // logger.log(`[${asset.symbol}] Criando snapshot no banco...`);
 
                 const snapshot = await marketSnapshotService.create({
                     assetId: asset.id,
@@ -108,9 +108,9 @@ new Worker(
                     close: ohlcData?.close,
                 });
 
-                logger.log(
-                    `[${asset.symbol}] Executando motor de análise (ID Snapshot: ${snapshot.id})...`,
-                );
+                // logger.log(
+                //     `[${asset.symbol}] Executando motor de análise (ID Snapshot: ${snapshot.id})...`,
+                // );
                 const analysis = await analysisService.performAnalysis(asset.id, snapshot.id);
 
                 logger.log(
