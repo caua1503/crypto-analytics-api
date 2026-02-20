@@ -78,13 +78,11 @@ export class TechnicalCalculators {
             throw new Error("Not enough data points to calculate MACD");
         }
 
-        // EMA rápida e lenta (últimos valores)
         const fastEMA = this.EMA(prices, fastPeriod);
         const slowEMA = this.EMA(prices, slowPeriod);
 
         const macdLine = fastEMA - slowEMA;
 
-        // Série MACD para cálculo da linha de sinal
         const macdSeries: number[] = [];
         for (let i = slowPeriod - 1; i < prices.length; i++) {
             const fast = this.EMA(prices.slice(0, i + 1), fastPeriod);
@@ -103,9 +101,7 @@ export class TechnicalCalculators {
     }
 }
 
-export class SentimentCalculators {
-    // Placeholder for sentiment calculation methods
-}
+export class SentimentCalculators {}
 
 export class MacroCalculators {
     getMarketRegime(
