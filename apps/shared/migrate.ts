@@ -5,14 +5,14 @@ import { spawnSync } from "node:child_process";
 console.log("Iniciando migrações do banco de dados...");
 
 // Executar migrações
-console.log(`DATABASE_URL: ${process.env.DATABASE_URL}`)
+console.log(`DATABASE_URL: ${process.env.DATABASE_URL}`);
 
 const result = spawnSync("bunx", ["prisma", "migrate", "deploy"], {
     stdio: "inherit",
     shell: true,
     env: {
         ...process.env,
-        DATABASE_URL: process.env.DATABASE_URL, // Garantir que está disponível
+        DATABASE_URL: process.env.DATABASE_URL,
     },
 });
 
