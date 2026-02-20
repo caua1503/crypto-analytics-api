@@ -127,4 +127,4 @@ new Worker(
     },
 );
 
-console.log("👷 Worker rodando");
+console.log(`👷 Worker rodando (concurrency: ${env.WORKER_CONCURRENCY})`);
