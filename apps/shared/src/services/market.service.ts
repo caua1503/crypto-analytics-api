@@ -12,7 +12,6 @@ import {
     type MarketSnapshotType,
 } from "@repo/shared/types/interfaces/market.interface";
 import { AssetService } from "./asset.service.js";
-import { z } from "zod";
 import { RedisClient, buildCacheKey, redis } from "@repo/shared";
 
 export class MarketSnapshotService {
