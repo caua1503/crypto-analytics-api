@@ -36,7 +36,7 @@ export class AnalysisService {
     constructor(
         private prisma: PrismaClientType,
         private cache: RedisClient = new RedisClient(redis),
-    ) { }
+    ) {}
 
     async create(data: AnalysisCreateType): Promise<AnalysisType> {
         try {
@@ -277,9 +277,9 @@ export class AnalysisService {
                         // Composição Final do Technical Score
                         // 40% RSI, 30% Trend, 30% Momentum
 
-                        console.log(
-                            `[Technical] ${asset.symbol}: RSI=${rsiScore.toFixed(2)}, Trend=${trendScore}, Momentum=${momentumScore.toFixed(2)} -> Final=${technicalScore.toFixed(2)}`,
-                        );
+                        // console.log(
+                        //     `[Technical] ${asset.symbol}: RSI=${rsiScore.toFixed(2)}, Trend=${trendScore}, Momentum=${momentumScore.toFixed(2)} -> Final=${technicalScore.toFixed(2)}`,
+                        // );
                     }
                 } else if (code === "MACRO_BTC_DOMINANCE" && snapshot.btcDominance !== null) {
                     if (isStable) {
@@ -362,7 +362,7 @@ export class AnalysisEngineVersionService {
     constructor(
         private prisma: PrismaClientType,
         private cache: RedisClient = new RedisClient(redis),
-    ) { }
+    ) {}
 
     async create(data: AnalysisEngineVersionCreateType): Promise<AnalysisEngineVersionType> {
         try {
