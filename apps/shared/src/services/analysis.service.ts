@@ -11,7 +11,6 @@ import {
     AnalysisEngineVersionCreate,
     AnalysisArray,
     AnalysisEngineVersionArray,
-    type AnalysisArrayType,
     type AnalysisEngineVersionCreateType,
     type AnalysisEngineVersionType,
     PaginatiomAnalysisEngineVersionParams,
@@ -24,9 +23,6 @@ import {
 } from "@repo/shared/types/interfaces/common.interface";
 import { RedisClient, buildCacheKey, redis } from "@repo/shared";
 import {
-    zDecimal,
-    CriterionCategory,
-    Recommendation,
     RecommendationEnum,
     CriterionCategoryEnum,
     type RecommendationType,
