@@ -7,11 +7,11 @@ import {
     type AssetType,
     AssetExtras,
     AssetExtrasArray,
-    AssetExtrasType,
+    type AssetExtrasType,
     AssetPublic,
-    AssetPublicType,
+    type AssetPublicType,
     AssetPublicResponse,
-    AssetPublicResponseType,
+    type AssetPublicResponseType,
 } from "@repo/shared/types/interfaces/asset.interface";
 import {
     PaginationParams,
