@@ -5,6 +5,8 @@ services:
     image: postgres:16
     container_name: crypto_api_postgres
     restart: unless-stopped
+    mem_limit: 256m
+    cpus: 0.2
     environment:
       POSTGRES_USER: crypto_api
       POSTGRES_PASSWORD: crypto_api
@@ -23,6 +25,8 @@ services:
     image: edoburu/pgbouncer:latest
     container_name: crypto_api_pgbouncer
     restart: unless-stopped
+    mem_limit: 128m
+    cpus: 0.1
     depends_on:
       postgres:
         condition: service_healthy
@@ -68,6 +72,8 @@ services:
       context: .
       dockerfile: Dockerfile.shared
     container_name: crypto_api_shared
+    mem_limit: 128m
+    cpus: 0.1
     restart: on-failure
     depends_on:
       postgres:
@@ -82,6 +88,8 @@ services:
       context: .
       dockerfile: Dockerfile.api
     container_name: crypto_api_service
+    mem_limit: 256m
+    cpus: 0.2
     restart: unless-stopped
     depends_on:
       postgres:
@@ -107,6 +115,8 @@ services:
       context: .
       dockerfile: Dockerfile.scheduler
     container_name: crypto_api_scheduler
+    mem_limit: 128m
+    cpus: 0.1
     restart: unless-stopped
     depends_on:
       postgres:
@@ -130,6 +140,8 @@ services:
       context: .
       dockerfile: Dockerfile.worker
     container_name: crypto_api_worker
+    mem_limit: 256m
+    cpus: 0.2
     restart: unless-stopped
     depends_on:
       postgres:
