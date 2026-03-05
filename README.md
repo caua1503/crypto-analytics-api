@@ -124,3 +124,10 @@ O ecossistema é dividido em sub-módulos especializados:
 ```bash
 docker compose up --build
 ```
+
+## Progresso do Projeto
+
+- [x] - Armazenando dados para analise
+- [ ] - Url publica para acesso a API (em progresso)
+- [ ] - Documentação publica para acesso a API (em progresso)
+- [ ] - Análise de dados por LLM (em progresso)

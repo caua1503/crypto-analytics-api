@@ -123,3 +123,10 @@ The ecosystem is divided into specialized sub-modules:
 ```bash
 docker compose up --build
 ```
+
+## Project Progress
+
+- [x] - Storing data for analysis
+- [ ] - Public URL for API access (in progress)
+- [ ] - Public documentation for API access (in progress)
+- [ ] - Data analysis via LLM (in progress)
