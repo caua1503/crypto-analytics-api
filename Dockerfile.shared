@@ -2,15 +2,20 @@ FROM oven/bun:alpine AS runtime
 
 WORKDIR /app
 
-
 RUN apk add --no-cache libstdc++ libgcc
-COPY build/shared /app/shared
 
+COPY apps/shared/package.json /app/package.json
+COPY apps/shared/bun.lock /app/bun.lock
 COPY apps/shared/prisma /app/prisma
 COPY apps/shared/prisma.config.ts /app/prisma.config.ts
-COPY apps/shared/package.json /app/package.json
 
+# Instala as dependências para que o bunx prisma migrate deploy funcione
+RUN bun install
 
+# Gera o Prisma Client
+RUN bunx prisma generate
+
+COPY build/shared /app/shared
 RUN chmod +x /app/shared
 
 CMD ["./shared"]
