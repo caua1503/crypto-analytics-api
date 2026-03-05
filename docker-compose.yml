@@ -73,6 +73,7 @@ services:
       dockerfile: Dockerfile.shared
     container_name: crypto_api_shared
     mem_limit: 256m
+    cpus: 0.2
     restart: on-failure
     depends_on:
       postgres:
