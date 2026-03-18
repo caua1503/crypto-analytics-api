@@ -14,9 +14,15 @@
   },
   "scripts": {
     "lint": "bunx @biomejs/biome format --write",
-    "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate deploy",
-    "db:dev": "prisma migrate dev",
+    "db:generate": "prisma generate && prisma generate --config=prisma.user.config.ts",
+    "db:migrate": "prisma migrate deploy && prisma migrate deploy --config=prisma.user.config.ts",
+    "db:dev": "prisma migrate dev && prisma migrate dev --config=prisma.user.config.ts",
+    "db:generate:market": "prisma generate",
+    "db:generate:user": "prisma generate --config=prisma.user.config.ts",
+    "db:migrate:market": "prisma migrate deploy",
+    "db:migrate:user": "prisma migrate deploy --config=prisma.user.config.ts",
+    "db:dev:market": "prisma migrate dev",
+    "db:dev:user": "prisma migrate dev --config=prisma.user.config.ts",
     "migrate": "bun run migrate.ts",
     "build": "bun build --compile --minify --bytecode --sourcemap migrate.ts --outfile ../../build/shared"
   },

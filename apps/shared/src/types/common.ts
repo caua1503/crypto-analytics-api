@@ -42,5 +42,7 @@ export const zDecimaltoString = z
         return val.toString();
     });
 
+export const jwtType = z.jwt();
+
 export type RecommendationType = z.infer<typeof Recommendation>;
 export type CriterionCategoryType = z.infer<typeof CriterionCategory>;

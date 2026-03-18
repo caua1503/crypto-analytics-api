@@ -11,10 +11,66 @@ services:
       POSTGRES_USER: crypto_api
       POSTGRES_PASSWORD: crypto_api
       POSTGRES_DB: crypto_api
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U crypto_api"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - crypto_api_network
+
+  postgres_user:
+    image: postgres:16
+    container_name: crypto_api_postgres_user
+    restart: unless-stopped
+    mem_limit: 256m
+    cpus: 0.2
+    environment:
+      POSTGRES_USER: crypto_user
+      POSTGRES_PASSWORD: crypto_user
+      POSTGRES_DB: crypto_user
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_user_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U crypto_user"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - crypto_api_network
+
+  pgbouncer_user:
+    image: edoburu/pgbouncer:latest
+    container_name: crypto_api_pgbouncer_user
+    restart: unless-stopped
+    mem_limit: 128m
+    cpus: 0.1
+    depends_on:
+      postgres_user:
+        condition: service_healthy
+    ports:
+      - "6433:6432"
+    environment:
+      - DB_HOST=postgres_user
+      - DB_PORT=5432
+      - DB_USER=crypto_user
+      - DB_PASSWORD=crypto_user
+      - DB_NAME=crypto_user
+      - POOL_MODE=transaction
+      - MAX_CLIENT_CONN=500
+      - DEFAULT_POOL_SIZE=20
+      - RESERVE_POOL_SIZE=5
+      - AUTH_TYPE=scram-sha-256
+      - LISTEN_ADDR=*
+      - LISTEN_PORT=6432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -p 6432 -U crypto_user"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -30,6 +86,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    ports:
+      - "6432:6432"    
     environment:
       - DB_HOST=postgres
       - DB_PORT=5432
@@ -59,6 +117,8 @@ services:
     restart: unless-stopped
     mem_limit: 128m
     cpus: 0.1
+    ports:
+      - "6379:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -67,101 +127,114 @@ services:
     networks:
       - crypto_api_network
 
-  shared:
-    build:
-      context: .
-      dockerfile: Dockerfile.shared
-    container_name: crypto_api_shared
-    mem_limit: 256m
-    cpus: 0.2
-    restart: on-failure
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      - DATABASE_URL=postgresql://crypto_api:crypto_api@postgres:5432/crypto_api
-    networks:
-      - crypto_api_network
+  # shared:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.shared
+  #   container_name: crypto_api_shared
+  #   mem_limit: 256m
+  #   cpus: 0.2
+  #   restart: on-failure
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     postgres_user:
+  #       condition: service_healthy
+  #   environment:
+  #     - DATABASE_URL=postgresql://crypto_api:crypto_api@postgres:5432/crypto_api
+  #     - USER_DATABASE_URL=postgresql://crypto_user:crypto_user@postgres_user:5432/crypto_user
+  #   networks:
+  #     - crypto_api_network
 
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile.api
-    container_name: crypto_api_service
-    mem_limit: 256m
-    cpus: 0.2
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      pgbouncer:
-        condition: service_healthy
-      shared:
-        condition: service_completed_successfully
-    ports:
-      - "6800:3000"
-    environment:
-      - NODE_ENV=production
-      - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:6432/crypto_api
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-    networks:
-      - crypto_api_network
+  # api:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.api
+  #   container_name: crypto_api_service
+  #   mem_limit: 256m
+  #   cpus: 0.2
+  #   restart: unless-stopped
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #     pgbouncer:
+  #       condition: service_healthy
+  #     pgbouncer_user:
+  #       condition: service_healthy
+  #     shared:
+  #       condition: service_completed_successfully
+  #   ports:
+  #     - "6800:3000"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:6432/crypto_api
+  #     - USER_DATABASE_URL=postgresql://crypto_user:crypto_user@pgbouncer_user:6432/crypto_user
+  #     - REDIS_HOST=redis
+  #     - REDIS_PORT=6379
+  #   networks:
+  #     - crypto_api_network
 
-  scheduler:
-    build:
-      context: .
-      dockerfile: Dockerfile.scheduler
-    container_name: crypto_api_scheduler
-    mem_limit: 128m
-    cpus: 0.1
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
-      pgbouncer:
-        condition: service_healthy
-      shared:
-        condition: service_completed_successfully
-      api:
-        condition: service_started
-    environment:
-      - NODE_ENV=production
-      - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:6432/crypto_api
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-    networks:
-      - crypto_api_network
+  # scheduler:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.scheduler
+  #   container_name: crypto_api_scheduler
+  #   mem_limit: 128m
+  #   cpus: 0.1
+  #   restart: unless-stopped
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     pgbouncer:
+  #       condition: service_healthy
+  #     pgbouncer_user:
+  #       condition: service_healthy
+  #     shared:
+  #       condition: service_completed_successfully
+  #     api:
+  #       condition: service_started
+  #   environment:
+  #     - NODE_ENV=production
+  #     - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:6432/crypto_api
+  #     - USER_DATABASE_URL=postgresql://crypto_user:crypto_user@pgbouncer_user:6432/crypto_user
+  #     - REDIS_HOST=redis
+  #     - REDIS_PORT=6379
+  #   networks:
+  #     - crypto_api_network
 
-  worker:
-    build:
-      context: .
-      dockerfile: Dockerfile.worker
-    container_name: crypto_api_worker
-    mem_limit: 256m
-    cpus: 0.2
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
-      pgbouncer:
-        condition: service_healthy
-      shared:
-        condition: service_completed_successfully
-      api:
-        condition: service_started
-    environment:
-      - NODE_ENV=production
-      - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:6432/crypto_api
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-    networks:
-      - crypto_api_network
+  # worker:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.worker
+  #   container_name: crypto_api_worker
+  #   mem_limit: 256m
+  #   cpus: 0.2
+  #   restart: unless-stopped
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     pgbouncer:
+  #       condition: service_healthy
+  #     pgbouncer_user:
+  #       condition: service_healthy
+  #     shared:
+  #       condition: service_completed_successfully
+  #     api:
+  #       condition: service_started
+  #   environment:
+  #     - NODE_ENV=production
+  #     - DATABASE_URL=postgresql://crypto_api:crypto_api@pgbouncer:6432/crypto_api
+  #     - USER_DATABASE_URL=postgresql://crypto_user:crypto_user@pgbouncer_user:6432/crypto_user
+  #     - REDIS_HOST=redis
+  #     - REDIS_PORT=6379
+  #   networks:
+  #     - crypto_api_network
 
 volumes:
   postgres_data:
+  postgres_user_data:
   pgbouncer_data:
 
 networks:
