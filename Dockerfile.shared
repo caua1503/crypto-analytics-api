@@ -8,6 +8,7 @@ COPY build/shared /app/shared
 
 COPY apps/shared/prisma /app/prisma
 COPY apps/shared/prisma.config.ts /app/prisma.config.ts
+COPY apps/shared/prisma.user.config.ts /app/prisma.user.config.ts
 COPY apps/shared/package.json /app/package.json
 
 
