@@ -41,7 +41,7 @@ export const MarketSnapshotCreate = MarketSnapshot.omit({
     btcDominance: zDecimal,
 });
 
-export const MarketSnapshotResponse = MarketSnapshot.extend({
+export const MarketSnapshotSimpleResponse = MarketSnapshot.extend({
     priceUsd: z.string(),
     volume24hUsd: z.string(),
     marketCapUsd: z.string(),
@@ -52,5 +52,14 @@ export const MarketSnapshotResponse = MarketSnapshot.extend({
     btcDominance: z.string(),
 });
 
+export const MarketSnapshotResponse = z.object({
+    meta: z.object({
+        total: z.number(),
+    }),
+    data: z.array(MarketSnapshot),
+});
+
 export type MarketSnapshotType = z.infer<typeof MarketSnapshot>;
+export type MarketSnapshotSimpleResponseType = z.infer<typeof MarketSnapshotSimpleResponse>;
 export type MarketSnapshotCreateType = z.input<typeof MarketSnapshotCreate>;
+export type MarketSnapshotResponseType = z.infer<typeof MarketSnapshotResponse>;

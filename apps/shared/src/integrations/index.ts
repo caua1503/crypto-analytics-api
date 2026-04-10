@@ -3,9 +3,7 @@ import { CoinPaprikaService } from "./coincaprika.js";
 import { CoinMarketCapService } from "./coinmarketcap.js";
 import { env } from "@repo/shared/env";
 import { MarketDataProviderEnum } from "@repo/shared/types/common";
-import type { ServiceContract, ServiceConfig, ServiceConstructor } from "./types";
-import { FearAndGreedIndex } from "./fear-and-greed";
-export { FearAndGreedIndex } from "./fear-and-greed";
+import type { ServiceContract, ServiceConfig, ServiceConstructor } from "./types.js";
 
 const serviceRegistry: Record<MarketDataProviderEnum, ServiceConstructor> = {
     [MarketDataProviderEnum.COINGECKO]: CoinGeckoService,
@@ -58,3 +56,5 @@ export function getMarketDataService(): ServiceContract {
     }
     return _serviceInstance;
 }
+
+export { FearAndGreedIndex } from "./fear-and-greed";

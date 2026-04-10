@@ -1,5 +1,5 @@
-import crypto from "crypto";
 import { Redis } from "ioredis";
+import Bun from "bun";
 import { env } from "./env.js";
 import { z } from "zod";
 
@@ -48,13 +48,13 @@ export class RedisClient {
         return await this.client.get(key);
     }
 
-    async get_json<T>(key: string, model: z.ZodSchema<T>): Promise<T | null> {
+    async get_json<T>(key: string, model?: z.ZodSchema<T>): Promise<T | null> {
         const value = await this.client.get(key);
 
         if (!value) return null;
 
         try {
-            return model.parse(JSON.parse(value));
+            return JSON.parse(value) as T;
         } catch (e) {
             console.error(`Failed to parse JSON from Redis for key ${key}:`, e);
             return null;
@@ -82,7 +82,7 @@ function normalizeParams(params: Record<string, any>) {
 
 export function buildCacheKey(prefix: string, params: Record<string, any>): string {
     const normalized = normalizeParams(params);
-    const hash = crypto.createHash("sha256").update(JSON.stringify(normalized)).digest("hex");
+    const hash = new Bun.CryptoHasher("sha256").update(JSON.stringify(normalized)).digest("hex");
 
     return `${prefix}:${hash}`;
 }

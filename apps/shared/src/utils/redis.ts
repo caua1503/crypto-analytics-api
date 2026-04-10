@@ -1,19 +1,20 @@
 import crypto from "crypto";
 import { Redis } from "ioredis";
+import { RedisClient as BunRedisClient } from "bun";
 import { env } from "@repo/shared/env";
 import { z } from "zod";
 
-export const redis = new Redis({
-    host: env.REDIS_HOST,
-    port: env.REDIS_PORT,
-});
+// export const redis = new Redis({
+//     host: env.REDIS_HOST,
+//     port: env.REDIS_PORT,
+// });
+
+const connectionString = `redis://${env.REDIS_HOST}:${env.REDIS_PORT}`;
+
+const redis = new BunRedisClient(connectionString);
 
 export class RedisClient {
-    private client: Redis;
-
-    constructor(client: Redis) {
-        this.client = client;
-    }
+    private client: BunRedisClient = redis;
 
     async set(
         key: string,
@@ -48,13 +49,13 @@ export class RedisClient {
         return await this.client.get(key);
     }
 
-    async get_json<T>(key: string, model: z.ZodSchema<T>): Promise<T | null> {
+    async get_json<T>(key: string, model?: z.ZodSchema<T>): Promise<T | null> {
         const value = await this.client.get(key);
 
         if (!value) return null;
 
         try {
-            return model.parse(JSON.parse(value));
+            return JSON.parse(value) as T;
         } catch (e) {
             console.error(`Failed to parse JSON from Redis for key ${key}:`, e);
             return null;

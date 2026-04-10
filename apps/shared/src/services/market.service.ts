@@ -8,38 +8,44 @@ import {
     MarketSnapshot,
     MarketSnapshotArray,
     MarketSnapshotCreate,
+    MarketSnapshotResponse,
     type MarketSnapshotCreateType,
     type MarketSnapshotType,
+    type MarketSnapshotResponseType,
 } from "@repo/shared/types/interfaces/market.interface";
 import { AssetService } from "./asset.service.js";
-import { RedisClient, buildCacheKey, redis } from "@repo/shared";
+import { RedisClient, buildCacheKey } from "@repo/shared";
 
 export class MarketSnapshotService {
     constructor(
         private prisma: PrismaClientType,
-        private cache: RedisClient = new RedisClient(redis),
+        private cache: RedisClient = new RedisClient(),
     ) {}
 
     async findAllBySymbol(
         symbol: string,
         pagination: PaginationParamsType = PaginationParams.parse({}),
-    ): Promise<MarketSnapshotType[]> {
+    ): Promise<MarketSnapshotResponseType> {
         const cacheKey = buildCacheKey("marketsnapshots:findAll:symbol:", {
             symbol,
             ...pagination,
         });
 
-        const cachedSnapshots = await new RedisClient(redis).get_json<MarketSnapshotType[]>(
+        const cachedSnapshots = await new RedisClient().get_json<MarketSnapshotResponseType>(
             cacheKey,
-            MarketSnapshotArray,
+            MarketSnapshotResponse,
         );
 
         if (cachedSnapshots) {
             return cachedSnapshots;
         }
         const { id } = await new AssetService(this.prisma).findBySymbol(symbol);
-
         const { skip, take, order } = pagination;
+
+        const total = await this.prisma.marketSnapshot.count({
+            where: { assetId: id },
+        });
+
         const snapshots = await this.prisma.marketSnapshot.findMany({
             where: { assetId: id },
             skip: skip,
@@ -51,7 +57,10 @@ export class MarketSnapshotService {
             throw httpErrors.notFound("No market snapshots found");
         }
 
-        const { success, data, error } = MarketSnapshotArray.safeParse(snapshots);
+        const { success, data, error } = MarketSnapshotResponse.safeParse({
+            meta: { total },
+            data: snapshots,
+        });
 
         if (!success) {
             console.error(error);
@@ -66,15 +75,15 @@ export class MarketSnapshotService {
     async findAllByPublicID(
         publicId: string,
         pagination: PaginationParamsType = PaginationParams.parse({}),
-    ): Promise<MarketSnapshotType[]> {
+    ): Promise<MarketSnapshotResponseType> {
         const cacheKey = buildCacheKey("marketsnapshots:findAll:publicId:", {
             publicId,
             ...pagination,
         });
 
-        const cachedSnapshots = await new RedisClient(redis).get_json<MarketSnapshotType[]>(
+        const cachedSnapshots = await new RedisClient().get_json<MarketSnapshotResponseType>(
             cacheKey,
-            MarketSnapshotArray,
+            MarketSnapshotResponse,
         );
 
         if (cachedSnapshots) {
@@ -82,6 +91,10 @@ export class MarketSnapshotService {
         }
         const { id } = await new AssetService(this.prisma).findByPublicId(publicId);
         const { skip, take, order } = pagination;
+
+        const total = await this.prisma.marketSnapshot.count({
+            where: { assetId: id },
+        });
         const snapshots = await this.prisma.marketSnapshot.findMany({
             where: { assetId: id },
             skip: skip,
@@ -92,8 +105,10 @@ export class MarketSnapshotService {
         if (!snapshots) {
             throw httpErrors.notFound("No market snapshots found");
         }
-
-        const { success, data, error } = MarketSnapshotArray.safeParse(snapshots);
+        const { success, data, error } = MarketSnapshotResponse.safeParse({
+            meta: { total },
+            data: snapshots,
+        });
 
         if (!success) {
             console.error(error);
