@@ -11,7 +11,7 @@ const marketResult = spawnSync("bunx", ["prisma", "migrate", "deploy"], {
     shell: true,
     env: {
         ...process.env,
-        DATABASE_URL: process.env.DATABASE_URL,
+        MIGRATE_DB: process.env.DATABASE_URL || process.env.MIGRATE_DB,
     },
 });
 

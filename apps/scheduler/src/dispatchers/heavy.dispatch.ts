@@ -2,12 +2,12 @@ import { Worker } from "bullmq";
 import { dispatchQueue, processingQueue } from "../queues/processing.queue";
 import { prisma } from "../config/db";
 import { redisConnection, env } from "../config/env";
-import { Logger, RedisClient, redis } from "@repo/shared";
+import { Logger, RedisClient } from "@repo/shared";
 import { getMarketDataService, FearAndGreedIndex } from "@repo/shared/integrations";
 
 const marketDataIntegration = getMarketDataService();
 const fearGreedService = new FearAndGreedIndex();
-const redisClient = new RedisClient(redis);
+const redisClient = new RedisClient();
 
 export const heavyDispatcher = new Worker(
     dispatchQueue.name,

@@ -5,8 +5,10 @@ import { prisma } from "@repo/shared";
 import { IdSchema, SymbolSchema, PublicIdSchema } from "@repo/shared/types/schemas/common.schemas";
 import { PaginationParams } from "@repo/shared/types/interfaces/common.interface";
 import {
+    MarketSnapshot,
     MarketSnapshotCreate,
     MarketSnapshotResponse,
+    MarketSnapshotSimpleResponse,
 } from "@repo/shared/types/interfaces/market.interface";
 import { MarketSnapshotService } from "@repo/shared/services/market.service";
 
@@ -17,21 +19,19 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
             schema: {
                 tags: ["Market"],
                 params: SymbolSchema,
-                querystring: PaginationParams,
+                querystring: PaginationParams.extend({
+                    order: z.enum(["asc", "desc"]).default("desc"),
+                }),
                 response: {
-                    [StatusCodes.OK]: z.object({
-                        markets: z.array(MarketSnapshotResponse),
-                    }),
+                    [StatusCodes.OK]: MarketSnapshotResponse,
                 },
             },
         },
         async (req) => {
-            return {
-                markets: await new MarketSnapshotService(prisma).findAllBySymbol(
-                    req.params.symbol,
-                    req.query,
-                ),
-            };
+            return await new MarketSnapshotService(prisma).findAllBySymbol(
+                req.params.symbol,
+                req.query,
+            );
         },
     );
     app.get(
@@ -41,20 +41,17 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
                 tags: ["Market"],
                 params: PublicIdSchema,
                 querystring: PaginationParams,
+                security: [],
                 response: {
-                    [StatusCodes.OK]: z.object({
-                        markets: z.array(MarketSnapshotResponse),
-                    }),
+                    [StatusCodes.OK]: MarketSnapshotResponse,
                 },
             },
         },
         async (req) => {
-            return {
-                markets: await new MarketSnapshotService(prisma).findAllByPublicID(
-                    req.params.publicId,
-                    req.query,
-                ),
-            };
+            return await new MarketSnapshotService(prisma).findAllByPublicID(
+                req.params.publicId,
+                req.query,
+            );
         },
     );
     app.get(
@@ -64,7 +61,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
                 tags: ["Market"],
                 params: IdSchema,
                 response: {
-                    [StatusCodes.OK]: MarketSnapshotResponse,
+                    [StatusCodes.OK]: MarketSnapshotSimpleResponse,
                 },
             },
         },
@@ -79,7 +76,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
                 tags: ["Market"],
                 params: PublicIdSchema,
                 response: {
-                    [StatusCodes.OK]: MarketSnapshotResponse,
+                    [StatusCodes.OK]: MarketSnapshotSimpleResponse,
                 },
             },
         },
@@ -96,7 +93,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
                 tags: ["Market"],
                 params: SymbolSchema,
                 response: {
-                    [StatusCodes.OK]: MarketSnapshotResponse,
+                    [StatusCodes.OK]: MarketSnapshotSimpleResponse,
                 },
             },
         },
@@ -113,7 +110,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
                 tags: ["Market"],
                 body: MarketSnapshotCreate,
                 response: {
-                    [StatusCodes.CREATED]: MarketSnapshotResponse,
+                    [StatusCodes.CREATED]: MarketSnapshotSimpleResponse,
                 },
             },
         },
@@ -125,10 +122,11 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
         "/:id",
         {
             schema: {
+                tags: ["Market"],
                 params: IdSchema,
                 body: MarketSnapshotCreate.partial(),
                 response: {
-                    [StatusCodes.OK]: MarketSnapshotResponse,
+                    [StatusCodes.OK]: MarketSnapshotSimpleResponse,
                 },
             },
         },
@@ -140,6 +138,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
         "/:id",
         {
             schema: {
+                tags: ["Market"],
                 params: IdSchema,
             },
         },

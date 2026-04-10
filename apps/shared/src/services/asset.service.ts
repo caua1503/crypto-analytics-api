@@ -17,12 +17,12 @@ import {
     PaginationParams,
     type PaginationParamsType,
 } from "@repo/shared/types/interfaces/common.interface";
-import { RedisClient, buildCacheKey, redis } from "@repo/shared";
+import { RedisClient, buildCacheKey } from "@repo/shared";
 
 export class AssetService {
     constructor(
         private prisma: PrismaClientType,
-        private cache: RedisClient = new RedisClient(redis),
+        private cache: RedisClient = new RedisClient(),
     ) {}
 
     async findAll(
@@ -172,6 +172,7 @@ export class AssetService {
 
         return data;
     }
+
     async findBySymbol(symbol: string): Promise<AssetType> {
         const cacheKey = `asset:symbol:${symbol}`;
         const cachedAsset = await this.cache.get_json<AssetType>(cacheKey, Asset);

@@ -834,7 +834,8 @@ export const UserScalarFieldEnum = {
   passwordResetExpires: 'passwordResetExpires',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
+  deletedAt: 'deletedAt',
+  autoDeleteAt: 'autoDeleteAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -855,7 +856,6 @@ export const UserSessionScalarFieldEnum = {
   id: 'id',
   publicId: 'publicId',
   userId: 'userId',
-  refreshTokenHash: 'refreshTokenHash',
   isRevoked: 'isRevoked',
   ip: 'ip',
   userAgent: 'userAgent',

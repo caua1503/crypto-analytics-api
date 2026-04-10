@@ -1,4 +1,4 @@
-import { createPrismaClient, type PrismaClient } from "@repo/shared";
+import { createMarketPrismaClient, type PrismaClient } from "@repo/shared";
 import { env } from "@repo/shared/env";
 
 const connectionString = env.DATABASE_URL;
@@ -12,7 +12,7 @@ const globalForPrisma = globalThis as unknown as {
 
 export const prisma =
     globalForPrisma.prisma ??
-    createPrismaClient(connectionString, {
+    createMarketPrismaClient(connectionString, {
         max: 20,
         idleTimeoutMillis: 10_000,
         connectionTimeoutMillis: 3_000,

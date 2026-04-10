@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { Prisma } from "../../generated/prisma/client.js";
+import { Prisma as UserPrisma } from "../../generated/user-prisma/client.js";
 
 export const Recommendation = z.enum(["STRONG_BUY", "BUY", "HOLD", "SELL", "STRONG_SELL"]);
 export const enum RecommendationEnum {
@@ -42,7 +43,24 @@ export const zDecimaltoString = z
         return val.toString();
     });
 
-export const jwtType = z.jwt();
+export const zJson = z
+    .json()
+    .optional()
+    .transform((val) => val as UserPrisma.InputJsonValue);
 
+export const jwt = z.object({
+    sub: z.string(),
+    exp: z.date(),
+    iat: z.date(),
+
+})
+
+export const enum ApiKeyMode {
+    PROD = "prod",
+    DEV = "dev",
+}
+export const ApiMethod = z.enum(["GET", "POST", "PUT", "DELETE", "PATCH"]).default("GET");
+export const jwtType = z.jwt();
+export type ApiMethodType = z.infer<typeof ApiMethod>;
 export type RecommendationType = z.infer<typeof Recommendation>;
 export type CriterionCategoryType = z.infer<typeof CriterionCategory>;

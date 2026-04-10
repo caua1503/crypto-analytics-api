@@ -1,6 +1,6 @@
 import { Worker } from "bullmq";
 import { redisConnection, env } from "./config/env.js";
-import { prisma, Logger, RedisClient, redis } from "@repo/shared";
+import { prisma, Logger, RedisClient } from "@repo/shared";
 import { zDecimal } from "@repo/shared/types/common";
 
 import { MarketSnapshotService } from "@repo/shared/services/market.service";
@@ -19,7 +19,7 @@ const marketSnapshotService = new MarketSnapshotService(prisma);
 const analysisService = new AnalysisService(prisma);
 const marketDataIntegration = getMarketDataService();
 
-const redisClient = new RedisClient(redis);
+const redisClient = new RedisClient();
 
 let cachedMacroData: ApiMacroData | null = null;
 let cachedFearGreed: number | null = null;

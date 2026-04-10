@@ -21,7 +21,7 @@ import {
     PaginationParams,
     type PaginationParamsType,
 } from "@repo/shared/types/interfaces/common.interface";
-import { RedisClient, buildCacheKey, redis } from "@repo/shared";
+import { RedisClient, buildCacheKey } from "@repo/shared";
 import {
     RecommendationEnum,
     CriterionCategoryEnum,
@@ -31,7 +31,7 @@ import {
 export class AnalysisService {
     constructor(
         private prisma: PrismaClientType,
-        private cache: RedisClient = new RedisClient(redis),
+        private cache: RedisClient = new RedisClient(),
     ) {}
 
     async create(data: AnalysisCreateType): Promise<AnalysisType> {
@@ -357,7 +357,7 @@ export class AnalysisService {
 export class AnalysisEngineVersionService {
     constructor(
         private prisma: PrismaClientType,
-        private cache: RedisClient = new RedisClient(redis),
+        private cache: RedisClient = new RedisClient(),
     ) {}
 
     async create(data: AnalysisEngineVersionCreateType): Promise<AnalysisEngineVersionType> {

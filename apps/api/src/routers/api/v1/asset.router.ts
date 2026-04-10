@@ -14,11 +14,13 @@ import { z } from "zod";
 import { PaginationParams } from "@repo/shared/types/interfaces/common.interface";
 
 import { StatusCodes } from "http-status-codes";
+import { hasAcess } from "@repo/shared/core/security";
 
 export async function assetRoutes(app: FastifyInstanceTyped) {
     app.get(
         "/",
         {
+            preHandler: hasAcess({}),
             schema: {
                 tags: ["Asset"],
                 querystring: PaginationParams,
