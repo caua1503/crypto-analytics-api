@@ -110,7 +110,7 @@ O ecossistema é dividido em sub-módulos especializados:
 - [**API**](apps/api/README.md) — Interface REST e documentação Swagger.
 - [**Scheduler**](apps/scheduler/README.md) — Agendamento de tarefas e orquestração de jobs.
 - [**Workers**](apps/workers/README.md) — Processamento assíncrono e tarefas intensivas.
-- **Shared** — Biblioteca interna de serviços, modelos e utilitários (usada por todos os módulos).
+- [**Shared**](apps/shared/README.md) — Biblioteca interna de serviços, modelos e utilitários (usada por todos os módulos).
 
 ---
 
