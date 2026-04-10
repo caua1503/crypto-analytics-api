@@ -77,7 +77,7 @@ export function hasAcess(config: HasAcessConfig = {}): any {
 
         const url = request.raw.url || "";
 
-        if (url.startsWith("/docs")) {
+        if (url.startsWith("/docs") && env.NODE_ENV === "development") {
             return;
         }
 
