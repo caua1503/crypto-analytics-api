@@ -5,7 +5,7 @@ RUN apk add --no-cache libstdc++ libgcc
 WORKDIR /app
 
 # Copiar o binário pré-compilado do diretório de build
-COPY build/scheduler /app/scheduler
+COPY dist/scheduler /app/scheduler
 
 # Dar permissão de execução
 RUN chmod +x /app/scheduler

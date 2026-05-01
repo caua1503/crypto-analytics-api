@@ -5,7 +5,7 @@ import { platform } from "node:os";
 
 const apps = ["shared", "api", "scheduler", "workers"];
 const shouldClean = process.argv.includes("--clean");
-const buildDir = join(import.meta.dirname, "build");
+const buildDir = join(import.meta.dirname, "dist");
 
 if (!existsSync(buildDir)) {
     mkdirSync(buildDir);

@@ -4,7 +4,7 @@ WORKDIR /app
 
 
 RUN apk add --no-cache libstdc++ libgcc
-COPY build/shared /app/shared
+COPY dist/shared /app/shared
 
 COPY apps/shared/prisma /app/prisma
 COPY apps/shared/prisma.config.ts /app/prisma.config.ts

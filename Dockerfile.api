@@ -6,7 +6,7 @@ WORKDIR /app
 RUN apk add --no-cache libstdc++ libgcc
 
 # Copiar o binário pré-compilado do diretório de build
-COPY build/api /app/api
+COPY dist/api /app/api
 
 # Dar permissão de execução
 RUN chmod +x /app/api
