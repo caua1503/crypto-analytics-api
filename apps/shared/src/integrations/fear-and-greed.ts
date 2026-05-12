@@ -5,6 +5,16 @@ import {
 } from "@repo/shared/types/interfaces/integrations.interface";
 import { SourceEnum } from "@repo/shared/types/common";
 
+export type MarketSentimentLabel = "Extreme Fear" | "Fear" | "Neutral" | "Greed" | "Extreme Greed";
+
+export function mapMarketSentimentFromScore(score: number): MarketSentimentLabel {
+    if (score <= 2) return "Extreme Fear";
+    if (score <= 4) return "Fear";
+    if (score === 5) return "Neutral";
+    if (score <= 7) return "Greed";
+    return "Extreme Greed";
+}
+
 export class FearAndGreedIndex {
     private httpsInterface: AxiosInstance;
 
@@ -33,6 +43,21 @@ export class FearAndGreedIndex {
         });
 
         return data;
+    }
+
+    async getDashboardSentiment(): Promise<{
+        value: number;
+        label: number;
+        marketSentiment: MarketSentimentLabel;
+    }> {
+        const index = await this.getIndexValue();
+        const score = Math.round((index / 100) * 10);
+
+        return {
+            value: index,
+            label: score,
+            marketSentiment: mapMarketSentimentFromScore(score),
+        };
     }
 }
 
