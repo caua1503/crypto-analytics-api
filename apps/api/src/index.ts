@@ -41,6 +41,16 @@ if (env.NODE_ENV !== "production") {
                 description: "Uma API de análise de criptomoedas...",
                 version: "1.0.0",
             },
+            servers: [
+                {
+                    url: "http://localhost:3000",
+                    description: "Development server",
+                },
+                {
+                    url: "http://localhost:3333",
+                    description: "Production server",
+                },
+            ],
             security: [{ bearerAuth: [] }, { apiKeyAuth: [] }],
             components: {
                 securitySchemes: {
