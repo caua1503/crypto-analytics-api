@@ -192,7 +192,7 @@ export type AnalysisEngineVersionGroupByOutputType = {
   _max: AnalysisEngineVersionMaxAggregateOutputType | null
 }
 
-type GetAnalysisEngineVersionGroupByPayload<T extends AnalysisEngineVersionGroupByArgs> = Prisma.PrismaPromise<
+export type GetAnalysisEngineVersionGroupByPayload<T extends AnalysisEngineVersionGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<AnalysisEngineVersionGroupByOutputType, T['by']> &
       {
@@ -1223,6 +1223,11 @@ export type AnalysisEngineVersionFindManyArgs<ExtArgs extends runtime.Types.Exte
    * Skip the first `n` AnalysisEngineVersions.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of AnalysisEngineVersions.
+   */
   distinct?: Prisma.AnalysisEngineVersionScalarFieldEnum | Prisma.AnalysisEngineVersionScalarFieldEnum[]
 }
 

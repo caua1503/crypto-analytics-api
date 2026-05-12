@@ -295,7 +295,7 @@ export type MarketSnapshotGroupByOutputType = {
   _max: MarketSnapshotMaxAggregateOutputType | null
 }
 
-type GetMarketSnapshotGroupByPayload<T extends MarketSnapshotGroupByArgs> = Prisma.PrismaPromise<
+export type GetMarketSnapshotGroupByPayload<T extends MarketSnapshotGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<MarketSnapshotGroupByOutputType, T['by']> &
       {
@@ -1707,6 +1707,11 @@ export type MarketSnapshotFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` MarketSnapshots.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of MarketSnapshots.
+   */
   distinct?: Prisma.MarketSnapshotScalarFieldEnum | Prisma.MarketSnapshotScalarFieldEnum[]
 }
 

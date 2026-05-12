@@ -219,7 +219,7 @@ export type CriterionWeightGroupByOutputType = {
   _max: CriterionWeightMaxAggregateOutputType | null
 }
 
-type GetCriterionWeightGroupByPayload<T extends CriterionWeightGroupByArgs> = Prisma.PrismaPromise<
+export type GetCriterionWeightGroupByPayload<T extends CriterionWeightGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<CriterionWeightGroupByOutputType, T['by']> &
       {
@@ -1356,6 +1356,11 @@ export type CriterionWeightFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Skip the first `n` CriterionWeights.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of CriterionWeights.
+   */
   distinct?: Prisma.CriterionWeightScalarFieldEnum | Prisma.CriterionWeightScalarFieldEnum[]
 }
 

@@ -52,8 +52,7 @@ export const jwt = z.object({
     sub: z.string(),
     exp: z.date(),
     iat: z.date(),
-
-})
+});
 
 export const enum ApiKeyMode {
     PROD = "prod",

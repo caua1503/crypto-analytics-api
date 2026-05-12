@@ -44,8 +44,6 @@ enum CriterionCategory {
   MACRO
 }
 
-
-
 // MODELS
 
 model Asset {
@@ -145,8 +143,8 @@ model Analysis {
 
   createdAt DateTime @default(now())
 
+  @@index([createdAt])
   @@index([snapshotId])
   @@index([engineVersionId])
   @@index([assetId, createdAt])
 }
-
