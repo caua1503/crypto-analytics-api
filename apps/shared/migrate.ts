@@ -33,6 +33,7 @@ const userResult = spawnSync(
         env: {
             ...process.env,
             USER_DATABASE_URL: process.env.USER_DATABASE_URL,
+            MIGRATE_DB_USER: process.env.USER_DATABASE_URL || process.env.MIGRATE_DB_USER,
         },
     },
 );
