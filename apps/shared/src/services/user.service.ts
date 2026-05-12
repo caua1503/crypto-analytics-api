@@ -29,7 +29,7 @@ import { env } from "@repo/shared/env";
 import { verifyPassword } from "@repo/shared/core/security";
 
 export class UserService {
-    constructor(private prisma: UserPrismaClientType) { }
+    constructor(private prisma: UserPrismaClientType) {}
 
     async findAllUsers(params: PaginationUserParamsType): Promise<PublicUserType[]> {
         try {
@@ -405,7 +405,7 @@ export class UserService {
 }
 
 export class UserSessionService {
-    constructor(private prisma: UserPrismaClientType) { }
+    constructor(private prisma: UserPrismaClientType) {}
 
     async findByPublicUserId(publicUserId: string) {
         try {
