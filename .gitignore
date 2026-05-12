@@ -4,3 +4,9 @@ node_modules
 .vscode
 /generated/prisma
 mydocs
+build/workers
+build/shared
+build/api
+build/index.js.map
+build/migrate.js.map
+build/scheduler
