@@ -25,7 +25,8 @@
     "db:dev:market": "prisma migrate dev",
     "db:dev:user": "prisma migrate dev --config=prisma.user.config.ts",
     "migrate": "bun run migrate.ts",
-    "build": "bun build --compile --minify --bytecode --sourcemap migrate.ts --outfile ../../build/shared"
+    "build": "bun build --compile --minify --bytecode --sourcemap migrate.ts --outfile ../../build/shared",
+    "dev": "bun i && bun run lint && bun run db:generate && bun run migrate"
   },
   "type": "module",
   "dependencies": {
