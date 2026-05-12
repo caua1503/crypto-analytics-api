@@ -98,7 +98,10 @@ export function hasAcess(config: HasAcessConfig = {}): any {
             // @ts-ignore
             const payload = (await request.server.jwt.access.verify(token)) as PayloadAcessToken;
             // console.log(payload);
-            if (role?.length && rulesPriority[payload.role] < Math.min(...role.map(r => rulesPriority[r]))) {
+            if (
+                role?.length &&
+                rulesPriority[payload.role] < Math.min(...role.map((r) => rulesPriority[r]))
+            ) {
                 throw httpErrors.forbidden("Forbidden");
             }
 
@@ -126,7 +129,11 @@ export function hasAcess(config: HasAcessConfig = {}): any {
                 throw httpErrors.forbidden(`Missing required scope: ${required_api_scope}`);
             }
 
-            if (role?.length && rulesPriority[verifiedKey.role as RoleType] < Math.min(...role.map(r => rulesPriority[r]))) {
+            if (
+                role?.length &&
+                rulesPriority[verifiedKey.role as RoleType] <
+                    Math.min(...role.map((r) => rulesPriority[r]))
+            ) {
                 throw httpErrors.forbidden("Insufficient role for this API Key");
             }
 
@@ -137,7 +144,6 @@ export function hasAcess(config: HasAcessConfig = {}): any {
 
             return;
         }
-
 
         // console.log("Unauthorized - final ");
         // throw httpErrors.unauthorized("Unauthorized");
