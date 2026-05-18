@@ -5,19 +5,19 @@ import { StatusCodes } from "http-status-codes";
 import type { FastifyInstanceTyped } from "../../../types/common.js";
 
 export async function dashboardRoutes(app: FastifyInstanceTyped) {
-    app.get(
-        "/",
-        {
-            schema: {
-                tags: ["Dashboard"],
-                security: [],
-                response: {
-                    [StatusCodes.OK]: DashboardResponse,
-                },
-            },
-        },
-        async () => {
-            return await new DashboardService(prisma).getDashboard();
-        },
-    );
+	app.get(
+		"/",
+		{
+			schema: {
+				tags: ["Dashboard"],
+				security: [],
+				response: {
+					[StatusCodes.OK]: DashboardResponse,
+				},
+			},
+		},
+		async () => {
+			return await new DashboardService(prisma).getDashboard();
+		},
+	);
 }

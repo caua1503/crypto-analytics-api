@@ -4,22 +4,22 @@ import { env } from "@repo/shared/env";
 const connectionString = env.DATABASE_URL;
 
 if (!connectionString) {
-    throw new Error("DATABASE_URL environment variable is not set");
+	throw new Error("DATABASE_URL environment variable is not set");
 }
 const globalForPrisma = globalThis as unknown as {
-    prisma?: PrismaClient;
+	prisma?: PrismaClient;
 };
 
 export const prisma =
-    globalForPrisma.prisma ??
-    createMarketPrismaClient(connectionString, {
-        max: 20,
-        idleTimeoutMillis: 10_000,
-        connectionTimeoutMillis: 3_000,
-    });
+	globalForPrisma.prisma ??
+	createMarketPrismaClient(connectionString, {
+		max: 20,
+		idleTimeoutMillis: 10_000,
+		connectionTimeoutMillis: 3_000,
+	});
 
 if (env.NODE_ENV !== "production") {
-    globalForPrisma.prisma = prisma;
+	globalForPrisma.prisma = prisma;
 }
 
 export type PrismaClientType = PrismaClient;

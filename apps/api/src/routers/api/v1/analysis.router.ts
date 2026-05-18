@@ -7,20 +7,20 @@ import { z } from "zod";
 import type { FastifyInstanceTyped } from "../../../types/common.js";
 
 export async function analysisRouter(app: FastifyInstanceTyped) {
-    app.get(
-        "/",
-        {
-            schema: {
-                querystring: PaginationParams,
-                response: {
-                    [StatusCodes.OK]: z.object({
-                        analyses: z.array(AnalysisResponse),
-                    }),
-                },
-            },
-        },
-        async (req) => {
-            return { analyses: await new AnalysisService(prisma).findAll(req.query) };
-        },
-    );
+	app.get(
+		"/",
+		{
+			schema: {
+				querystring: PaginationParams,
+				response: {
+					[StatusCodes.OK]: z.object({
+						analyses: z.array(AnalysisResponse),
+					}),
+				},
+			},
+		},
+		async (req) => {
+			return { analyses: await new AnalysisService(prisma).findAll(req.query) };
+		},
+	);
 }

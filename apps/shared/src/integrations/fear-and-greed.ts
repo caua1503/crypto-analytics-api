@@ -1,64 +1,73 @@
-import axios, { type AxiosInstance } from "axios";
-import {
-    ApiSentimentDataSchema,
-    type ApiSentimentData,
-} from "@repo/shared/types/interfaces/integrations.interface";
 import { SourceEnum } from "@repo/shared/types/common";
+import {
+	ApiSentimentDataSchema,
+	type ApiSentimentData,
+} from "@repo/shared/types/interfaces/integrations.interface";
+import axios, { type AxiosInstance } from "axios";
 
-export type MarketSentimentLabel = "Extreme Fear" | "Fear" | "Neutral" | "Greed" | "Extreme Greed";
+export type MarketSentimentLabel =
+	| "Extreme Fear"
+	| "Fear"
+	| "Neutral"
+	| "Greed"
+	| "Extreme Greed";
 
-export function mapMarketSentimentFromScore(score: number): MarketSentimentLabel {
-    if (score <= 2) return "Extreme Fear";
-    if (score <= 4) return "Fear";
-    if (score === 5) return "Neutral";
-    if (score <= 7) return "Greed";
-    return "Extreme Greed";
+export function mapMarketSentimentFromScore(
+	score: number,
+): MarketSentimentLabel {
+	if (score <= 2) return "Extreme Fear";
+	if (score <= 4) return "Fear";
+	if (score === 5) return "Neutral";
+	if (score <= 7) return "Greed";
+	return "Extreme Greed";
 }
 
 export class FearAndGreedIndex {
-    private httpsInterface: AxiosInstance;
+	private httpsInterface: AxiosInstance;
 
-    constructor() {
-        this.httpsInterface = axios.create();
-    }
+	constructor() {
+		this.httpsInterface = axios.create();
+	}
 
-    async getIndexValue(): Promise<number> {
-        try {
-            const response = await this.httpsInterface.get("https://api.alternative.me/fng/");
-            const value: string = response.data.data[0].value;
-            return parseInt(value, 10);
-        } catch (error) {
-            throw new Error("Erro ao buscar Fear & Greed Index");
-        }
-    }
+	async getIndexValue(): Promise<number> {
+		try {
+			const response = await this.httpsInterface.get(
+				"https://api.alternative.me/fng/",
+			);
+			const value: string = response.data.data[0].value;
+			return parseInt(value, 10);
+		} catch {
+			throw new Error("Erro ao buscar Fear & Greed Index");
+		}
+	}
 
-    async getSentimentData(): Promise<ApiSentimentData> {
-        const index = await this.getIndexValue();
-        const sentiment = Math.round((index / 100) * 10);
-        const data = ApiSentimentDataSchema.parse({
-            fearGreedIndex: index,
-            sentimentScore: sentiment,
-            source: SourceEnum.ALTERNATIVE_ME,
-            timestamp: new Date(),
-        });
+	async getSentimentData(): Promise<ApiSentimentData> {
+		const index = await this.getIndexValue();
+		const sentiment = Math.round((index / 100) * 10);
+		const data = ApiSentimentDataSchema.parse({
+			fearGreedIndex: index,
+			sentimentScore: sentiment,
+			source: SourceEnum.ALTERNATIVE_ME,
+			timestamp: new Date(),
+		});
 
-        return data;
-    }
+		return data;
+	}
 
-    async getDashboardSentiment(): Promise<{
-        value: number;
-        label: number;
-        marketSentiment: MarketSentimentLabel;
-    }> {
-        const index = await this.getIndexValue();
-        const score = Math.round((index / 100) * 10);
+	async getDashboardSentiment(): Promise<{
+		value: number;
+		label: number;
+		marketSentiment: MarketSentimentLabel;
+	}> {
+		const index = await this.getIndexValue();
+		const score = Math.round((index / 100) * 10);
 
-        return {
-            value: index,
-            label: score,
-            marketSentiment: mapMarketSentimentFromScore(score),
-        };
-    }
+		return {
+			value: index,
+			label: score,
+			marketSentiment: mapMarketSentimentFromScore(score),
+		};
+	}
 }
 
 // async function main() {

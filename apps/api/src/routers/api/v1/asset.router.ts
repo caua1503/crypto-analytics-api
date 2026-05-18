@@ -2,12 +2,12 @@ import { prisma } from "@repo/shared";
 import { hasAcess } from "@repo/shared/core/security";
 import { AssetService } from "@repo/shared/services/asset.service";
 import {
-    Asset,
-    AssetCreate,
-    AssetExtras,
-    AssetExtrasArray,
-    AssetPublic,
-    AssetPublicResponse,
+	Asset,
+	AssetCreate,
+	AssetExtras,
+	AssetExtrasArray,
+	AssetPublic,
+	AssetPublicResponse,
 } from "@repo/shared/types/interfaces/asset.interface";
 import { PaginationParams } from "@repo/shared/types/interfaces/common.interface";
 import { IdSchema, SymbolSchema } from "@repo/shared/types/schemas/common.schemas";
@@ -16,146 +16,146 @@ import { z } from "zod";
 import type { FastifyInstanceTyped } from "../../../types/common.js";
 
 export async function assetRoutes(app: FastifyInstanceTyped) {
-    app.get(
-        "/",
-        {
-            preHandler: hasAcess({}),
-            schema: {
-                tags: ["Asset"],
-                querystring: PaginationParams,
-                response: {
-                    [StatusCodes.OK]: AssetPublicResponse,
-                },
-            },
-        },
-        async (req) => {
-            return await new AssetService(prisma).findAll(req.query);
-        },
-    );
+	app.get(
+		"/",
+		{
+			preHandler: hasAcess({}),
+			schema: {
+				tags: ["Asset"],
+				querystring: PaginationParams,
+				response: {
+					[StatusCodes.OK]: AssetPublicResponse,
+				},
+			},
+		},
+		async (req) => {
+			return await new AssetService(prisma).findAll(req.query);
+		},
+	);
 
-    app.get(
-        "/extras",
-        {
-            schema: {
-                tags: ["Asset"],
-                querystring: PaginationParams,
-                response: {
-                    [StatusCodes.OK]: z.object({
-                        assets: AssetExtrasArray,
-                    }),
-                },
-            },
-        },
-        async (req) => {
-            return { assets: await new AssetService(prisma).findAllWithExtras(req.query) };
-        },
-    );
+	app.get(
+		"/extras",
+		{
+			schema: {
+				tags: ["Asset"],
+				querystring: PaginationParams,
+				response: {
+					[StatusCodes.OK]: z.object({
+						assets: AssetExtrasArray,
+					}),
+				},
+			},
+		},
+		async (req) => {
+			return { assets: await new AssetService(prisma).findAllWithExtras(req.query) };
+		},
+	);
 
-    app.get(
-        "/:symbol",
-        {
-            schema: {
-                tags: ["Asset"],
-                params: SymbolSchema,
-                response: {
-                    [StatusCodes.OK]: AssetPublic,
-                },
-            },
-        },
-        async (req) => {
-            return await new AssetService(prisma).findBySymbol(req.params.symbol);
-        },
-    );
+	app.get(
+		"/:symbol",
+		{
+			schema: {
+				tags: ["Asset"],
+				params: SymbolSchema,
+				response: {
+					[StatusCodes.OK]: AssetPublic,
+				},
+			},
+		},
+		async (req) => {
+			return await new AssetService(prisma).findBySymbol(req.params.symbol);
+		},
+	);
 
-    app.get(
-        "/:symbol/extras",
-        {
-            schema: {
-                tags: ["Asset"],
-                params: SymbolSchema,
-                response: {
-                    [StatusCodes.OK]: AssetExtras,
-                },
-            },
-        },
-        async (req) => {
-            return await new AssetService(prisma).findBySymbolWithExtras(req.params.symbol);
-        },
-    );
+	app.get(
+		"/:symbol/extras",
+		{
+			schema: {
+				tags: ["Asset"],
+				params: SymbolSchema,
+				response: {
+					[StatusCodes.OK]: AssetExtras,
+				},
+			},
+		},
+		async (req) => {
+			return await new AssetService(prisma).findBySymbolWithExtras(req.params.symbol);
+		},
+	);
 
-    app.get(
-        "/id/:id",
-        {
-            schema: {
-                tags: ["Asset"],
-                params: IdSchema,
-                response: {
-                    [StatusCodes.OK]: AssetPublic,
-                },
-            },
-        },
-        async (req) => {
-            return await new AssetService(prisma).findById(req.params.id);
-        },
-    );
+	app.get(
+		"/id/:id",
+		{
+			schema: {
+				tags: ["Asset"],
+				params: IdSchema,
+				response: {
+					[StatusCodes.OK]: AssetPublic,
+				},
+			},
+		},
+		async (req) => {
+			return await new AssetService(prisma).findById(req.params.id);
+		},
+	);
 
-    app.get(
-        "/id/:id/extras",
-        {
-            schema: {
-                tags: ["Asset"],
-                params: IdSchema,
-                response: {
-                    [StatusCodes.OK]: AssetExtras,
-                },
-            },
-        },
-        async (req) => {
-            return await new AssetService(prisma).findByIdWithExtras(req.params.id);
-        },
-    );
+	app.get(
+		"/id/:id/extras",
+		{
+			schema: {
+				tags: ["Asset"],
+				params: IdSchema,
+				response: {
+					[StatusCodes.OK]: AssetExtras,
+				},
+			},
+		},
+		async (req) => {
+			return await new AssetService(prisma).findByIdWithExtras(req.params.id);
+		},
+	);
 
-    app.post(
-        "/",
-        {
-            schema: {
-                tags: ["Asset"],
-                body: AssetCreate,
-                response: {
-                    [StatusCodes.CREATED]: Asset,
-                },
-            },
-        },
-        async (req, res) => {
-            return await new AssetService(prisma).create(req.body);
-        },
-    );
-    app.patch(
-        "/id/:id",
-        {
-            schema: {
-                tags: ["Asset"],
-                params: IdSchema,
-                body: AssetCreate.partial(),
-                response: {
-                    [StatusCodes.CREATED]: Asset,
-                },
-            },
-        },
-        async (req, res) => {
-            return await new AssetService(prisma).update(req.params.id, req.body);
-        },
-    );
-    app.delete(
-        "/id/:id",
-        {
-            schema: {
-                tags: ["Asset"],
-                params: IdSchema,
-            },
-        },
-        async (req, res) => {
-            return await new AssetService(prisma).delete(req.params.id);
-        },
-    );
+	app.post(
+		"/",
+		{
+			schema: {
+				tags: ["Asset"],
+				body: AssetCreate,
+				response: {
+					[StatusCodes.CREATED]: Asset,
+				},
+			},
+		},
+		async (req, res) => {
+			return await new AssetService(prisma).create(req.body);
+		},
+	);
+	app.patch(
+		"/id/:id",
+		{
+			schema: {
+				tags: ["Asset"],
+				params: IdSchema,
+				body: AssetCreate.partial(),
+				response: {
+					[StatusCodes.CREATED]: Asset,
+				},
+			},
+		},
+		async (req, res) => {
+			return await new AssetService(prisma).update(req.params.id, req.body);
+		},
+	);
+	app.delete(
+		"/id/:id",
+		{
+			schema: {
+				tags: ["Asset"],
+				params: IdSchema,
+			},
+		},
+		async (req, res) => {
+			return await new AssetService(prisma).delete(req.params.id);
+		},
+	);
 }

@@ -1,10 +1,7 @@
 import { httpErrors } from "@fastify/sensible";
 import { userPrisma } from "@repo/shared";
 import { signAuthTokens, verifyRefreshToken } from "@repo/shared/core/security";
-import {
-	UserService,
-	UserSessionService,
-} from "@repo/shared/services/user.service";
+import { UserService, UserSessionService } from "@repo/shared/services/user.service";
 import {
 	AuthTokensResponse,
 	CreateUser,
@@ -29,21 +26,15 @@ export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			const payload = await new UserService(userPrisma).createPayloadAcessToken(
-				req.body,
-			);
-			const user = await new UserService(userPrisma).findByEmail(
-				req.body.email,
-			);
+			const payload = await new UserService(userPrisma).createPayloadAcessToken(req.body);
+			const user = await new UserService(userPrisma).findByEmail(req.body.email);
 
 			const sessionService = new UserSessionService(userPrisma);
 			const session = await sessionService.create({
 				userId: user.id,
 				expiresAt: new Date(
 					Date.now() +
-						(req.body.rememberMe
-							? 7 * 24 * 60 * 60 * 1000
-							: 1 * 24 * 60 * 60 * 1000),
+						(req.body.rememberMe ? 7 * 24 * 60 * 60 * 1000 : 1 * 24 * 60 * 60 * 1000),
 				),
 				ip: req.ip,
 				userAgent: req.headers["user-agent"],

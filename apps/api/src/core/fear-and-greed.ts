@@ -1,39 +1,39 @@
 import { SourceEnum } from "@repo/shared/types/common";
 import {
-    type ApiSentimentData,
-    ApiSentimentDataSchema,
+	type ApiSentimentData,
+	ApiSentimentDataSchema,
 } from "@repo/shared/types/interfaces/integrations.interface";
 import axios, { type AxiosInstance } from "axios";
 
 export class FearAndGreedIndex {
-    private httpsInterface: AxiosInstance;
+	private httpsInterface: AxiosInstance;
 
-    constructor() {
-        this.httpsInterface = axios.create();
-    }
+	constructor() {
+		this.httpsInterface = axios.create();
+	}
 
-    async getIndexValue(): Promise<number> {
-        try {
-            const response = await this.httpsInterface.get("https://api.alternative.me/fng/");
-            const value: string = response.data.data[0].value;
-            return parseInt(value, 10);
-        } catch (error) {
-            throw new Error("Erro ao buscar Fear & Greed Index");
-        }
-    }
+	async getIndexValue(): Promise<number> {
+		try {
+			const response = await this.httpsInterface.get("https://api.alternative.me/fng/");
+			const value: string = response.data.data[0].value;
+			return parseInt(value, 10);
+		} catch {
+			throw new Error("Erro ao buscar Fear & Greed Index");
+		}
+	}
 
-    async getSentimentData(): Promise<ApiSentimentData> {
-        const index = await this.getIndexValue();
-        const sentiment = Math.round((index / 100) * 10);
-        const data = ApiSentimentDataSchema.parse({
-            fearGreedIndex: index,
-            sentimentScore: sentiment,
-            source: SourceEnum.ALTERNATIVE_ME,
-            timestamp: new Date(),
-        });
+	async getSentimentData(): Promise<ApiSentimentData> {
+		const index = await this.getIndexValue();
+		const sentiment = Math.round((index / 100) * 10);
+		const data = ApiSentimentDataSchema.parse({
+			fearGreedIndex: index,
+			sentimentScore: sentiment,
+			source: SourceEnum.ALTERNATIVE_ME,
+			timestamp: new Date(),
+		});
 
-        return data;
-    }
+		return data;
+	}
 }
 
 // async function main() {

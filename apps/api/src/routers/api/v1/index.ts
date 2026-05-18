@@ -12,9 +12,9 @@ export { marketRoutes };
 export { userRoutes };
 
 export async function registerRoutes(app: FastifyInstance) {
-    app.register(userRoutes, { prefix: "/user" });
-    app.register(assetRoutes, { prefix: "/assets" });
-    app.register(criterionRoutes, { prefix: "/criterion" });
-    app.register(dashboardRoutes, { prefix: "/dashboard" });
-    app.register(marketRoutes, { prefix: "/market" });
+	app.register(userRoutes, { prefix: "/user" });
+	app.register(assetRoutes, { prefix: "/assets" });
+	app.register(criterionRoutes, { prefix: "/criterion" });
+	app.register(dashboardRoutes, { prefix: "/dashboard" });
+	app.register(marketRoutes, { prefix: "/market" });
 }
