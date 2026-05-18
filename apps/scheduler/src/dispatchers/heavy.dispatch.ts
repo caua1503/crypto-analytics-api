@@ -1,8 +1,5 @@
 import { Logger, RedisClient } from "@repo/shared";
-import {
-	FearAndGreedIndex,
-	getMarketDataService,
-} from "@repo/shared/integrations";
+import { FearAndGreedIndex, getMarketDataService } from "@repo/shared/integrations";
 import { Worker } from "bullmq";
 import { prisma } from "../config/db";
 import { env, redisConnection } from "../config/env";
@@ -22,9 +19,7 @@ export const heavyDispatcher = new Worker(
 		logger.log("🚀 Iniciando dispatch de mercado...");
 
 		try {
-			logger.log(
-				"🌐 Coletando e semeando dados globais (Macro + Fear & Greed)...",
-			);
+			logger.log("🌐 Coletando e semeando dados globais (Macro + Fear & Greed)...");
 			const macroData = await marketDataIntegration.fetchMacroData();
 			// console.log("MacroData", macroData);
 			const fearGreed = await fearGreedService.getIndexValue();
