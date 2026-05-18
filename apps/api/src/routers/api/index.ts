@@ -1,4 +1,4 @@
-import { FastifyInstance } from "fastify";
+import type { FastifyInstance } from "fastify";
 import { registerRoutes as registerV1Routes } from "./v1/index.js";
 
 export async function registerApiRoutes(app: FastifyInstance) {

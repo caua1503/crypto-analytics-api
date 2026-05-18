@@ -1,7 +1,7 @@
-import { StatusCodes } from "http-status-codes";
 import { prisma } from "@repo/shared";
 import { DashboardService } from "@repo/shared/services/dashboard.service";
 import { DashboardResponse } from "@repo/shared/types/interfaces/dashboard.interface";
+import { StatusCodes } from "http-status-codes";
 import type { FastifyInstanceTyped } from "../../../types/common.js";
 
 export async function dashboardRoutes(app: FastifyInstanceTyped) {

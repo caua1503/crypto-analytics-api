@@ -1,4 +1,4 @@
-import { FastifyInstance } from "fastify";
+import type { FastifyInstance } from "fastify";
 import { registerApiRoutes } from "./api/index.js";
 import { registerAuthRoutes } from "./auth/index.js";
 

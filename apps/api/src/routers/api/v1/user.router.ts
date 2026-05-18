@@ -1,17 +1,17 @@
-import { z } from "zod";
-import { StatusCodes } from "http-status-codes";
-import { FastifyInstanceTyped } from "../../../types/common.js";
 import { userPrisma } from "@repo/shared";
+import { hasAcess } from "@repo/shared/core/security";
 import { UserService } from "@repo/shared/services/user.service";
-import { PublicIdSchema } from "@repo/shared/types/schemas/common.schemas";
 import {
-    PublicUser,
     CreateUser,
-    PublicUserApiKeyArray,
     CreateUserApiKey,
+    PublicUser,
+    PublicUserApiKeyArray,
     Role,
 } from "@repo/shared/types/interfaces/user.interface";
-import { hasAcess } from "@repo/shared/core/security";
+import { PublicIdSchema } from "@repo/shared/types/schemas/common.schemas";
+import { StatusCodes } from "http-status-codes";
+import { z } from "zod";
+import type { FastifyInstanceTyped } from "../../../types/common.js";
 
 export async function userRoutes(app: FastifyInstanceTyped) {
     app.post(

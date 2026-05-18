@@ -1,20 +1,19 @@
-import { FastifyInstanceTyped } from "../../../types/common.js";
-import { AssetService } from "@repo/shared/services/asset.service";
 import { prisma } from "@repo/shared";
+import { hasAcess } from "@repo/shared/core/security";
+import { AssetService } from "@repo/shared/services/asset.service";
 import {
     Asset,
-    AssetPublic,
     AssetCreate,
     AssetExtras,
     AssetExtrasArray,
+    AssetPublic,
     AssetPublicResponse,
 } from "@repo/shared/types/interfaces/asset.interface";
-import { IdSchema, SymbolSchema } from "@repo/shared/types/schemas/common.schemas";
-import { z } from "zod";
 import { PaginationParams } from "@repo/shared/types/interfaces/common.interface";
-
+import { IdSchema, SymbolSchema } from "@repo/shared/types/schemas/common.schemas";
 import { StatusCodes } from "http-status-codes";
-import { hasAcess } from "@repo/shared/core/security";
+import { z } from "zod";
+import type { FastifyInstanceTyped } from "../../../types/common.js";
 
 export async function assetRoutes(app: FastifyInstanceTyped) {
     app.get(

@@ -1,4 +1,4 @@
-import { FastifyInstance } from "fastify";
+import type { FastifyInstance } from "fastify";
 import { assetRoutes } from "./asset.router.js";
 import { criterionRoutes } from "./criteria.router.js";
 import { dashboardRoutes } from "./dashboard.router.js";

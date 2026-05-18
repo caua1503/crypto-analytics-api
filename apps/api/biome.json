@@ -9,7 +9,7 @@
         "ignoreUnknown": true,
         "includes": [
             "**",
-            "!!**/generated/**",
+            "!!**/generated",
             "!!**/bun.lock",
             "!!**/package-lock.json",
             "!!**/package.json",

@@ -1,9 +1,9 @@
-import axios, { AxiosInstance } from "axios";
-import {
-    ApiSentimentDataSchema,
-    ApiSentimentData,
-} from "@repo/shared/types/interfaces/integrations.interface";
 import { SourceEnum } from "@repo/shared/types/common";
+import {
+    type ApiSentimentData,
+    ApiSentimentDataSchema,
+} from "@repo/shared/types/interfaces/integrations.interface";
+import axios, { type AxiosInstance } from "axios";
 
 export class FearAndGreedIndex {
     private httpsInterface: AxiosInstance;

@@ -43,7 +43,7 @@
     "ioredis": "^5.9.2",
     "pg": "^8.17.1",
     "prisma": "^7.2.0",
-    "zod": "^4.3.5"
+    "zod": "4.4.1"
   },
   "devDependencies": {
     "@types/node": "^25.3.0",

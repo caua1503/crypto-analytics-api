@@ -1,7 +1,7 @@
-import { Redis } from "ioredis";
 import Bun from "bun";
+import { Redis } from "ioredis";
+import type { z } from "zod";
 import { env } from "./env.js";
-import { z } from "zod";
 
 export const redis = new Redis({
     host: env.REDIS_HOST,

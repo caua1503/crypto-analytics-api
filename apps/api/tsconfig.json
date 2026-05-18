@@ -12,6 +12,30 @@
         "paths": {
             "@repo/shared": [
                 "../shared/src/index.ts"
+            ],
+            "@repo/shared/env": [
+                "../shared/src/utils/env.ts"
+            ],
+            "@repo/shared/integrations": [
+                "../shared/src/integrations/index.ts"
+            ],
+            "@repo/shared/services/*": [
+                "../shared/src/services/*.ts"
+            ],
+            "@repo/shared/types": [
+                "../shared/src/types"
+            ],
+            "@repo/shared/types/common": [
+                "../shared/src/types/common.ts"
+            ],
+            "@repo/shared/types/schemas/*": [
+                "../shared/src/types/schemas/*.ts"
+            ],
+            "@repo/shared/types/interfaces/*": [
+                "../shared/src/types/interfaces/*.ts"
+            ],
+            "@repo/shared/core/*": [
+                "../shared/src/core/*.ts"
             ]
         },
         "baseUrl": ".",

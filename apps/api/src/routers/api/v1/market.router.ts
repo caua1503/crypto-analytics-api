@@ -1,8 +1,5 @@
-import { z } from "zod";
-import { StatusCodes } from "http-status-codes";
-import { FastifyInstanceTyped } from "../../../types/common.js";
 import { prisma } from "@repo/shared";
-import { IdSchema, SymbolSchema, PublicIdSchema } from "@repo/shared/types/schemas/common.schemas";
+import { MarketSnapshotService } from "@repo/shared/services/market.service";
 import { PaginationParams } from "@repo/shared/types/interfaces/common.interface";
 import {
     MarketSnapshot,
@@ -10,7 +7,10 @@ import {
     MarketSnapshotResponse,
     MarketSnapshotSimpleResponse,
 } from "@repo/shared/types/interfaces/market.interface";
-import { MarketSnapshotService } from "@repo/shared/services/market.service";
+import { IdSchema, PublicIdSchema, SymbolSchema } from "@repo/shared/types/schemas/common.schemas";
+import { StatusCodes } from "http-status-codes";
+import { z } from "zod";
+import type { FastifyInstanceTyped } from "../../../types/common.js";
 
 export async function marketRoutes(app: FastifyInstanceTyped) {
     app.get(
