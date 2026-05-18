@@ -130,4 +130,5 @@ docker compose up --build
 - [x] - Armazenando dados para analise
 - [ ] - Url publica para acesso a API (em progresso)
 - [ ] - Documentação publica para acesso a API (em progresso)
-- [ ] - Análise de dados por LLM (em progresso)
+- [ ] - Frontend para visualização de dados
+- [ ] - Análise de dados por LLM
