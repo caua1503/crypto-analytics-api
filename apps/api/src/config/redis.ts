@@ -29,7 +29,7 @@ export class RedisClient {
 
 	async set_json(
 		key: string,
-		value: any,
+		value: unknown,
 		expireInSeconds: number = env.REDIS_TIMEOUT_SECONDS,
 	): Promise<void> {
 		try {
@@ -54,7 +54,18 @@ export class RedisClient {
 		if (!value) return null;
 
 		try {
-			return JSON.parse(value) as T;
+			const parsed = JSON.parse(value);
+
+			if (model) {
+				const result = model.safeParse(parsed);
+				if (!result.success) {
+					console.error(`Zod validation failed for Redis key ${key}:`, result.error);
+					return null;
+				}
+				return result.data;
+			}
+
+			return parsed as T;
 		} catch (e) {
 			console.error(`Failed to parse JSON from Redis for key ${key}:`, e);
 			return null;
@@ -66,11 +77,11 @@ export class RedisClient {
 	}
 }
 
-function normalizeParams(params: Record<string, any>) {
+function normalizeParams(params: Record<string, unknown>) {
 	return Object.fromEntries(
 		Object.entries(params)
 			.filter(([, value]) => value !== undefined)
-			.map(([key, value]) => {
+			.map(([key, value]): [string, unknown] => {
 				if (value instanceof Date) {
 					return [key, value.toISOString()];
 				}
@@ -80,7 +91,7 @@ function normalizeParams(params: Record<string, any>) {
 	);
 }
 
-export function buildCacheKey(prefix: string, params: Record<string, any>): string {
+export function buildCacheKey(prefix: string, params: Record<string, unknown>): string {
 	const normalized = normalizeParams(params);
 	const hash = new Bun.CryptoHasher("sha256").update(JSON.stringify(normalized)).digest("hex");
 
