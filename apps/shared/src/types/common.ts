@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { Prisma } from "../../generated/prisma/client.js";
 import type { Prisma as UserPrisma } from "../../generated/user-prisma/client.js";
+import type { PayloadAcessToken, PayloadRefreshToken } from "./interfaces/user.interface.js";
 
 export const Recommendation = z.enum(["STRONG_BUY", "BUY", "HOLD", "SELL", "STRONG_SELL"]);
 export enum RecommendationEnum {
@@ -63,3 +64,22 @@ export const jwtType = z.jwt();
 export type ApiMethodType = z.infer<typeof ApiMethod>;
 export type RecommendationType = z.infer<typeof Recommendation>;
 export type CriterionCategoryType = z.infer<typeof CriterionCategory>;
+
+export interface FastifyJwtInstance {
+	jwt: {
+		access: {
+			sign: (
+				payload: { sub: string; role: string },
+				options?: Record<string, unknown>,
+			) => string;
+			verify: (token: string) => PayloadAcessToken;
+		};
+		refresh: {
+			sign: (
+				payload: { sub: string; sessionId: string },
+				options?: Record<string, unknown>,
+			) => string;
+			verify: (token: string) => PayloadRefreshToken;
+		};
+	};
+}
