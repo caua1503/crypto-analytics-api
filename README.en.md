@@ -107,8 +107,8 @@ The final score is calculated with specific weights for each dimension:
 The ecosystem is divided into specialized sub-modules:
 
 - [**API**](apps/api/README.en.md) — REST interface and Swagger documentation.
-- [**Scheduler**](apps/scheduler/README.md) — Task scheduling and job orchestration.
-- [**Workers**](apps/workers/README.md) — Asynchronous processing and intensive tasks.
+- [**Scheduler**](apps/scheduler/README.en.md) — Task scheduling and job orchestration.
+- [**Workers**](apps/workers/README.en.md) — Asynchronous processing and intensive tasks.
 - [**Shared**](apps/shared/README.md) — Internal library of services, models, and utilities (used by all modules).
 
 ---
