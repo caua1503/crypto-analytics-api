@@ -20,7 +20,7 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 				},
 			},
 		},
-		async (req, res) => {
+		async () => {
 			return { criterions: await new CriterionService(prisma).findAll() };
 		},
 	);
@@ -37,7 +37,7 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 				},
 			},
 		},
-		async (req, res) => {
+		async (req) => {
 			return { criterion: await new CriterionService(prisma).findById(req.params.id) };
 		},
 	);
@@ -53,7 +53,7 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 				},
 			},
 		},
-		async (req, res) => {
+		async () => {
 			return { categories: await new CriterionService(prisma).findAllCategories() };
 		},
 	);
@@ -68,7 +68,7 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 				},
 			},
 		},
-		async (req, res) => {
+		async (req) => {
 			return await new CriterionService(prisma).create(req.body);
 		},
 	);
@@ -80,7 +80,7 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 				params: IdSchema,
 			},
 		},
-		async (req, res) => {
+		async (req) => {
 			return await new CriterionService(prisma).delete(req.params.id);
 		},
 	);
@@ -96,7 +96,7 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 				},
 			},
 		},
-		async (req, res) => {
+		async (req) => {
 			return await new CriterionService(prisma).update(req.params.id, req.body);
 		},
 	);

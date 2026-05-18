@@ -2,7 +2,6 @@ import { prisma } from "@repo/shared";
 import { MarketSnapshotService } from "@repo/shared/services/market.service";
 import { PaginationParams } from "@repo/shared/types/interfaces/common.interface";
 import {
-	MarketSnapshot,
 	MarketSnapshotCreate,
 	MarketSnapshotResponse,
 	MarketSnapshotSimpleResponse,

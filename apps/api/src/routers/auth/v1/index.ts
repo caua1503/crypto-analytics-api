@@ -6,6 +6,7 @@ import {
 	AuthTokensResponse,
 	CreateUser,
 	Login,
+	type PayloadRefreshToken,
 	PublicUser,
 	RefreshToken,
 } from "@repo/shared/types/interfaces/user.interface";
@@ -81,7 +82,7 @@ export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 		},
 		async (req) => {
 			const { refreshToken } = req.body;
-			let decoded;
+			let decoded: PayloadRefreshToken;
 			try {
 				decoded = verifyRefreshToken(app, refreshToken);
 			} catch (_err) {

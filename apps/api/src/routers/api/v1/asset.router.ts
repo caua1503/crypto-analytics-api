@@ -47,7 +47,9 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return { assets: await new AssetService(prisma).findAllWithExtras(req.query) };
+			return {
+				assets: await new AssetService(prisma).findAllWithExtras(req.query),
+			};
 		},
 	);
 
@@ -126,7 +128,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 				},
 			},
 		},
-		async (req, res) => {
+		async (req) => {
 			return await new AssetService(prisma).create(req.body);
 		},
 	);
@@ -142,7 +144,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 				},
 			},
 		},
-		async (req, res) => {
+		async (req) => {
 			return await new AssetService(prisma).update(req.params.id, req.body);
 		},
 	);
@@ -154,7 +156,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 				params: IdSchema,
 			},
 		},
-		async (req, res) => {
+		async (req) => {
 			return await new AssetService(prisma).delete(req.params.id);
 		},
 	);

@@ -5,11 +5,7 @@ import { dashboardRoutes } from "./dashboard.router.js";
 import { marketRoutes } from "./market.router.js";
 import { userRoutes } from "./user.router.js";
 
-export { assetRoutes };
-export { criterionRoutes };
-export { dashboardRoutes };
-export { marketRoutes };
-export { userRoutes };
+export { assetRoutes, criterionRoutes, dashboardRoutes, marketRoutes, userRoutes };
 
 export async function registerRoutes(app: FastifyInstance) {
 	app.register(userRoutes, { prefix: "/user" });

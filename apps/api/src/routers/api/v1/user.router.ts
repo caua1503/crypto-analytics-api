@@ -6,7 +6,6 @@ import {
 	CreateUserApiKey,
 	PublicUser,
 	PublicUserApiKeyArray,
-	Role,
 } from "@repo/shared/types/interfaces/user.interface";
 import { PublicIdSchema } from "@repo/shared/types/schemas/common.schemas";
 import { StatusCodes } from "http-status-codes";
