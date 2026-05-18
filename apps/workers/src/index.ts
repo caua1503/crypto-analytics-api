@@ -3,10 +3,10 @@ import { FearAndGreedIndex, getMarketDataService } from "@repo/shared/integratio
 import { AnalysisService } from "@repo/shared/services/analysis.service";
 
 import { MarketSnapshotService } from "@repo/shared/services/market.service";
-import { zDecimal } from "@repo/shared/types/common";
 import {
 	type ApiMacroData,
 	ApiMacroDataSchema,
+	type ApiOHLC,
 } from "@repo/shared/types/interfaces/integrations.interface";
 import { Worker } from "bullmq";
 import { env, redisConnection } from "./config/env.js";
@@ -55,9 +55,13 @@ async function getGlobalMarketData() {
 		lastGlobalDataFetch = now;
 	}
 
+	if (!cachedMacroData || cachedFearGreed === null) {
+		throw new Error("Failed to fetch global market data");
+	}
+
 	return {
-		macroData: cachedMacroData!,
-		fearGreed: cachedFearGreed!,
+		macroData: cachedMacroData,
+		fearGreed: cachedFearGreed,
 	};
 }
 
@@ -80,7 +84,7 @@ new Worker(
 
 				const { macroData, fearGreed } = await getGlobalMarketData();
 
-				let ohlcData;
+				let ohlcData: ApiOHLC | undefined;
 				try {
 					// logger.log(`[${asset.symbol}] Coletando dados OHLC...`);
 					ohlcData = await marketDataIntegration.fetchOHLCBySymbol(asset.symbol);

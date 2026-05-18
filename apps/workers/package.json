@@ -14,12 +14,14 @@
 	"type": "module",
 	"private": true,
 	"devDependencies": {
+		"@biomejs/biome": "2.4.15",
 		"@types/bun": "latest"
 	},
 	"scripts": {
 		"build": "bun i && bun run lint && bun build --compile --minify --sourcemap --bytecode src/index.ts --outfile ../../build/workers",
 		"dev": "bun i && bun run lint && bun --watch run src/index.ts",
-		"lint": "bunx @biomejs/biome check --write"
+		"lint": "bunx @biomejs/biome check --write",
+		"check": "bunx @biomejs/biome check"
 	},
 	"peerDependencies": {
 		"typescript": "^5"
