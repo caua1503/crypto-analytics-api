@@ -2,6 +2,7 @@ import { httpErrors } from "@fastify/sensible";
 import { userPrisma } from "@repo/shared";
 import { signAuthTokens, verifyRefreshToken } from "@repo/shared/core/security";
 import { UserService, UserSessionService } from "@repo/shared/services/user.service";
+import type { FastifyJwtInstance } from "@repo/shared/types/common";
 import {
 	AuthTokensResponse,
 	CreateUser,
@@ -43,7 +44,7 @@ export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 			});
 
 			const tokens = signAuthTokens(
-				app,
+				app as unknown as FastifyJwtInstance,
 				{ ...payload, sessionId: session.publicId },
 				req.body.rememberMe,
 			);
@@ -84,7 +85,7 @@ export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 			const { refreshToken } = req.body;
 			let decoded: PayloadRefreshToken;
 			try {
-				decoded = verifyRefreshToken(app, refreshToken);
+				decoded = verifyRefreshToken(app as unknown as FastifyJwtInstance, refreshToken);
 			} catch (_err) {
 				throw httpErrors.unauthorized("Invalid or expired refresh token");
 			}
@@ -123,7 +124,7 @@ export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 				sessionId: newSession.publicId,
 			};
 
-			return signAuthTokens(app, payload);
+			return signAuthTokens(app as unknown as FastifyJwtInstance, payload);
 		},
 	);
 }
