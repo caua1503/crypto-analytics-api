@@ -3,6 +3,7 @@ import { httpErrors } from "@fastify/sensible";
 import { userPrisma } from "@repo/shared";
 import { env } from "@repo/shared/env";
 import { UserService } from "@repo/shared/services/user.service";
+import type { FastifyJwtInstance } from "@repo/shared/types/common";
 import { ApiKeyMode } from "@repo/shared/types/common";
 import type {
 	AuthTokensResponseType,
@@ -28,24 +29,6 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
 export function createApiKey(mode: ApiKeyMode = ApiKeyMode.PROD) {
 	const code = crypto.randomBytes(32).toString("hex");
 	return `caa_${mode}_${code}`;
-}
-
-interface FastifyJwtInstance {
-	jwt: {
-		access: {
-			sign: (
-				payload: { sub: string; role: string },
-				options?: Record<string, unknown>,
-			) => string;
-		};
-		refresh: {
-			sign: (
-				payload: { sub: string; sessionId: string },
-				options?: Record<string, unknown>,
-			) => string;
-			verify: (token: string) => PayloadRefreshToken;
-		};
-	};
 }
 
 export function signAuthTokens(
@@ -112,11 +95,9 @@ export function hasAcess(
 
 		if (usage_bearer && authHeader?.startsWith("Bearer ")) {
 			const token = authHeader.split(" ")[1];
-			// console.log(token);
 
-			// @ts-expect-error
-			const payload = (await request.server.jwt.access.verify(token)) as PayloadAcessToken;
-			// console.log(payload);
+			const server = request.server as unknown as FastifyJwtInstance;
+			const payload: PayloadAcessToken = await server.jwt.access.verify(token);
 			if (
 				role?.length &&
 				rulesPriority[payload.role] < Math.min(...role.map((r) => rulesPriority[r]))
