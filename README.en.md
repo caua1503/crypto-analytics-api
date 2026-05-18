@@ -129,4 +129,5 @@ docker compose up --build
 - [x] - Storing data for analysis
 - [ ] - Public URL for API access (in progress)
 - [ ] - Public documentation for API access (in progress)
-- [ ] - Data analysis via LLM (in progress)
+- [ ] - Frontend for data visualization
+- [ ] - Data analysis via LLM
