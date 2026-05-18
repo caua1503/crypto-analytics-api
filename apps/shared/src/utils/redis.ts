@@ -1,8 +1,8 @@
+import { env } from "@repo/shared/env";
+import { RedisClient as BunRedisClient } from "bun";
 import crypto from "crypto";
 import { Redis } from "ioredis";
-import { RedisClient as BunRedisClient } from "bun";
-import { env } from "@repo/shared/env";
-import { z } from "zod";
+import type { z } from "zod";
 
 // export const redis = new Redis({
 //     host: env.REDIS_HOST,
@@ -14,80 +14,80 @@ const connectionString = `redis://${env.REDIS_HOST}:${env.REDIS_PORT}`;
 const redis = new BunRedisClient(connectionString);
 
 export class RedisClient {
-    private client: BunRedisClient = redis;
+	private client: BunRedisClient = redis;
 
-    async set(
-        key: string,
-        value: string,
-        expireInSeconds: number = env.REDIS_TIMEOUT_SECONDS,
-    ): Promise<void> {
-        if (expireInSeconds) {
-            await this.client.set(key, value, "EX", expireInSeconds);
-        } else {
-            await this.client.set(key, value);
-        }
-    }
+	async set(
+		key: string,
+		value: string,
+		expireInSeconds: number = env.REDIS_TIMEOUT_SECONDS,
+	): Promise<void> {
+		if (expireInSeconds) {
+			await this.client.set(key, value, "EX", expireInSeconds);
+		} else {
+			await this.client.set(key, value);
+		}
+	}
 
-    async set_json(
-        key: string,
-        value: any,
-        expireInSeconds: number = env.REDIS_TIMEOUT_SECONDS,
-    ): Promise<void> {
-        try {
-            const stringValue = JSON.stringify(value);
-            if (expireInSeconds) {
-                await this.client.set(key, stringValue, "EX", expireInSeconds);
-            } else {
-                await this.client.set(key, stringValue);
-            }
-        } catch (e) {
-            console.error(`Failed to stringify JSON for Redis key ${key}:`, e);
-        }
-    }
+	async set_json(
+		key: string,
+		value: any,
+		expireInSeconds: number = env.REDIS_TIMEOUT_SECONDS,
+	): Promise<void> {
+		try {
+			const stringValue = JSON.stringify(value);
+			if (expireInSeconds) {
+				await this.client.set(key, stringValue, "EX", expireInSeconds);
+			} else {
+				await this.client.set(key, stringValue);
+			}
+		} catch (e) {
+			console.error(`Failed to stringify JSON for Redis key ${key}:`, e);
+		}
+	}
 
-    async get(key: string): Promise<string | null> {
-        return await this.client.get(key);
-    }
+	async get(key: string): Promise<string | null> {
+		return await this.client.get(key);
+	}
 
-    async get_json<T>(key: string, model?: z.ZodSchema<T>): Promise<T | null> {
-        const value = await this.client.get(key);
+	async get_json<T>(key: string, model?: z.ZodSchema<T>): Promise<T | null> {
+		const value = await this.client.get(key);
 
-        if (!value) return null;
+		if (!value) return null;
 
-        try {
-            return JSON.parse(value) as T;
-        } catch (e) {
-            console.error(`Failed to parse JSON from Redis for key ${key}:`, e);
-            return null;
-        }
-    }
+		try {
+			return JSON.parse(value) as T;
+		} catch (e) {
+			console.error(`Failed to parse JSON from Redis for key ${key}:`, e);
+			return null;
+		}
+	}
 
-    async del(key: string): Promise<void> {
-        try {
-            await this.client.del(key);
-        } catch (e) {
-            console.error(`Failed to delete key ${key}:`, e);
-        }
-    }
+	async del(key: string): Promise<void> {
+		try {
+			await this.client.del(key);
+		} catch (e) {
+			console.error(`Failed to delete key ${key}:`, e);
+		}
+	}
 }
 
 function normalizeParams(params: Record<string, any>) {
-    return Object.fromEntries(
-        Object.entries(params)
-            .filter(([, value]) => value !== undefined)
-            .map(([key, value]) => {
-                if (value instanceof Date) {
-                    return [key, value.toISOString()];
-                }
-                return [key, value];
-            })
-            .sort(([a], [b]) => a.localeCompare(b)),
-    );
+	return Object.fromEntries(
+		Object.entries(params)
+			.filter(([, value]) => value !== undefined)
+			.map(([key, value]) => {
+				if (value instanceof Date) {
+					return [key, value.toISOString()];
+				}
+				return [key, value];
+			})
+			.sort(([a], [b]) => a.localeCompare(b)),
+	);
 }
 
 export function buildCacheKey(prefix: string, params: Record<string, any>): string {
-    const normalized = normalizeParams(params);
-    const hash = crypto.createHash("sha256").update(JSON.stringify(normalized)).digest("hex");
+	const normalized = normalizeParams(params);
+	const hash = crypto.createHash("sha256").update(JSON.stringify(normalized)).digest("hex");
 
-    return `${prefix}:${hash}`;
+	return `${prefix}:${hash}`;
 }

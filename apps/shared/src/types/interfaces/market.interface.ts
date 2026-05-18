@@ -1,62 +1,62 @@
-import { Asset } from "./asset.interface.js";
 import { z } from "zod";
 import { zDecimal, zDecimaltoString } from "../common.js";
+import { Asset } from "./asset.interface.js";
 
 export const MarketSnapshot = z.object({
-    id: z.number(),
-    assetId: z.number(),
-    // asset: Asset,
+	id: z.number(),
+	assetId: z.number(),
+	// asset: Asset,
 
-    priceUsd: zDecimaltoString,
-    volume24hUsd: zDecimaltoString,
-    marketCapUsd: zDecimaltoString,
+	priceUsd: zDecimaltoString,
+	volume24hUsd: zDecimaltoString,
+	marketCapUsd: zDecimaltoString,
 
-    open: zDecimaltoString.nullable().optional(),
-    high: zDecimaltoString.nullable().optional(),
-    low: zDecimaltoString.nullable().optional(),
-    close: zDecimaltoString.nullable().optional(),
+	open: zDecimaltoString.nullable().optional(),
+	high: zDecimaltoString.nullable().optional(),
+	low: zDecimaltoString.nullable().optional(),
+	close: zDecimaltoString.nullable().optional(),
 
-    btcDominance: zDecimaltoString,
-    fearGreed: z.number().optional(),
+	btcDominance: zDecimaltoString,
+	fearGreed: z.number().optional(),
 
-    source: z.string(),
-    cachedUntil: z.coerce.date(),
+	source: z.string(),
+	cachedUntil: z.coerce.date(),
 
-    createdAt: z.coerce.date(),
+	createdAt: z.coerce.date(),
 });
 
 export const MarketSnapshotArray = z.array(MarketSnapshot);
 
 export const MarketSnapshotCreate = MarketSnapshot.omit({
-    id: true,
-    createdAt: true,
+	id: true,
+	createdAt: true,
 }).extend({
-    priceUsd: zDecimal,
-    volume24hUsd: zDecimal,
-    marketCapUsd: zDecimal,
-    open: zDecimal.optional(),
-    high: zDecimal.optional(),
-    low: zDecimal.optional(),
-    close: zDecimal.optional(),
-    btcDominance: zDecimal,
+	priceUsd: zDecimal,
+	volume24hUsd: zDecimal,
+	marketCapUsd: zDecimal,
+	open: zDecimal.optional(),
+	high: zDecimal.optional(),
+	low: zDecimal.optional(),
+	close: zDecimal.optional(),
+	btcDominance: zDecimal,
 });
 
 export const MarketSnapshotSimpleResponse = MarketSnapshot.extend({
-    priceUsd: z.string(),
-    volume24hUsd: z.string(),
-    marketCapUsd: z.string(),
-    open: z.string().nullable().optional(),
-    high: z.string().nullable().optional(),
-    low: z.string().nullable().optional(),
-    close: z.string().nullable().optional(),
-    btcDominance: z.string(),
+	priceUsd: z.string(),
+	volume24hUsd: z.string(),
+	marketCapUsd: z.string(),
+	open: z.string().nullable().optional(),
+	high: z.string().nullable().optional(),
+	low: z.string().nullable().optional(),
+	close: z.string().nullable().optional(),
+	btcDominance: z.string(),
 });
 
 export const MarketSnapshotResponse = z.object({
-    meta: z.object({
-        total: z.number(),
-    }),
-    data: z.array(MarketSnapshot),
+	meta: z.object({
+		total: z.number(),
+	}),
+	data: z.array(MarketSnapshot),
 });
 
 export type MarketSnapshotType = z.infer<typeof MarketSnapshot>;

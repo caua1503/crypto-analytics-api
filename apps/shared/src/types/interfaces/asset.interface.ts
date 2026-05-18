@@ -1,30 +1,30 @@
 import { z } from "zod";
 
 export const Asset = z.object({
-    id: z.number(),
-    publicId: z.uuid(),
-    symbol: z.string().min(1).max(10).toUpperCase(),
-    name: z
-        .string()
-        .min(1)
-        .transform((str) => str.charAt(0).toUpperCase() + str.slice(1)),
+	id: z.number(),
+	publicId: z.uuid(),
+	symbol: z.string().min(1).max(10).toUpperCase(),
+	name: z
+		.string()
+		.min(1)
+		.transform((str) => str.charAt(0).toUpperCase() + str.slice(1)),
 
-    createdAt: z.coerce.date(),
+	createdAt: z.coerce.date(),
 });
 
 export const AssetExtras = Asset.extend({
-    extras: z.json().default({}),
+	extras: z.json().default({}),
 });
 
 export const AssetCreate = Asset.omit({
-    id: true,
-    createdAt: true,
-    publicId: true,
+	id: true,
+	createdAt: true,
+	publicId: true,
 });
 
 export const AssetPublic = Asset.omit({
-    id: true,
-    createdAt: true,
+	id: true,
+	createdAt: true,
 });
 
 export const AssetPublicArray = z.array(AssetPublic);
@@ -32,14 +32,14 @@ export const AssetArray = z.array(Asset);
 export const AssetExtrasArray = z.array(AssetExtras);
 
 export const AssetResponse = z.object({
-    meta: z.object({
-        total: z.number(),
-    }),
-    data: AssetArray,
+	meta: z.object({
+		total: z.number(),
+	}),
+	data: AssetArray,
 });
 
 export const AssetPublicResponse = AssetResponse.extend({
-    data: AssetPublicArray,
+	data: AssetPublicArray,
 });
 
 export type AssetType = z.infer<typeof Asset>;

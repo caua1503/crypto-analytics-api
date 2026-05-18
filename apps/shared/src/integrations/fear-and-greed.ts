@@ -1,20 +1,13 @@
 import { SourceEnum } from "@repo/shared/types/common";
 import {
-	ApiSentimentDataSchema,
 	type ApiSentimentData,
+	ApiSentimentDataSchema,
 } from "@repo/shared/types/interfaces/integrations.interface";
 import axios, { type AxiosInstance } from "axios";
 
-export type MarketSentimentLabel =
-	| "Extreme Fear"
-	| "Fear"
-	| "Neutral"
-	| "Greed"
-	| "Extreme Greed";
+export type MarketSentimentLabel = "Extreme Fear" | "Fear" | "Neutral" | "Greed" | "Extreme Greed";
 
-export function mapMarketSentimentFromScore(
-	score: number,
-): MarketSentimentLabel {
+export function mapMarketSentimentFromScore(score: number): MarketSentimentLabel {
 	if (score <= 2) return "Extreme Fear";
 	if (score <= 4) return "Fear";
 	if (score === 5) return "Neutral";
@@ -31,9 +24,7 @@ export class FearAndGreedIndex {
 
 	async getIndexValue(): Promise<number> {
 		try {
-			const response = await this.httpsInterface.get(
-				"https://api.alternative.me/fng/",
-			);
+			const response = await this.httpsInterface.get("https://api.alternative.me/fng/");
 			const value: string = response.data.data[0].value;
 			return parseInt(value, 10);
 		} catch {
