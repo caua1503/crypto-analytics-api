@@ -103,22 +103,14 @@ app.get("/health", async (_req, _res) => {
 	return { message: "ok" };
 });
 
-//Inicialisa a integração de dados de mercado
-// getMarketDataService();
-
-// const service = getMarketDataService();
-// service.fetchOHLCById(1).then((result) => {
-//     console.log("OHLC Data:", result);
-// });
-
 app.listen({ port: PORT, host: HOST }).then(() => {
 	console.log(
 		`\n🚀 Server is running at \n(http://${HOST}:${PORT})\n(http://localhost:${PORT})\n`,
 	);
-	console.log(`\n📚 Docs available at: http://localhost:${PORT}/docs`);
 	if (env.NODE_ENV === "production") {
 		console.log(`🔥 Running in mode: "${env.NODE_ENV}"`);
 	} else {
 		console.log(`📚 Running in mode: "${env.NODE_ENV}"`);
+		console.log(`\n📚 Docs available at: http://localhost:${PORT}/docs`);
 	}
 });
