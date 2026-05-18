@@ -36,7 +36,9 @@ export class AnalysisService {
 		try {
 			const validatedData = AnalysisCreate.parse(data);
 
-			const analysis = await this.prisma.analysis.create({ data: validatedData });
+			const analysis = await this.prisma.analysis.create({
+				data: validatedData,
+			});
 
 			return Analysis.parse(analysis);
 		} catch (error) {
@@ -110,7 +112,9 @@ export class AnalysisService {
 		if (cachedAnalyses) {
 			return cachedAnalyses;
 		}
-		const analyses = await this.prisma.analysis.findMany({ where: { assetId } });
+		const analyses = await this.prisma.analysis.findMany({
+			where: { assetId },
+		});
 
 		if (!analyses) {
 			throw httpErrors.notFound("Analyses not found");
@@ -203,7 +207,7 @@ export class AnalysisService {
 
 			for (const weight of engineVersion.weights) {
 				const code = weight.criterion.code;
-				const importance = Number(weight.importanceWeight);
+				const _importance = Number(weight.importanceWeight);
 
 				if (code === "SENTIMENT_FEAR_GREED" && snapshot.fearGreed !== null) {
 					sentimentScore = isStable
@@ -223,12 +227,14 @@ export class AnalysisService {
 
 						// Reverter para ordem cronologica (antigo -> novo) para calculos
 						const prices = historicalSnapshots
-							.map((s: any) => Number(s.close ?? s.priceUsd))
+							.map((s: { close: unknown; priceUsd: unknown }) =>
+								Number(s.close ?? s.priceUsd),
+							)
 							.reverse();
 
-						let trendScore = 5;
-						let rsiScore = 5;
-						let momentumScore = 5;
+						let _trendScore = 5;
+						let _rsiScore = 5;
+						let _momentumScore = 5;
 
 						if (prices.length >= 15) {
 							// Minimo para RSI
@@ -240,8 +246,8 @@ export class AnalysisService {
 								// RSI < 30 -> Oversold (Bullish) -> Score 8-10
 								// RSI > 70 -> Overbought (Bearish) -> Score 0-2
 								// RSI 50 -> Neutral -> Score 5
-								if (rsi <= 30) rsiScore = 8 + ((30 - rsi) / 30) * 2;
-								else if (rsi >= 70) rsiScore = 2 - ((rsi - 70) / 30) * 2;
+								if (rsi <= 30) _rsiScore = 8 + ((30 - rsi) / 30) * 2;
+								else if (rsi >= 70) _rsiScore = 2 - ((rsi - 70) / 30) * 2;
 							} catch (e) {
 								console.warn(`Error calculating RSI for ${asset.symbol}: ${e}`);
 							}
@@ -252,8 +258,8 @@ export class AnalysisService {
 								const currentPrice = prices[prices.length - 1];
 								if (currentPrice !== undefined) {
 									if (currentPrice > sma20)
-										trendScore = 7; // Bullish trend
-									else trendScore = 3; // Bearish trend
+										_trendScore = 7; // Bullish trend
+									else _trendScore = 3; // Bearish trend
 								}
 							} catch (e) {
 								console.warn(`Error calculating SMA for ${asset.symbol}: ${e}`);
@@ -265,7 +271,7 @@ export class AnalysisService {
 							const currentPrice = Number(snapshot.priceUsd);
 							const oldPrice = Number(assetHistoricalSnapshot.priceUsd);
 							const priceChange = (currentPrice - oldPrice) / oldPrice;
-							momentumScore = Math.max(0, Math.min(10, 5 + priceChange * 50));
+							_momentumScore = Math.max(0, Math.min(10, 5 + priceChange * 50));
 						}
 
 						// Composição Final do Technical Score
@@ -422,7 +428,9 @@ export class AnalysisEngineVersionService {
 			return cachedVersion;
 		}
 
-		const version = await this.prisma.analysisEngineVersion.findUnique({ where: { id } });
+		const version = await this.prisma.analysisEngineVersion.findUnique({
+			where: { id },
+		});
 
 		if (!version) {
 			throw httpErrors.notFound("Analysis engine version not found");

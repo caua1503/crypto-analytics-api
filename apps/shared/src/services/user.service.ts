@@ -11,14 +11,11 @@ import {
 	CreateUserSession,
 	type CreateUserSessionType,
 	type CreateUserType,
-	Login,
 	type LoginType,
 	type PayloadAcessToken,
 	PublicUser,
-	PublicUserApiKey,
 	PublicUserApiKeyArray,
 	type PublicUserApiKeyArrayType,
-	type PublicUserApiKeyType,
 	PublicUserArray,
 	type PublicUserType,
 	User,
@@ -131,8 +128,9 @@ export class UserService {
 			if (!isPasswordValid) {
 				throw new Error("Invalid credentials");
 			}
-		} catch (error: any) {
-			if (error.message === "Email not verified") {
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			if (message === "Email not verified") {
 				throw httpErrors.unauthorized("Email not verified");
 			}
 
@@ -143,8 +141,8 @@ export class UserService {
 			sub: user.publicId,
 			role: user.role,
 			isActive: user.isActive,
-			iat: new Date().getTime(),
-			exp: new Date().getTime() + env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
+			iat: Date.now(),
+			exp: Date.now() + env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
 		};
 
 		void this.updateLastLogin(user.publicId, new Date());
@@ -172,8 +170,10 @@ export class UserService {
 			if (!isPasswordValid) {
 				throw new Error("Invalid credentials");
 			}
-		} catch (error: any) {
-			if (error.message === "Email not verified") {
+		} catch (error) {
+			console.error(error);
+			const message = error instanceof Error ? error.message : String(error);
+			if (message === "Email not verified") {
 				throw httpErrors.unauthorized("Email not verified");
 			}
 
@@ -184,8 +184,8 @@ export class UserService {
 			sub: user.publicId,
 			role: user.role,
 			isActive: user.isActive,
-			iat: new Date().getTime(),
-			exp: new Date().getTime() + env.JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+			iat: Date.now(),
+			exp: Date.now() + env.JWT_REFRESH_TOKEN_EXPIRATION_TIME,
 		};
 
 		void this.updateLastLogin(user.publicId, new Date());
@@ -201,7 +201,9 @@ export class UserService {
 		}
 
 		const { password, ...restData } = validatedData;
-		const updateData: any = { ...restData };
+		const updateData: Partial<CreateUserType & { passwordHash?: string }> = {
+			...restData,
+		};
 
 		if (password) {
 			updateData.passwordHash = await getPasswordHash(password);
@@ -219,7 +221,7 @@ export class UserService {
 
 	async updateLastLogin(publicId: string, date: Date = new Date()) {
 		try {
-			const user = await this.prisma.user.update({
+			const _user = await this.prisma.user.update({
 				where: {
 					publicId,
 				},
@@ -235,7 +237,7 @@ export class UserService {
 
 	async delete(publicId: string) {
 		try {
-			const user = await this.prisma.user.delete({
+			const _user = await this.prisma.user.delete({
 				where: {
 					publicId,
 				},
@@ -249,7 +251,7 @@ export class UserService {
 	async deleteTemporarily(publicId: string, autoDeleteInDays: number = 90) {
 		try {
 			const autoDeleteAt = new Date(Date.now() + autoDeleteInDays * 24 * 60 * 60 * 1000);
-			const user = await this.prisma.user.update({
+			await this.prisma.user.update({
 				where: {
 					publicId,
 				},
@@ -259,15 +261,14 @@ export class UserService {
 					autoDeleteAt: autoDeleteAt,
 				},
 			});
-		} catch (error) {
-			console.error(`Error no delete temporariamente: ${error}`);
+		} catch {
 			throw httpErrors.internalServerError("Failed to delete user temporarily");
 		}
 	}
 
 	async restore(publicId: string) {
 		try {
-			const user = await this.prisma.user.update({
+			await this.prisma.user.update({
 				where: {
 					publicId,
 				},
@@ -277,8 +278,7 @@ export class UserService {
 					autoDeleteAt: null,
 				},
 			});
-		} catch (error) {
-			console.error(`Error no restore: ${error}`);
+		} catch {
 			throw httpErrors.internalServerError("Failed to restore user");
 		}
 	}
@@ -312,7 +312,7 @@ export class UserService {
 
 			const restData = CreateUserApiKey.parse(data);
 
-			const userApiKey = await this.prisma.userApiKey.create({
+			const _userApiKey = await this.prisma.userApiKey.create({
 				data: {
 					...restData,
 					userId: user.id,
@@ -351,7 +351,7 @@ export class UserService {
 			},
 		});
 
-		if (!record || !record.isActive) {
+		if (!record?.isActive) {
 			throw httpErrors.forbidden("Invalid API Key");
 		}
 
@@ -421,11 +421,7 @@ export class UserSessionService {
 			}
 
 			return user.sessions;
-		} catch (error: any) {
-			console.error(error);
-			if (error.statusCode) {
-				throw error;
-			}
+		} catch {
 			throw httpErrors.internalServerError("Failed to find user session");
 		}
 	}
@@ -503,8 +499,7 @@ export class UserSessionService {
 			if (result.count === 0) {
 				throw httpErrors.notFound("User or sessions not found");
 			}
-		} catch (error: any) {
-			console.error(error);
+		} catch {
 			throw httpErrors.internalServerError("Failed to delete user sessions");
 		}
 	}

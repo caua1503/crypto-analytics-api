@@ -29,7 +29,7 @@ export class CriterionService {
 			}
 
 			return CriterionArray.parse(criterions);
-		} catch (error) {
+		} catch {
 			throw httpErrors.internalServerError("Error retrieving criterions");
 		}
 	}
@@ -44,7 +44,7 @@ export class CriterionService {
 				throw httpErrors.notFound("Criterion not found");
 			}
 			return Criterion.parse(criterion);
-		} catch (error) {
+		} catch {
 			throw httpErrors.internalServerError("Error retrieving criterion");
 		}
 	}
@@ -53,7 +53,7 @@ export class CriterionService {
 		try {
 			const validatedData = CriterionCreate.parse(data);
 			return await this.prisma.criterion.create({ data: validatedData });
-		} catch (error) {
+		} catch {
 			throw httpErrors.badRequest("Invalid criterion data");
 		}
 	}
@@ -62,7 +62,7 @@ export class CriterionService {
 		try {
 			const validatedData = CriterionCreate.partial().parse(data);
 			return await this.prisma.criterion.update({ where: { id }, data: validatedData });
-		} catch (error) {
+		} catch {
 			throw httpErrors.badRequest("Invalid criterion data");
 		}
 	}
@@ -70,7 +70,7 @@ export class CriterionService {
 	async delete(id: number): Promise<void> {
 		try {
 			await this.prisma.criterion.delete({ where: { id } });
-		} catch (error) {
+		} catch {
 			throw httpErrors.notFound("Criterion not found");
 		}
 	}
@@ -89,7 +89,7 @@ export class CriterionWeightService {
 				throw httpErrors.notFound("Criterion weight not found");
 			}
 			return CriterionWeight.parse(criterionWeight);
-		} catch (error) {
+		} catch {
 			throw httpErrors.internalServerError("Error retrieving criterion weight");
 		}
 	}
@@ -102,7 +102,7 @@ export class CriterionWeightService {
 			});
 
 			return CriterionWeight.parse(criterionWeight);
-		} catch (error) {
+		} catch {
 			throw httpErrors.badRequest("Invalid criterion weight data");
 		}
 	}
@@ -119,7 +119,7 @@ export class CriterionWeightService {
 			});
 
 			return CriterionWeight.parse(criterionWeight);
-		} catch (error) {
+		} catch {
 			throw httpErrors.badRequest("Invalid criterion weight data");
 		}
 	}
@@ -127,7 +127,7 @@ export class CriterionWeightService {
 	async delete(id: number): Promise<void> {
 		try {
 			await this.prisma.criterionWeight.delete({ where: { id } });
-		} catch (error) {
+		} catch {
 			throw httpErrors.notFound("Criterion weight not found");
 		}
 	}

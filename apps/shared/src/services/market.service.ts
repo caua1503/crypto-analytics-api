@@ -7,7 +7,6 @@ import {
 } from "@repo/shared/types/interfaces/common.interface";
 import {
 	MarketSnapshot,
-	MarketSnapshotArray,
 	MarketSnapshotCreate,
 	type MarketSnapshotCreateType,
 	MarketSnapshotResponse,
@@ -214,7 +213,7 @@ export class MarketSnapshotService {
 				data: validatedData,
 			});
 			return MarketSnapshot.parse(newSnapshot);
-		} catch (error) {
+		} catch {
 			throw httpErrors.badRequest("Invalid market snapshot data");
 		}
 	}
@@ -227,14 +226,14 @@ export class MarketSnapshotService {
 				data: validatedData,
 			});
 			return MarketSnapshot.parse(updatedSnapshot);
-		} catch (error) {
+		} catch {
 			throw httpErrors.badRequest("Invalid market snapshot data");
 		}
 	}
 	async delete(id: number): Promise<void> {
 		try {
 			await this.prisma.marketSnapshot.delete({ where: { id } });
-		} catch (error) {
+		} catch {
 			throw httpErrors.notFound("Market snapshot not found");
 		}
 	}

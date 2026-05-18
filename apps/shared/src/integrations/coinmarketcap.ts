@@ -1,14 +1,8 @@
-import { prisma } from "@repo/shared";
-import { AssetService } from "@repo/shared/services/asset.service";
-import { SourceEnum } from "@repo/shared/types/common";
-import {
-	type ApiMacroData,
-	ApiMacroDataSchema,
-	type ApiMarketSnapshot,
-	ApiMarketSnapshotSchema,
-	type ApiOHLC,
+import type {
+	ApiMacroData,
+	ApiMarketSnapshot,
+	ApiOHLC,
 } from "@repo/shared/types/interfaces/integrations.interface";
-import axios, { AxiosInstance } from "axios";
 import type { ServiceConfig, ServiceContract } from "./types.js";
 
 export class CoinMarketCapService implements ServiceContract {
@@ -21,10 +15,12 @@ export class CoinMarketCapService implements ServiceContract {
 	}
 
 	async fetchMarketDataBySymbol(assetSymbol: string): Promise<ApiMarketSnapshot> {
+		assetSymbol;
 		throw new Error("CoinMarketCapService not implemented yet");
 	}
 
 	async fetchMarketDataById(assetId: number): Promise<ApiMarketSnapshot> {
+		assetId;
 		throw new Error("CoinMarketCapService not implemented yet");
 	}
 
@@ -33,10 +29,12 @@ export class CoinMarketCapService implements ServiceContract {
 	}
 
 	async fetchOHLCBySymbol(assetSymbol: string): Promise<ApiOHLC> {
+		assetSymbol;
 		throw new Error("CoinMarketCapService not implemented yet");
 	}
 
 	async fetchOHLCById(assetId: number): Promise<ApiOHLC> {
+		assetId;
 		throw new Error("CoinMarketCapService not implemented yet");
 	}
 }

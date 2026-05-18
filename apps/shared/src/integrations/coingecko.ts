@@ -1,10 +1,8 @@
 import { prisma } from "@repo/shared";
-import { env } from "@repo/shared/env";
 import { AssetService } from "@repo/shared/services/asset.service";
 import { SourceEnum } from "@repo/shared/types/common";
 import {
 	type ApiMacroData,
-	ApiMacroDataSchema,
 	ApiMacroDataSchemaDTO,
 	type ApiMarketSnapshot,
 	ApiMarketSnapshotSchema,
@@ -110,10 +108,12 @@ export class CoinGeckoService implements ServiceContract {
 	}
 
 	async fetchOHLCBySymbol(assetSymbol: string): Promise<ApiOHLC> {
+		assetSymbol;
 		throw new Error("CoinGeckoService not implemented yet");
 	}
 
 	async fetchOHLCById(assetId: number): Promise<ApiOHLC> {
+		assetId;
 		throw new Error("CoinGeckoService not implemented yet");
 	}
 }

@@ -5,13 +5,13 @@ export class Logger {
 		this.context = context;
 	}
 
-	log(message: string, ...args: any[]) {
+	log(message: string, ...args: unknown[]) {
 		// [TIMESTAMP] [CONTEXT] Message
 		const timestamp = new Date().toISOString();
 		console.log(`[${timestamp}] [${this.context}] ${message}`, ...args);
 	}
 
-	error(message: string, error?: any) {
+	error(message: string, error?: unknown) {
 		const timestamp = new Date().toISOString();
 		console.error(`[${timestamp}] [${this.context}] ERROR: ${message}`, error || "");
 	}

@@ -1,6 +1,6 @@
 import { prisma } from "@repo/shared";
 import { AssetService } from "@repo/shared/services/asset.service";
-import { Period, SourceEnum } from "@repo/shared/types/common";
+import { SourceEnum } from "@repo/shared/types/common";
 import {
 	type ApiMacroData,
 	ApiMacroDataSchemaDTO,
@@ -56,10 +56,9 @@ export class CoinPaprikaService implements ServiceContract {
 			});
 
 			return data;
-		} catch (error: any) {
-			throw new Error(
-				`Erro ao buscar dados de mercado para ${assetSymbol}: ${error.message}`,
-			);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			throw new Error(`Erro ao buscar dados de mercado para ${assetSymbol}: ${message}`);
 		}
 	}
 
@@ -92,8 +91,9 @@ export class CoinPaprikaService implements ServiceContract {
 			});
 
 			return data;
-		} catch (error: any) {
-			throw new Error(`Erro ao buscar dados de mercado para ID ${assetId}: ${error.message}`);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			throw new Error(`Erro ao buscar dados de mercado para ID ${assetId}: ${message}`);
 		}
 	}
 
@@ -118,8 +118,9 @@ export class CoinPaprikaService implements ServiceContract {
 			});
 
 			return data;
-		} catch (error: any) {
-			throw new Error(`Erro ao buscar dados macroeconômicos: ${error.message}`);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			throw new Error(`Erro ao buscar dados macroeconômicos: ${message}`);
 		}
 	}
 
@@ -144,8 +145,9 @@ export class CoinPaprikaService implements ServiceContract {
 			});
 
 			return data;
-		} catch (error: any) {
-			throw new Error(`Erro ao buscar OHLC para ${assetSymbol}: ${error.message}`);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			throw new Error(`Erro ao buscar OHLC para ${assetSymbol}: ${message}`);
 		}
 	}
 
@@ -173,8 +175,9 @@ export class CoinPaprikaService implements ServiceContract {
 			});
 
 			return data;
-		} catch (error: any) {
-			throw new Error(`Erro ao buscar OHLC para ID ${assetId}: ${error.message}`);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			throw new Error(`Erro ao buscar OHLC para ID ${assetId}: ${message}`);
 		}
 	}
 }

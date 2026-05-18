@@ -1,11 +1,9 @@
 import { z } from "zod";
 import { zDecimal, zDecimaltoString } from "../common.js";
-import { Asset } from "./asset.interface.js";
 
 export const MarketSnapshot = z.object({
 	id: z.number(),
 	assetId: z.number(),
-	// asset: Asset,
 
 	priceUsd: zDecimaltoString,
 	volume24hUsd: zDecimaltoString,

@@ -238,7 +238,7 @@ export class AssetService {
 
 			this.cache.set_json(cacheKey, assetCreated).catch(console.error);
 			return assetCreated;
-		} catch (error) {
+		} catch {
 			throw httpErrors.badRequest("Invalid asset data");
 		}
 	}
@@ -258,7 +258,7 @@ export class AssetService {
 		try {
 			const validatedData = AssetCreate.partial().parse(data);
 			return this.prisma.asset.update({ where: { id }, data: validatedData });
-		} catch (error) {
+		} catch {
 			throw httpErrors.badRequest("Invalid asset data");
 		}
 	}
@@ -275,7 +275,7 @@ export class AssetService {
 			this.cache.del(`asset:id:extras:${id}`).catch(console.error);
 			this.cache.del(`asset:symbol:${asset.symbol}`).catch(console.error);
 			this.cache.del(`asset:symbol:extras:${asset.symbol}`).catch(console.error);
-		} catch (error) {
+		} catch {
 			throw httpErrors.notFound("Asset not found");
 		}
 	}

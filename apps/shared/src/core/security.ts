@@ -1,20 +1,17 @@
+import crypto from "node:crypto";
 import { httpErrors } from "@fastify/sensible";
 import { userPrisma } from "@repo/shared";
 import { env } from "@repo/shared/env";
 import { UserService } from "@repo/shared/services/user.service";
 import { ApiKeyMode } from "@repo/shared/types/common";
-import {
-	type AuthTokensResponseType,
-	LoginType,
-	type PayloadAcessToken,
-	type PayloadRefreshToken,
-	type RoleType,
-	UserType,
+import type {
+	AuthTokensResponseType,
+	PayloadAcessToken,
+	PayloadRefreshToken,
+	RoleType,
 } from "@repo/shared/types/interfaces/user.interface";
 import Bun from "bun";
-import crypto from "crypto";
-import { type FastifyReply, type FastifyRequest, preHandlerHookHandler } from "fastify";
-import { ZodTypeProvider } from "fastify-type-provider-zod";
+import type { FastifyReply, FastifyRequest } from "fastify";
 
 export async function getPasswordHash(password: string): Promise<string> {
 	return await Bun.password.hash(password, {
@@ -33,12 +30,33 @@ export function createApiKey(mode: ApiKeyMode = ApiKeyMode.PROD) {
 	return `caa_${mode}_${code}`;
 }
 
+interface FastifyJwtInstance {
+	jwt: {
+		access: {
+			sign: (
+				payload: { sub: string; role: string },
+				options?: Record<string, unknown>,
+			) => string;
+		};
+		refresh: {
+			sign: (
+				payload: { sub: string; sessionId: string },
+				options?: Record<string, unknown>,
+			) => string;
+			verify: (token: string) => PayloadRefreshToken;
+		};
+	};
+}
+
 export function signAuthTokens(
-	app: any, // fastify instance
+	app: FastifyJwtInstance,
 	payload: PayloadAcessToken & { sessionId: string },
 	rememberMe = false,
 ): AuthTokensResponseType {
-	const accessToken = app.jwt.access.sign({ sub: payload.sub, role: payload.role });
+	const accessToken = app.jwt.access.sign({
+		sub: payload.sub,
+		role: payload.role,
+	});
 	const refreshToken = app.jwt.refresh.sign(
 		{ sub: payload.sub, sessionId: payload.sessionId },
 		{ expiresIn: rememberMe ? "30d" : "7d" },
@@ -46,7 +64,7 @@ export function signAuthTokens(
 	return { accessToken, refreshToken, expiresIn: 15 * 60 };
 }
 
-export function verifyRefreshToken(app: any, token: string): PayloadRefreshToken {
+export function verifyRefreshToken(app: FastifyJwtInstance, token: string): PayloadRefreshToken {
 	return app.jwt.refresh.verify(token);
 }
 const rulesPriority: Record<RoleType, number> = {
@@ -63,14 +81,16 @@ interface HasAcessConfig {
 	usage_api_key?: boolean;
 }
 
-export function hasAcess(config: HasAcessConfig = {}): any {
+export function hasAcess(
+	config: HasAcessConfig = {},
+): (request: FastifyRequest, reply: FastifyReply) => Promise<void> {
 	const {
 		role = null,
 		required_api_scope = null,
 		usage_bearer = true,
 		usage_api_key = true,
 	} = config;
-	return async (request: FastifyRequest, reply: FastifyReply) => {
+	return async (request: FastifyRequest, _reply: FastifyReply) => {
 		const authHeader = request.headers.authorization;
 		const apiKey = request.headers["x-api-key"];
 

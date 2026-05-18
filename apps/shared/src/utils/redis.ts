@@ -1,6 +1,6 @@
+import crypto from "node:crypto";
 import { env } from "@repo/shared/env";
 import { RedisClient as BunRedisClient } from "bun";
-import crypto from "crypto";
 import type { z } from "zod";
 
 // export const redis = new Redis({
@@ -59,10 +59,7 @@ export class RedisClient {
 			if (model) {
 				const result = model.safeParse(parsed);
 				if (!result.success) {
-					console.error(
-						`Zod validation failed for Redis key ${key}:`,
-						result.error,
-					);
+					console.error(`Zod validation failed for Redis key ${key}:`, result.error);
 					return null;
 				}
 				return result.data;
@@ -98,15 +95,9 @@ function normalizeParams(params: Record<string, unknown>) {
 	);
 }
 
-export function buildCacheKey(
-	prefix: string,
-	params: Record<string, unknown>,
-): string {
+export function buildCacheKey(prefix: string, params: Record<string, unknown>): string {
 	const normalized = normalizeParams(params);
-	const hash = crypto
-		.createHash("sha256")
-		.update(JSON.stringify(normalized))
-		.digest("hex");
+	const hash = crypto.createHash("sha256").update(JSON.stringify(normalized)).digest("hex");
 
 	return `${prefix}:${hash}`;
 }
