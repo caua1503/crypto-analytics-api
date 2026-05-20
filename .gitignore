@@ -11,3 +11,4 @@ build/index.js.map
 build/migrate.js.map
 build/scheduler
 /dist
+load-test.js
