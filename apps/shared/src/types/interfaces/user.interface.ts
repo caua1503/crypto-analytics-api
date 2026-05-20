@@ -151,10 +151,6 @@ export interface VerifiedApiKeyData {
 	ipWhitelist: string[];
 }
 
-export type AuthenticatedIdentity =
-	| { type: "bearer"; sub: string; role: RoleType }
-	| { type: "api_key"; keyId: number; role: RoleType; scopes: string[] };
-
 export type RoleType = z.infer<typeof Role>;
 export type UserType = z.infer<typeof User>;
 export type PublicUserType = z.infer<typeof PublicUser>;
