@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { ApiMethod, zJson } from "../common.js";
 
+export type AuthenticatedIdentity =
+	| { type: "bearer"; sub: string; role: RoleType }
+	| { type: "api_key"; keyId: number; role: RoleType; scopes: string[] };
+
 export const Role = z.enum(["FREE", "PRO", "TRADER", "ADMIN"]).default("FREE");
 
 export const User = z.object({

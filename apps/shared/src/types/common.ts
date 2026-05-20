@@ -1,7 +1,19 @@
 import { z } from "zod";
 import { Prisma } from "../../generated/prisma/client.js";
 import type { Prisma as UserPrisma } from "../../generated/user-prisma/client.js";
-import type { PayloadAcessToken, PayloadRefreshToken } from "./interfaces/user.interface.js";
+
+import type {
+	AuthenticatedIdentity,
+	PayloadAcessToken,
+	PayloadRefreshToken,
+} from "./interfaces/user.interface.js";
+
+declare module "fastify" {
+	interface FastifyRequest {
+		/** Populated by `hasAcess` middleware after successful authentication. */
+		identity: AuthenticatedIdentity | null;
+	}
+}
 
 export const Recommendation = z.enum(["STRONG_BUY", "BUY", "HOLD", "SELL", "STRONG_SELL"]);
 export enum RecommendationEnum {

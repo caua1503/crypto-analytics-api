@@ -1,3 +1,4 @@
+import { httpErrors } from "@fastify/sensible";
 import { userPrisma } from "@repo/shared";
 import { hasAcess } from "@repo/shared/core/security";
 import { UserService } from "@repo/shared/services/user.service";
@@ -11,6 +12,8 @@ import { PublicIdSchema } from "@repo/shared/types/schemas/common.schemas";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import type { FastifyInstanceTyped } from "../../../types/common.js";
+
+const userService = new UserService(userPrisma);
 
 export async function userRoutes(app: FastifyInstanceTyped) {
 	app.post(
@@ -27,7 +30,7 @@ export async function userRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new UserService(userPrisma).create(req.body);
+			return await userService.create(req.body);
 		},
 	);
 
@@ -44,13 +47,14 @@ export async function userRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new UserService(userPrisma).findByPublicId(req.params.publicId);
+			return await userService.findByPublicId(req.params.publicId);
 		},
 	);
 
 	app.get(
 		"/:publicId/api-key",
 		{
+			preHandler: hasAcess({ usage_api_key: false }),
 			schema: {
 				tags: ["User"],
 				params: PublicIdSchema,
@@ -60,13 +64,24 @@ export async function userRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new UserService(userPrisma).getApiKeys(req.params.publicId);
+			const identity = req.identity;
+
+			// Only ADMIN can query other users' API keys
+			if (
+				identity?.role !== "ADMIN" &&
+				(identity?.type !== "bearer" || identity.sub !== req.params.publicId)
+			) {
+				throw httpErrors.forbidden("Access denied");
+			}
+
+			return await userService.getApiKeys(req.params.publicId);
 		},
 	);
 
 	app.post(
 		"/:publicId/api-key",
 		{
+			preHandler: hasAcess({ usage_api_key: false }),
 			schema: {
 				tags: ["User"],
 				params: PublicIdSchema,
@@ -79,10 +94,17 @@ export async function userRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			const apiKey = await new UserService(userPrisma).createApiKey(
-				req.params.publicId,
-				req.body,
-			);
+			const identity = req.identity;
+
+			// Only ADMIN can create API keys for other users
+			if (
+				identity?.role !== "ADMIN" &&
+				(identity?.type !== "bearer" || identity.sub !== req.params.publicId)
+			) {
+				throw httpErrors.forbidden("Access denied");
+			}
+
+			const apiKey = await userService.createApiKey(req.params.publicId, req.body);
 			return { apiKey };
 		},
 	);

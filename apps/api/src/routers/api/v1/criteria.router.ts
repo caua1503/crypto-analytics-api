@@ -7,6 +7,8 @@ import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import type { FastifyInstanceTyped } from "../../../types/common.js";
 
+const criterionService = new CriterionService(prisma);
+
 export async function criterionRoutes(app: FastifyInstanceTyped) {
 	app.get(
 		"/",
@@ -21,7 +23,7 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async () => {
-			return { criterions: await new CriterionService(prisma).findAll() };
+			return { criterions: await criterionService.findAll() };
 		},
 	);
 	app.get(
@@ -38,7 +40,7 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return { criterion: await new CriterionService(prisma).findById(req.params.id) };
+			return { criterion: await criterionService.findById(req.params.id) };
 		},
 	);
 	app.get(
@@ -54,7 +56,7 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async () => {
-			return { categories: await new CriterionService(prisma).findAllCategories() };
+			return { categories: await criterionService.findAllCategories() };
 		},
 	);
 	app.post(
@@ -69,7 +71,7 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new CriterionService(prisma).create(req.body);
+			return await criterionService.create(req.body);
 		},
 	);
 	app.delete(
@@ -81,7 +83,7 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new CriterionService(prisma).delete(req.params.id);
+			return await criterionService.delete(req.params.id);
 		},
 	);
 	app.patch(
@@ -97,7 +99,7 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new CriterionService(prisma).update(req.params.id, req.body);
+			return await criterionService.update(req.params.id, req.body);
 		},
 	);
 }

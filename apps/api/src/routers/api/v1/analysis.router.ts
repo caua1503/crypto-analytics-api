@@ -6,6 +6,8 @@ import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import type { FastifyInstanceTyped } from "../../../types/common.js";
 
+const analysisService = new AnalysisService(prisma);
+
 export async function analysisRouter(app: FastifyInstanceTyped) {
 	app.get(
 		"/",
@@ -20,7 +22,7 @@ export async function analysisRouter(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return { analyses: await new AnalysisService(prisma).findAll(req.query) };
+			return { analyses: await analysisService.findAll(req.query) };
 		},
 	);
 }

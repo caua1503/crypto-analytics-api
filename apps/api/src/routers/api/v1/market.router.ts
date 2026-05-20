@@ -11,6 +11,8 @@ import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import type { FastifyInstanceTyped } from "../../../types/common.js";
 
+const marketSnapshotService = new MarketSnapshotService(prisma);
+
 export async function marketRoutes(app: FastifyInstanceTyped) {
 	app.get(
 		"/asset/:symbol",
@@ -27,10 +29,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new MarketSnapshotService(prisma).findAllBySymbol(
-				req.params.symbol,
-				req.query,
-			);
+			return await marketSnapshotService.findAllBySymbol(req.params.symbol, req.query);
 		},
 	);
 	app.get(
@@ -47,10 +46,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new MarketSnapshotService(prisma).findAllByPublicID(
-				req.params.publicId,
-				req.query,
-			);
+			return await marketSnapshotService.findAllByPublicID(req.params.publicId, req.query);
 		},
 	);
 	app.get(
@@ -65,7 +61,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new MarketSnapshotService(prisma).findById(req.params.id);
+			return await marketSnapshotService.findById(req.params.id);
 		},
 	);
 	app.get(
@@ -80,9 +76,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new MarketSnapshotService(prisma).getLatestSnapshotByPublicId(
-				req.params.publicId,
-			);
+			return await marketSnapshotService.getLatestSnapshotByPublicId(req.params.publicId);
 		},
 	);
 	app.get(
@@ -97,9 +91,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new MarketSnapshotService(prisma).getLatestSnapshotBySymbol(
-				req.params.symbol,
-			);
+			return await marketSnapshotService.getLatestSnapshotBySymbol(req.params.symbol);
 		},
 	);
 	app.post(
@@ -114,7 +106,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new MarketSnapshotService(prisma).create(req.body);
+			return await marketSnapshotService.create(req.body);
 		},
 	);
 	app.patch(
@@ -130,7 +122,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new MarketSnapshotService(prisma).update(req.params.id, req.body);
+			return await marketSnapshotService.update(req.params.id, req.body);
 		},
 	);
 	app.delete(
@@ -142,7 +134,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new MarketSnapshotService(prisma).delete(req.params.id);
+			return await marketSnapshotService.delete(req.params.id);
 		},
 	);
 }
