@@ -15,6 +15,8 @@ import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import type { FastifyInstanceTyped } from "../../../types/common.js";
 
+const assetService = new AssetService(prisma);
+
 export async function assetRoutes(app: FastifyInstanceTyped) {
 	app.get(
 		"/",
@@ -29,7 +31,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new AssetService(prisma).findAll(req.query);
+			return await assetService.findAll(req.query);
 		},
 	);
 
@@ -48,7 +50,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 		},
 		async (req) => {
 			return {
-				assets: await new AssetService(prisma).findAllWithExtras(req.query),
+				assets: await assetService.findAllWithExtras(req.query),
 			};
 		},
 	);
@@ -65,7 +67,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new AssetService(prisma).findBySymbol(req.params.symbol);
+			return await assetService.findBySymbol(req.params.symbol);
 		},
 	);
 
@@ -81,7 +83,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new AssetService(prisma).findBySymbolWithExtras(req.params.symbol);
+			return await assetService.findBySymbolWithExtras(req.params.symbol);
 		},
 	);
 
@@ -97,7 +99,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new AssetService(prisma).findById(req.params.id);
+			return await assetService.findById(req.params.id);
 		},
 	);
 
@@ -113,7 +115,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new AssetService(prisma).findByIdWithExtras(req.params.id);
+			return await assetService.findByIdWithExtras(req.params.id);
 		},
 	);
 
@@ -129,7 +131,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new AssetService(prisma).create(req.body);
+			return await assetService.create(req.body);
 		},
 	);
 	app.patch(
@@ -145,7 +147,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new AssetService(prisma).update(req.params.id, req.body);
+			return await assetService.update(req.params.id, req.body);
 		},
 	);
 	app.delete(
@@ -157,7 +159,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new AssetService(prisma).delete(req.params.id);
+			return await assetService.delete(req.params.id);
 		},
 	);
 }

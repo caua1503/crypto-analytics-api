@@ -14,6 +14,9 @@ import {
 import { StatusCodes } from "http-status-codes";
 import type { FastifyInstanceTyped } from "../../../types/common.js";
 
+const userService = new UserService(userPrisma);
+const sessionService = new UserSessionService(userPrisma);
+
 export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 	app.post(
 		"/login",
@@ -28,10 +31,9 @@ export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			const payload = await new UserService(userPrisma).createPayloadAcessToken(req.body);
-			const user = await new UserService(userPrisma).findByEmail(req.body.email);
+			const payload = await userService.createPayloadAcessToken(req.body);
+			const user = await userService.findByEmail(req.body.email);
 
-			const sessionService = new UserSessionService(userPrisma);
 			const session = await sessionService.create({
 				userId: user.id,
 				expiresAt: new Date(
@@ -65,7 +67,7 @@ export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			return await new UserService(userPrisma).create(req.body);
+			return await userService.create(req.body);
 		},
 	);
 
@@ -90,7 +92,6 @@ export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 				throw httpErrors.unauthorized("Invalid or expired refresh token");
 			}
 
-			const sessionService = new UserSessionService(userPrisma);
 			const session = await sessionService.findByPublicId(decoded.sessionId);
 
 			if (session.revokedAt) {
@@ -113,7 +114,7 @@ export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 				},
 			});
 
-			const user = await new UserService(userPrisma).findByID(session.userId);
+			const user = await userService.findByID(session.userId);
 
 			const payload = {
 				sub: user.publicId,

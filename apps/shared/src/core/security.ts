@@ -6,6 +6,7 @@ import { UserService } from "@repo/shared/services/user.service";
 import type { FastifyJwtInstance } from "@repo/shared/types/common";
 import { ApiKeyMode } from "@repo/shared/types/common";
 import type {
+	AuthenticatedIdentity,
 	AuthTokensResponseType,
 	PayloadAcessToken,
 	PayloadRefreshToken,
@@ -77,6 +78,8 @@ export function hasAcess(
 		const authHeader = request.headers.authorization;
 		const apiKey = request.headers["x-api-key"];
 
+		request.identity = null;
+
 		const url = request.raw.url || "";
 
 		if (url.startsWith("/docs") && env.NODE_ENV === "development") {
@@ -84,12 +87,10 @@ export function hasAcess(
 		}
 
 		if (!usage_bearer && authHeader) {
-			console.log("Unauthorized - 1 ");
 			throw httpErrors.unauthorized("Unauthorized");
 		}
 
 		if (!usage_api_key && apiKey) {
-			console.log("Unauthorized - 2 ");
 			throw httpErrors.unauthorized("Unauthorized");
 		}
 
@@ -105,10 +106,11 @@ export function hasAcess(
 				throw httpErrors.forbidden("Forbidden");
 			}
 
-			// if (required_api_scope && !payload.scopes?.includes(required_api_scope)) {
-			//     throw httpErrors.forbidden("Missing scope");
-			// }
-
+			request.identity = {
+				type: "bearer",
+				sub: payload.sub,
+				role: payload.role,
+			} satisfies AuthenticatedIdentity;
 			return;
 		}
 
@@ -137,15 +139,21 @@ export function hasAcess(
 				throw httpErrors.forbidden("Insufficient role for this API Key");
 			}
 
+			// DISPARAR EVENTO DE TRACKING
 			void userPrisma.userApiKey.update({
 				where: { id: verifiedKey.id },
 				data: { lastUsedAt: new Date() },
 			});
 
+			request.identity = {
+				type: "api_key",
+				keyId: verifiedKey.id,
+				role: verifiedKey.role as RoleType,
+				scopes: verifiedKey.scopes,
+			} satisfies AuthenticatedIdentity;
 			return;
 		}
 
-		// console.log("Unauthorized - final ");
-		// throw httpErrors.unauthorized("Unauthorized");
+		throw httpErrors.unauthorized("Unauthorized");
 	};
 }
