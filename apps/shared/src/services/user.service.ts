@@ -1,7 +1,6 @@
 import { httpErrors } from "@fastify/sensible";
 import type { UserPrismaClientType } from "@repo/shared";
 import { createApiKey, getPasswordHash, verifyPassword } from "@repo/shared/core/security";
-import { env } from "@repo/shared/env";
 import { ApiKeyMode } from "@repo/shared/types/common";
 import type { PaginationUserParamsType } from "@repo/shared/types/interfaces/common.interface";
 import {
@@ -108,7 +107,9 @@ export class UserService {
 		return PublicUser.parse(user);
 	}
 
-	async createPayloadAcessToken(body: LoginType): Promise<PayloadAcessToken> {
+	async createPayloadAcessToken(
+		body: LoginType,
+	): Promise<{ payload: PayloadAcessToken; userId: number }> {
 		let user: UserType;
 
 		try {
@@ -140,14 +141,11 @@ export class UserService {
 		const payload = {
 			sub: user.publicId,
 			role: user.role,
-			isActive: user.isActive,
-			iat: Date.now(),
-			exp: Date.now() + env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
 		};
 
 		void this.updateLastLogin(user.publicId, new Date());
 
-		return payload;
+		return { payload, userId: user.id };
 	}
 
 	async createRefreshToken(body: LoginType) {
@@ -183,9 +181,6 @@ export class UserService {
 		const payload = {
 			sub: user.publicId,
 			role: user.role,
-			isActive: user.isActive,
-			iat: Date.now(),
-			exp: Date.now() + env.JWT_REFRESH_TOKEN_EXPIRATION_TIME,
 		};
 
 		void this.updateLastLogin(user.publicId, new Date());

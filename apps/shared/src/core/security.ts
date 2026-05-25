@@ -1,6 +1,8 @@
 import crypto from "node:crypto";
 import { httpErrors } from "@fastify/sensible";
 import { userPrisma } from "@repo/shared";
+import type { RateLimitConfig } from "@repo/shared/core/ratelimit";
+import { applyRateLimit } from "@repo/shared/core/ratelimit";
 import { env } from "@repo/shared/env";
 import { UserService } from "@repo/shared/services/user.service";
 import type { FastifyJwtInstance } from "@repo/shared/types/common";
@@ -23,7 +25,10 @@ export async function getPasswordHash(password: string): Promise<string> {
 	});
 }
 
-export async function verifyPassword(password: string, hash: string): Promise<boolean> {
+export async function verifyPassword(
+	password: string,
+	hash: string,
+): Promise<boolean> {
 	return await Bun.password.verify(password, hash);
 }
 
@@ -48,7 +53,10 @@ export function signAuthTokens(
 	return { accessToken, refreshToken, expiresIn: 15 * 60 };
 }
 
-export function verifyRefreshToken(app: FastifyJwtInstance, token: string): PayloadRefreshToken {
+export function verifyRefreshToken(
+	app: FastifyJwtInstance,
+	token: string,
+): PayloadRefreshToken {
 	return app.jwt.refresh.verify(token);
 }
 const rulesPriority: Record<RoleType, number> = {
@@ -63,6 +71,7 @@ interface HasAcessConfig {
 	required_api_scope?: string | null;
 	usage_bearer?: boolean;
 	usage_api_key?: boolean;
+	rateLimit?: RateLimitConfig;
 }
 
 export function hasAcess(
@@ -86,6 +95,12 @@ export function hasAcess(
 			return;
 		}
 
+		// Bypass: rota declarada explicitamente como pública via security: []
+		const routeSecurity = request.routeOptions.schema?.security;
+		if (Array.isArray(routeSecurity) && routeSecurity.length === 0) {
+			return;
+		}
+
 		if (!usage_bearer && authHeader) {
 			throw httpErrors.unauthorized("Unauthorized");
 		}
@@ -101,7 +116,8 @@ export function hasAcess(
 			const payload: PayloadAcessToken = await server.jwt.access.verify(token);
 			if (
 				role?.length &&
-				rulesPriority[payload.role] < Math.min(...role.map((r) => rulesPriority[r]))
+				rulesPriority[payload.role] <
+					Math.min(...role.map((r) => rulesPriority[r]))
 			) {
 				throw httpErrors.forbidden("Forbidden");
 			}
@@ -111,6 +127,15 @@ export function hasAcess(
 				sub: payload.sub,
 				role: payload.role,
 			} satisfies AuthenticatedIdentity;
+
+			if (config.rateLimit) {
+				await applyRateLimit(
+					request,
+					_reply,
+					config.rateLimit,
+					request.identity,
+				);
+			}
 			return;
 		}
 
@@ -127,8 +152,13 @@ export function hasAcess(
 				}
 			}
 
-			if (required_api_scope && !verifiedKey.scopes.includes(required_api_scope)) {
-				throw httpErrors.forbidden(`Missing required scope: ${required_api_scope}`);
+			if (
+				required_api_scope &&
+				!verifiedKey.scopes.includes(required_api_scope)
+			) {
+				throw httpErrors.forbidden(
+					`Missing required scope: ${required_api_scope}`,
+				);
 			}
 
 			if (
@@ -140,10 +170,14 @@ export function hasAcess(
 			}
 
 			// DISPARAR EVENTO DE TRACKING
-			void userPrisma.userApiKey.update({
-				where: { id: verifiedKey.id },
-				data: { lastUsedAt: new Date() },
-			});
+			userPrisma.userApiKey
+				.update({
+					where: { id: verifiedKey.id },
+					data: { lastUsedAt: new Date() },
+				})
+				.catch((err) => {
+					console.error("Failed to update API key lastUsedAt:", err);
+				});
 
 			request.identity = {
 				type: "api_key",
@@ -151,6 +185,15 @@ export function hasAcess(
 				role: verifiedKey.role as RoleType,
 				scopes: verifiedKey.scopes,
 			} satisfies AuthenticatedIdentity;
+
+			if (config.rateLimit) {
+				await applyRateLimit(
+					request,
+					_reply,
+					config.rateLimit,
+					request.identity,
+				);
+			}
 			return;
 		}
 

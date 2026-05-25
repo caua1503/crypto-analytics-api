@@ -38,6 +38,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 	app.get(
 		"/extras",
 		{
+			preHandler: [],
 			schema: {
 				tags: ["Asset"],
 				querystring: PaginationParams,
@@ -122,6 +123,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 	app.post(
 		"/",
 		{
+			preHandler: hasAcess({ role: ["ADMIN"] }),
 			schema: {
 				tags: ["Asset"],
 				body: AssetCreate,
@@ -137,6 +139,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 	app.patch(
 		"/id/:id",
 		{
+			preHandler: hasAcess({ role: ["ADMIN"] }),
 			schema: {
 				tags: ["Asset"],
 				params: IdSchema,
@@ -153,6 +156,7 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 	app.delete(
 		"/id/:id",
 		{
+			preHandler: hasAcess({ role: ["ADMIN"] }),
 			schema: {
 				tags: ["Asset"],
 				params: IdSchema,

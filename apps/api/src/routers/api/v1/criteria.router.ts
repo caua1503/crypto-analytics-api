@@ -1,4 +1,5 @@
 import { prisma } from "@repo/shared";
+import { hasAcess } from "@repo/shared/core/security";
 import { CriterionService } from "@repo/shared/services/criteria.service";
 import { CriterionCategory } from "@repo/shared/types/common";
 import { Criterion, CriterionCreate } from "@repo/shared/types/interfaces/criteria.interface";
@@ -62,6 +63,7 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 	app.post(
 		"/",
 		{
+			preHandler: hasAcess({ role: ["ADMIN"] }),
 			schema: {
 				tags: ["Criterion"],
 				body: CriterionCreate,
@@ -77,6 +79,7 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 	app.delete(
 		"/:id",
 		{
+			preHandler: hasAcess({ role: ["ADMIN"] }),
 			schema: {
 				tags: ["Criterion"],
 				params: IdSchema,
@@ -89,6 +92,7 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 	app.patch(
 		"/:id",
 		{
+			preHandler: hasAcess({ role: ["ADMIN"] }),
 			schema: {
 				tags: ["Criterion"],
 				params: IdSchema,
