@@ -31,11 +31,10 @@ export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 			},
 		},
 		async (req) => {
-			const payload = await userService.createPayloadAcessToken(req.body);
-			const user = await userService.findByEmail(req.body.email);
+			const { payload, userId } = await userService.createPayloadAcessToken(req.body);
 
 			const session = await sessionService.create({
-				userId: user.id,
+				userId,
 				expiresAt: new Date(
 					Date.now() +
 						(req.body.rememberMe ? 7 * 24 * 60 * 60 * 1000 : 1 * 24 * 60 * 60 * 1000),
@@ -119,9 +118,6 @@ export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 			const payload = {
 				sub: user.publicId,
 				role: user.role,
-				isActive: user.isActive,
-				iat: Date.now(),
-				exp: Date.now() + 15 * 60 * 1000, // 15 minutes
 				sessionId: newSession.publicId,
 			};
 
