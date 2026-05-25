@@ -133,8 +133,8 @@ export const RefreshToken = z.object({
 export interface PayloadAcessToken {
 	sub: string;
 	role: RoleType;
-	iat: number;
-	exp: number;
+	iat?: number;
+	exp?: number;
 }
 
 export interface PayloadRefreshToken {
