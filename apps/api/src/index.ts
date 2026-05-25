@@ -91,15 +91,16 @@ app.register(jwt, {
 app.register(jwt, {
 	namespace: "refresh",
 	secret: env.JWT_REFRESH_SECRET,
+	sign: { expiresIn: "30D" },
 });
 
-app.addHook("preHandler", hasAcess({}));
+app.addHook("preHandler", hasAcess({ rateLimit: { windowSeconds: 60, limit: 100 } }));
 
-app.get("/", async (_req, _res) => {
+app.get("/", { schema: { security: [] } }, async (_req, _res) => {
 	return { message: "go to /docs" };
 });
 
-app.get("/health", async (_req, _res) => {
+app.get("/health", { schema: { security: [] } }, async (_req, _res) => {
 	return { message: "ok" };
 });
 
