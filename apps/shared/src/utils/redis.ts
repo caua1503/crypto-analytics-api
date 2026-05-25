@@ -79,6 +79,18 @@ export class RedisClient {
 			console.error(`Failed to delete key ${key}:`, e);
 		}
 	}
+
+	async incr(key: string): Promise<number> {
+		return await this.client.incr(key);
+	}
+
+	async expire(key: string, seconds: number): Promise<void> {
+		await this.client.expire(key, seconds);
+	}
+
+	async ttl(key: string): Promise<number> {
+		return await this.client.ttl(key);
+	}
 }
 
 function normalizeParams(params: Record<string, unknown>) {
