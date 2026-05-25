@@ -13,6 +13,11 @@ declare module "fastify" {
 		/** Populated by `hasAcess` middleware after successful authentication. */
 		identity: AuthenticatedIdentity | null;
 	}
+
+	interface FastifySchema {
+		/** OpenAPI security requirement objects (e.g. `[{ bearerAuth: [] }]` or `[]` for public). */
+		security?: readonly { [securityLabel: string]: readonly string[] }[];
+	}
 }
 
 export const Recommendation = z.enum(["STRONG_BUY", "BUY", "HOLD", "SELL", "STRONG_SELL"]);
