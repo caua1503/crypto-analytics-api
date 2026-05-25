@@ -1,4 +1,5 @@
 import { prisma } from "@repo/shared";
+import { hasAcess } from "@repo/shared/core/security";
 import { MarketSnapshotService } from "@repo/shared/services/market.service";
 import { PaginationParams } from "@repo/shared/types/interfaces/common.interface";
 import {
@@ -97,6 +98,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
 	app.post(
 		"/",
 		{
+			preHandler: hasAcess({ role: ["ADMIN"] }),
 			schema: {
 				tags: ["Market"],
 				body: MarketSnapshotCreate,
@@ -112,6 +114,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
 	app.patch(
 		"/:id",
 		{
+			preHandler: hasAcess({ role: ["ADMIN"] }),
 			schema: {
 				tags: ["Market"],
 				params: IdSchema,
@@ -128,6 +131,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
 	app.delete(
 		"/:id",
 		{
+			preHandler: hasAcess({ role: ["ADMIN"] }),
 			schema: {
 				tags: ["Market"],
 				params: IdSchema,
