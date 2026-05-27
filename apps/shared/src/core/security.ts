@@ -25,10 +25,7 @@ export async function getPasswordHash(password: string): Promise<string> {
 	});
 }
 
-export async function verifyPassword(
-	password: string,
-	hash: string,
-): Promise<boolean> {
+export async function verifyPassword(password: string, hash: string): Promise<boolean> {
 	return await Bun.password.verify(password, hash);
 }
 
@@ -53,10 +50,7 @@ export function signAuthTokens(
 	return { accessToken, refreshToken, expiresIn: 15 * 60 };
 }
 
-export function verifyRefreshToken(
-	app: FastifyJwtInstance,
-	token: string,
-): PayloadRefreshToken {
+export function verifyRefreshToken(app: FastifyJwtInstance, token: string): PayloadRefreshToken {
 	return app.jwt.refresh.verify(token);
 }
 const rulesPriority: Record<RoleType, number> = {
@@ -95,9 +89,8 @@ export function hasAcess(
 			return;
 		}
 
-		// Bypass: rota declarada explicitamente como pública via security: []
-		const routeSecurity = request.routeOptions.schema?.security;
-		if (Array.isArray(routeSecurity) && routeSecurity.length === 0) {
+		const routeConfig = request.routeOptions.config as { public?: boolean } | undefined;
+		if (routeConfig?.public === true) {
 			return;
 		}
 
@@ -116,8 +109,7 @@ export function hasAcess(
 			const payload: PayloadAcessToken = await server.jwt.access.verify(token);
 			if (
 				role?.length &&
-				rulesPriority[payload.role] <
-					Math.min(...role.map((r) => rulesPriority[r]))
+				rulesPriority[payload.role] < Math.min(...role.map((r) => rulesPriority[r]))
 			) {
 				throw httpErrors.forbidden("Forbidden");
 			}
@@ -129,12 +121,7 @@ export function hasAcess(
 			} satisfies AuthenticatedIdentity;
 
 			if (config.rateLimit) {
-				await applyRateLimit(
-					request,
-					_reply,
-					config.rateLimit,
-					request.identity,
-				);
+				await applyRateLimit(request, _reply, config.rateLimit, request.identity);
 			}
 			return;
 		}
@@ -152,13 +139,8 @@ export function hasAcess(
 				}
 			}
 
-			if (
-				required_api_scope &&
-				!verifiedKey.scopes.includes(required_api_scope)
-			) {
-				throw httpErrors.forbidden(
-					`Missing required scope: ${required_api_scope}`,
-				);
+			if (required_api_scope && !verifiedKey.scopes.includes(required_api_scope)) {
+				throw httpErrors.forbidden(`Missing required scope: ${required_api_scope}`);
 			}
 
 			if (
@@ -187,12 +169,7 @@ export function hasAcess(
 			} satisfies AuthenticatedIdentity;
 
 			if (config.rateLimit) {
-				await applyRateLimit(
-					request,
-					_reply,
-					config.rateLimit,
-					request.identity,
-				);
+				await applyRateLimit(request, _reply, config.rateLimit, request.identity);
 			}
 			return;
 		}

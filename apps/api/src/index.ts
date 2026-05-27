@@ -78,8 +78,6 @@ if (env.NODE_ENV !== "production") {
 	});
 }
 
-app.register(registerAllRoutes);
-
 app.register(sensible);
 
 app.register(jwt, {
@@ -96,11 +94,13 @@ app.register(jwt, {
 
 app.addHook("preHandler", hasAcess({ rateLimit: { windowSeconds: 60, limit: 100 } }));
 
-app.get("/", { schema: { security: [] } }, async (_req, _res) => {
+app.register(registerAllRoutes);
+
+app.get("/", { config: { public: true }, schema: { security: [] } }, async (_req, _res) => {
 	return { message: "go to /docs" };
 });
 
-app.get("/health", { schema: { security: [] } }, async (_req, _res) => {
+app.get("/health", { config: { public: true }, schema: { security: [] } }, async (_req, _res) => {
 	return { message: "ok" };
 });
 

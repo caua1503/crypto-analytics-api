@@ -21,6 +21,7 @@ export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 	app.post(
 		"/login",
 		{
+			config: { public: true },
 			schema: {
 				tags: ["Auth"],
 				body: Login,
@@ -56,6 +57,7 @@ export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 	app.post(
 		"/register",
 		{
+			config: { public: true },
 			schema: {
 				tags: ["Auth"],
 				body: CreateUser.omit({ role: true }),
@@ -73,6 +75,7 @@ export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 	app.post(
 		"/refresh",
 		{
+			config: { public: true },
 			schema: {
 				tags: ["Auth"],
 				body: RefreshToken,
