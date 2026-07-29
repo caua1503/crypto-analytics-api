@@ -29,7 +29,8 @@ export async function userRoutes(app: FastifyInstanceTyped) {
 				},
 			},
 		},
-		async (req) => {
+		async (req, reply) => {
+			reply.code(StatusCodes.CREATED);
 			return await userService.create(req.body);
 		},
 	);
@@ -93,7 +94,7 @@ export async function userRoutes(app: FastifyInstanceTyped) {
 				},
 			},
 		},
-		async (req) => {
+		async (req, reply) => {
 			const identity = req.identity;
 
 			// Only ADMIN can create API keys for other users
@@ -105,6 +106,7 @@ export async function userRoutes(app: FastifyInstanceTyped) {
 			}
 
 			const apiKey = await userService.createApiKey(req.params.publicId, req.body);
+			reply.code(StatusCodes.CREATED);
 			return { apiKey };
 		},
 	);

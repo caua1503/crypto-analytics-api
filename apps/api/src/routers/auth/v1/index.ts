@@ -67,7 +67,8 @@ export async function registerAuthRoutes(app: FastifyInstanceTyped) {
 				},
 			},
 		},
-		async (req) => {
+		async (req, reply) => {
+			reply.code(StatusCodes.CREATED);
 			return await userService.create(req.body);
 		},
 	);

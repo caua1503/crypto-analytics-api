@@ -132,7 +132,8 @@ export async function assetRoutes(app: FastifyInstanceTyped) {
 				},
 			},
 		},
-		async (req) => {
+		async (req, reply) => {
+			reply.code(StatusCodes.CREATED);
 			return await assetService.create(req.body);
 		},
 	);

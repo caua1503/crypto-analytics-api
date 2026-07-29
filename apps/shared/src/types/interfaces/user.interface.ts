@@ -88,8 +88,8 @@ export const CreateUserApiKey = z.object({
 
 	ipWhitelist: z.array(z.string()).optional(),
 
-	expiresAt: z.date().optional(),
-	revokedAt: z.date().optional(),
+	expiresAt: z.date().nullable().optional(),
+	revokedAt: z.date().nullable().optional(),
 
 	metadata: zJson,
 });

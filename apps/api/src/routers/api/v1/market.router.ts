@@ -108,7 +108,8 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
 				},
 			},
 		},
-		async (req) => {
+		async (req, reply) => {
+			reply.code(StatusCodes.CREATED);
 			return await marketSnapshotService.create(req.body);
 		},
 	);

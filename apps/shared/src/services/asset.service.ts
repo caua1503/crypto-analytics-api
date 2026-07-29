@@ -233,7 +233,7 @@ export class AssetService {
 
 			if (asset) throw httpErrors.conflict("Asset already exists");
 
-			const assetCreated = this.prisma.asset.create({ data: validatedData });
+			const assetCreated = await this.prisma.asset.create({ data: validatedData });
 			const cacheKey = `asset:symbol:${validatedData.symbol}`;
 
 			this.cache.set_json(cacheKey, assetCreated).catch(console.error);
