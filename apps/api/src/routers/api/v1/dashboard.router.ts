@@ -8,6 +8,7 @@ export async function dashboardRoutes(app: FastifyInstanceTyped) {
 	app.get(
 		"/",
 		{
+			config: { public: true },
 			schema: {
 				tags: ["Dashboard"],
 				security: [],

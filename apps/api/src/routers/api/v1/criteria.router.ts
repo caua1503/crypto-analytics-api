@@ -72,7 +72,8 @@ export async function criterionRoutes(app: FastifyInstanceTyped) {
 				},
 			},
 		},
-		async (req) => {
+		async (req, reply) => {
+			reply.code(StatusCodes.CREATED);
 			return await criterionService.create(req.body);
 		},
 	);

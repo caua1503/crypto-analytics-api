@@ -36,6 +36,7 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
 	app.get(
 		"/asset/id/:publicId",
 		{
+			config: { public: true },
 			schema: {
 				tags: ["Market"],
 				params: PublicIdSchema,
@@ -107,7 +108,8 @@ export async function marketRoutes(app: FastifyInstanceTyped) {
 				},
 			},
 		},
-		async (req) => {
+		async (req, reply) => {
+			reply.code(StatusCodes.CREATED);
 			return await marketSnapshotService.create(req.body);
 		},
 	);
